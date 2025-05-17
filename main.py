@@ -9,6 +9,8 @@ class MainApp:
     def __init__(self, page: ft.Page):
         self.page = page
         page.title = "Trail Peñasagra - Corremos por Adriana"
+        page.scroll = None
+        page.auto_scroll = False
         
        # Crear instancias de cada pantalla
         self.home_screen = HomeScreen()
@@ -26,7 +28,14 @@ class MainApp:
         }
         
         # Contenedor para mostrar la pantalla activa
-        self.body_container = ft.Container(content=self.screens["btn1"], expand=True)
+        self.body_container = ft.Container(
+            content=ft.Column(
+                [self.screens["btn1"]],
+                scroll=ft.ScrollMode.AUTO,
+                expand=True,
+            ),
+            expand=True,
+        )
         
         # Barra de navegación, acordaros de que es unafuncion Callback
         # que se ejecuta cuando se hace click en un botón
@@ -43,7 +52,11 @@ class MainApp:
     def on_button_clicked(self, e):
         button_id = e.control.data
         if button_id in self.screens:
-            self.body_container.content = self.screens[button_id]
+            self.body_container.content = ft.Column(
+                [self.screens[button_id]],
+                scroll=ft.ScrollMode.AUTO,
+                expand=True,
+            )
             self.page.update()
 
 def main(page: ft.Page):

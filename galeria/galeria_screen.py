@@ -7,12 +7,11 @@ class GaleriaScreen(ft.Container):
             alignment=ft.alignment.center,
             expand=True
         )
+        #------------------------------------------------------------
         
-        self.content = ft.Column([
-            ft.Text("Pantalla 3", size=30, color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD),
-
-        ], spacing=20, alignment=ft.MainAxisAlignment.CENTER)
-        self.bgcolor = ft.Colors.ORANGE_50
+        
+        
+        #-------------------------------------------------------------
         
         
 if __name__ == "__main__":
