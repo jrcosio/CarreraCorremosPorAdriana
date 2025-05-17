@@ -23,7 +23,7 @@ class HomeScreen(ft.Container):
                 ft.Image(src="imagenes_home/andarines.jpg", fit=ft.ImageFit.CONTAIN, width=800, height=800),
                 ft.Container(
                     content=ft.Text(
-                        "12 de de 2025",
+                        "12 de Julio de 2025",
                         size=40,
                         color=ft.Colors.WHITE,
                         font_family="Britanic Bold",
