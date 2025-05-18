@@ -20,13 +20,13 @@ class HomeScreen(ft.Container):
         andarines = ft.Container(
             content=ft.Stack(
             [
-                ft.Image(src="imagenes_home/andarines.jpg", fit=ft.ImageFit.CONTAIN, width=800, height=800),
+                ft.Image(src="imagenes_home/andarines.jpg", fit=ft.ImageFit.CONTAIN, expand=True),
                     
                 ft.Container(
                     content=ft.Text(
                         "12 de Julio de 2025",
                         size=40,
-                        color=ft.Colors.WHITE,
+                        color=ft.Colors.BLACK,
                         font_family="Britanic Bold",
                         weight=ft.FontWeight.BOLD,
                         italic=True,
@@ -50,13 +50,12 @@ class HomeScreen(ft.Container):
         runers = ft.Container(
             content=ft.Stack(
             [    
-                ft.Image(src="imagenes_home/trail.jpg", fit=ft.ImageFit.CONTAIN, width=800, 
-                            height=800),
+                ft.Image(src="imagenes_home/trail.jpg", fit=ft.ImageFit.CONTAIN,expand=True),  
                     ft.Container(
                         content=ft.Text(
                             "Cosío - Rionansa",
                             size=40,
-                            color=ft.Colors.WHITE,
+                            color=ft.Colors.BLACK,
                             font_family="Britanic Bold",
                             weight=ft.FontWeight.BOLD,
                             italic=True
