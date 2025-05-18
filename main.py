@@ -24,7 +24,8 @@ class MainApp:
         self.screens = {
             "btn1": self.home_screen,
             "btn2": self.inscripcion_screen,
-            "btn3": self.galeria_screen
+            "btn3": self.galeria_screen,
+            
         }
         
         # Contenedor para mostrar la pantalla activa
