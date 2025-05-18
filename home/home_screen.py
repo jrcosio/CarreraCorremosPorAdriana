@@ -21,21 +21,7 @@ class HomeScreen(ft.Container):
             content=ft.Stack(
             [
                 ft.Image(src="imagenes_home/andarines.jpg", fit=ft.ImageFit.CONTAIN, width=800, height=800),
-                    ft.Container(
-                    content=ft.Text(
-                        "Andarines",
-                        size=50,
-                        color=ft.Colors.WHITE,
-                        font_family="Britanic Bold",
-                        weight=ft.FontWeight.BOLD,
-                        italic=True,
-                   
-                ),
-                alignment=ft.alignment.center,  # Posiciona el texto en la parte superior
-                padding=20,
-                bgcolor=ft.Colors.BLACK45,
-                border_radius=ft.border_radius.only(bottom_left=20, bottom_right=20)
-            ),
+                    
                 ft.Container(
                     content=ft.Text(
                         "12 de Julio de 2025",
