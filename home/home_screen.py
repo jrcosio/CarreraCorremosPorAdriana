@@ -11,7 +11,7 @@ class HomeScreen(ft.Container):
         #------------------------------------------------------------
         adriana = ft.Container(
             content=ft.Text("Escrito sobre la enfermadad de Adri", size=40, color=ft.Colors.BLACK, 
-                            font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
+            font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
             expand=True,
             alignment=ft.alignment.center,
             height=100,  
@@ -21,6 +21,21 @@ class HomeScreen(ft.Container):
             content=ft.Stack(
             [
                 ft.Image(src="imagenes_home/andarines.jpg", fit=ft.ImageFit.CONTAIN, width=800, height=800),
+                    ft.Container(
+                    content=ft.Text(
+                        "Andarines",
+                        size=50,
+                        color=ft.Colors.WHITE,
+                        font_family="Britanic Bold",
+                        weight=ft.FontWeight.BOLD,
+                        italic=True,
+                   
+                ),
+                alignment=ft.alignment.center,  # Posiciona el texto en la parte superior
+                padding=20,
+                bgcolor=ft.Colors.BLACK45,
+                border_radius=ft.border_radius.only(bottom_left=20, bottom_right=20)
+            ),
                 ft.Container(
                     content=ft.Text(
                         "12 de Julio de 2025",
@@ -34,7 +49,7 @@ class HomeScreen(ft.Container):
                     alignment=ft.alignment.bottom_center,  # Posiciona el texto en la parte inferior
                     padding=10,  # Espaciado opcional
                     bgcolor=ft.Colors.BLACK54,
-                    border_radius=ft.border_radius.all(20),# Fondo semitransparente para mejorar la visibilidad
+                    border_radius=ft.border_radius.only(top_left=20, top_right=20)
                 ),
             ]
         ),
@@ -63,7 +78,7 @@ class HomeScreen(ft.Container):
                     alignment=ft.alignment.bottom_center,  # Posiciona el texto en la parte inferior
                     padding=10,  # Espaciado opcional
                     bgcolor=ft.Colors.BLACK54,
-                    border_radius=ft.border_radius.all(20),# Fondo semitransparente para mejorar la visibilidad
+                    border_radius=ft.border_radius.only(top_left=20, top_right=20)
                 ),
             ]
         ),
@@ -87,8 +102,6 @@ class HomeScreen(ft.Container):
                     font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
             expand=True,
             alignment=ft.Alignment(0, -1),
-            width=1500,
-            height=500, 
             bgcolor=ft.Colors.YELLOW, 
         )
         
@@ -96,8 +109,6 @@ class HomeScreen(ft.Container):
                     font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
             expand=True,
             alignment=ft.Alignment(0, -1),
-            width=1500,
-            height=500,
             bgcolor=ft.Colors.GREEN,  
         )    
         
