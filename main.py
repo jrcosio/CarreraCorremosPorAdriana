@@ -11,6 +11,8 @@ class MainApp:
         page.title = "Trail Peñasagra - Corremos por Adriana"
         page.scroll = None
         page.auto_scroll = False
+        page.spacing = 0
+        page.padding = 0
         
        # Crear instancias de cada pantalla
         self.home_screen = HomeScreen()
