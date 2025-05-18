@@ -1,37 +1,67 @@
 import flet as ft
-from flet_webview import WebView  # Importar desde el nuevo paquete
+from flet_webview import WebView
+
+class WikilocMapContainer(ft.Container):
+    def __init__(
+        self, 
+        trail_id: str, 
+        width: int = None,  
+        height: int = None,  
+        padding: int = 10, 
+        border_color: str = ft.Colors.GREY_400,
+        border_width: int = 1, 
+        border_radius: int = 10,
+        show_measures: bool = True,     # Mostrar medidas de la ruta
+        show_title: bool = False,       # Mostrar título de la ruta
+        show_near: bool = False,        # Mostrar rutas cercanas
+        show_images: bool = False,      # Mostrar imágenes de la ruta
+        map_type: str = "H",  # H, M, S (Híbrido, Mapa, Satélite)
+        expand: bool = False,  # Añadido para permitir expandir al padre
+        **kwargs
+    ):
+        # Construir la URL de Wikiloc
+        wikiloc_url = f"https://es.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id={trail_id}"
+        wikiloc_url += f"&measures={'on' if show_measures else 'off'}"
+        wikiloc_url += f"&title={'on' if show_title else 'off'}"
+        wikiloc_url += f"&near={'on' if show_near else 'off'}"
+        wikiloc_url += f"&images={'on' if show_images else 'off'}"
+        wikiloc_url += f"&maptype={map_type}"
+        
+        # Crear el WebView para el mapa con dimensiones que se adaptarán
+        wikiloc_map = WebView(
+            url=wikiloc_url,
+            width=width,
+            height=height,
+            expand=expand,  # El WebView también se expandirá si es necesario
+        )
+        
+        # Inicializar el Container con el WebView
+        super().__init__(
+            content=wikiloc_map,
+            width=width,
+            height=height,
+            padding=padding,
+            border=ft.border.all(border_width, border_color),
+            border_radius=border_radius,
+            expand=expand,  # Permite que el contenedor se expanda
+            **kwargs  # Permite pasar otras propiedades del Container
+        )
+
+
 
 def main(page: ft.Page):
     page.title = "Mapa de Wikiloc en Flet"
+
     
-    # ID de la ruta de Wikiloc que quieres mostrar
-    wikiloc_trail_id = "176672547"  
-    
-    # URL del iframe de Wikiloc
-    wikiloc_url = f"https://es.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id={wikiloc_trail_id}&measures=on&title=off&near=off&images=off&maptype=H"
-                   
-    
-    # Crear un WebView para mostrar el mapa
-    wikiloc_map = WebView(
-        url=wikiloc_url,
+    wikiloc_container = WikilocMapContainer(
+        trail_id="176672547", # ID de la ruta de Wikiloc
+        # expand=True,  # Permitir que el contenedor se expanda
         width=1000,
-        height=600,
-    )
-    titulo = ft.Text(
-        "Mapa de la ruta de Wikiloc Corremos por Adriana",
-        size=20,
-        color=ft.Colors.RED,
-        font_family="Arial",
-        weight=ft.FontWeight.BOLD,
-    )
-    # Añadir el WebView a un contenedor
-    container = ft.Container(
-        content=wikiloc_map,
-        padding=10,
-        border=ft.border.all(1, ft.Colors.GREY_400),
-        border_radius=10,
+        height=600
     )
     
-    page.add(titulo, container)
+    page.add(wikiloc_container)
+
+
 
 ft.app(target=main, view=ft.WEB_BROWSER, port=80)
