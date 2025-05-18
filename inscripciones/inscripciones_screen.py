@@ -9,7 +9,7 @@ class InscripcionScreen(ft.Container):
         )
         
         self.content = ft.Column([
-            ft.Text("Pantalla 2", size=30,  color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD),
+            ft.Text("Pantalla 2 de prueba", size=30,  color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD),
         ], spacing=20, alignment=ft.MainAxisAlignment.CENTER)
         self.bgcolor = ft.Colors.GREEN_50
         
