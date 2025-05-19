@@ -14,8 +14,8 @@ class GaleriaScreen(ft.Container):
         #------------------------------------------------------------
         fuentes_disponibles=["Algerian","Courier New","Georgia","Cooper Black","Impact","Tahoma","Stencil","Bauhaus 93","Forte","Bernard MT Condensed",]
         colores_disponibles=[
-            ft.colors.RED_900, ft.colors.GREEN_900, ft.colors.BLUE_900, ft.colors.YELLOW_900, ft.colors.PURPLE_900,
-            ft.colors.BLACK]
+            ft.Colors.RED_900, ft.Colors.GREEN_900, ft.Colors.BLUE_900, ft.Colors.YELLOW_900, ft.Colors.PURPLE_900,
+            ft.Colors.BLACK]
         fuente_aleatoria = random.choice(fuentes_disponibles)
         color_aleatorio=random.choice(colores_disponibles)
         
@@ -25,7 +25,7 @@ class GaleriaScreen(ft.Container):
                             color=color_aleatorio, font_family=fuente_aleatoria),
             border_radius=ft.border_radius.all(20),
             alignment=ft.alignment.center,
-            bgcolor=ft.colors.BLUE_GREY_100,
+            bgcolor=ft.Colors.BLUE_GREY_100,
             padding=10,
             margin=0,
         )
@@ -75,11 +75,11 @@ class GaleriaScreen(ft.Container):
                 height=height,
                 border_radius=10,
                 margin=0,
-                bgcolor=ft.colors.GREY_100,
+                bgcolor=ft.Colors.GREY_100,
                 shadow=ft.BoxShadow(
                     spread_radius=1,
                     blur_radius=5,
-                    color=ft.colors.BLACK26,
+                    color=ft.Colors.BLACK26,
                     offset=ft.Offset(2, 2)
                 ),
                 on_click=lambda e: self.page.open(dlg_modal(foto)) if self.page else None,

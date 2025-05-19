@@ -34,7 +34,7 @@ class NavBar(ft.Container):
         # Botones de navegación
         self.buttons = [
             NavButton("HOME", "btn1", on_button_clicked),
-            NavButton("INCRIPCIÓN", "btn2", on_button_clicked),
+            NavButton("INSCRIPCIÓN", "btn2", on_button_clicked),
             NavButton("GALERÍA", "btn3", on_button_clicked)
         ]
         
