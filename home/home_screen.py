@@ -9,97 +9,111 @@ class HomeScreen(ft.Container):
         )
 
         #------------------------------------------------------------
+        fecha_carrera = ft.Container(
+            content=ft.Text("12 de Julio de 2025", size=40, color=ft.Colors.BLACK, 
+            font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
+            alignment=ft.alignment.top_center,
+            bgcolor=ft.Colors.YELLOW,  # Cambiado a un color estándar
+            expand=True,
+            border_radius=ft.border_radius.only(top_left=20, top_right=20)  
+        )
+        
+        lugar_carrera = ft.Container(
+            content=ft.Text("Cosío - Rionansa", size=40, color=ft.Colors.BLACK,
+            font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
+            alignment=ft.alignment.top_center,
+            bgcolor=ft.Colors.YELLOW,  # Cambiado a un color estándar
+            expand=True, 
+            border_radius=ft.border_radius.only(top_left=20, top_right=20) 
+        )
+        
         adriana = ft.Container(
             content=ft.Text("Escrito sobre la enfermadad de Adri", size=40, color=ft.Colors.BLACK, 
-            font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
-            expand=True,
+                font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
             alignment=ft.alignment.center,
             height=100,  
+            bgcolor=ft.Colors.RED_100
         )   
         
         andarines = ft.Container(
             content=ft.Stack(
-            [
-                ft.Image(src="imagenes_home/andarines.jpg", fit=ft.ImageFit.CONTAIN, expand=True),
-                    
-                ft.Container(
-                    content=ft.Text(
-                        "12 de Julio de 2025",
-                        size=40,
+                [
+                    ft.Image(
+                        src="imagenes_home/andarines.jpg", 
+                        fit=ft.ImageFit.CONTAIN,
+                    ),
+                    ft.Container(
+                        content=ft.Text(
+                            "Distancia: 14 km",
+                        size=32,
                         color=ft.Colors.BLACK,
                         font_family="Britanic Bold",
                         weight=ft.FontWeight.BOLD,
                         italic=True,
-                        
-                    ),
-                    alignment=ft.alignment.bottom_center,  # Posiciona el texto en la parte inferior
-                    padding=10,  # Espaciado opcional
-                    bgcolor=ft.Colors.BLACK54,
-                    border_radius=ft.border_radius.only(top_left=20, top_right=20)
-                ),
-            ]
-        ),
-                width=800,
-                expand=True,
+            ),
                 alignment=ft.alignment.center,
-                padding=10,
-                margin=0,
-                bgcolor=ft.Colors.WHITE,
-            )
+                expand=True,  # Movido expand=True al contenedor
+        ),
+                ],
+            ),
+            expand=True,
+        )   
 
         runers = ft.Container(
             content=ft.Stack(
-            [    
-                ft.Image(src="imagenes_home/trail.jpg", fit=ft.ImageFit.CONTAIN,expand=True),  
+                [
+                    ft.Image(
+                        src="imagenes_home/trail.jpg", 
+                        fit=ft.ImageFit.CONTAIN,
+                    ),
                     ft.Container(
                         content=ft.Text(
-                            "Cosío - Rionansa",
-                            size=40,
-                            color=ft.Colors.BLACK,
-                            font_family="Britanic Bold",
-                            weight=ft.FontWeight.BOLD,
-                            italic=True
-                        ),
-                    alignment=ft.alignment.bottom_center,  # Posiciona el texto en la parte inferior
-                    padding=10,  # Espaciado opcional
-                    bgcolor=ft.Colors.BLACK54,
-                    border_radius=ft.border_radius.only(top_left=20, top_right=20)
-                ),
-            ]
-        ),
-                width=800,
-                expand=True,
+                            "Distancia: 20 km",
+                        size=32,
+                        color=ft.Colors.BLACK,
+                        font_family="Britanic Bold",
+                        weight=ft.FontWeight.BOLD,
+                        italic=True,
+            ),
                 alignment=ft.alignment.center,
-                padding=10,
-                margin=0,
-                bgcolor=ft.Colors.WHITE,
+                expand=True,  # Movido expand=True al contenedor
+        ),
+                ],
+            
+            ),
+            expand=True,  # Movido expand=True al contenedor
+        )
+        
+        cabecera = ft.Row(
+            [fecha_carrera, lugar_carrera],  # Eliminada coma adicional
+            alignment=ft.MainAxisAlignment.CENTER,
         )
 
-        portada= ft.Row(
-            [andarines,
-            runers,
-            ],
+        portada = ft.Row(
+            [andarines, runers],  # Eliminada coma adicional
             alignment=ft.MainAxisAlignment.CENTER,
         )
         
-        patrocinadores= ft.Container(
-            ft.Text("Patrocinadores", size=40, color=ft.Colors.BLACK, 
-                    font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
+        patrocinadores = ft.Container(
+            content=ft.Text("Patrocinadores", size=40, color=ft.Colors.BLACK, 
+            font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
             expand=True,
-            alignment=ft.Alignment(0, -1),
+            alignment=ft.alignment.top_center,  # Cambiado a una alineación estándar
             bgcolor=ft.Colors.YELLOW, 
         )
         
-        colaboradores= ft.Container(ft.Text("Colaboradores", size=40, color=ft.Colors.BLACK, 
-                    font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
+        colaboradores = ft.Container(
+            content=ft.Text("Colaboradores", size=40, color=ft.Colors.BLACK, 
+                font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
             expand=True,
-            alignment=ft.Alignment(0, -1),
+            alignment=ft.alignment.top_center,  # Cambiado a una alineación estándar
             bgcolor=ft.Colors.GREEN,  
         )    
         
         self.content = ft.Column(
             [
                 adriana,
+                cabecera,
                 portada,
                 patrocinadores,
                 colaboradores,
@@ -107,7 +121,6 @@ class HomeScreen(ft.Container):
             alignment=ft.MainAxisAlignment.CENTER,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=0,
-
             expand=True,
         )
     #------------------------------------------------------------

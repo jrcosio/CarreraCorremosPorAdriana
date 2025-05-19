@@ -23,11 +23,11 @@ class GaleriaScreen(ft.Container):
         Cabecera = ft.Container(
             content=ft.Text("TRAIL SIERRA DE PEÑASAGRA 2024 - Corremos por Adriana", size=40, 
                             color=color_aleatorio, font_family=fuente_aleatoria),
-            border_radius=ft.border_radius.all(20),
+            border_radius=ft.border_radius.all(10),
             alignment=ft.alignment.center,
-            bgcolor=ft.Colors.BLUE_GREY_100,
+            bgcolor=ft.Colors.BLUE_200,
             padding=10,
-            margin=0,
+            margin=10,
         )
 
         def obtener_fotografias(carpeta):
