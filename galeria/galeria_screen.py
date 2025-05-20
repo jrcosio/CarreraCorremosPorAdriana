@@ -40,7 +40,7 @@ class GaleriaScreen(ft.Container):
                     for archivo in os.listdir(carpeta)
                     if archivo.lower().endswith(extensiones_validas)
                 ]
-                # print(fotos)
+                print(fotos)
                 
             except FileNotFoundError:
                 print(f"Error: Carpeta no encontrada: {carpeta}")
