@@ -10,7 +10,7 @@ class HomeScreen(ft.Container):
 
         #------------------------------------------------------------
         adriana = ft.Container(
-            content=ft.Text("Escrito sobre la enfermadad de Adri", size=40, color=ft.Colors.BLACK, 
+            content=ft.Text("Banner Corremos por Adriana", size=40, color=ft.Colors.YELLOW, 
             font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
             expand=True,
             alignment=ft.alignment.center,
@@ -20,22 +20,9 @@ class HomeScreen(ft.Container):
         andarines = ft.Container(
             content=ft.Stack(
             [
-                ft.Image(src="imagenes_home/andarines.jpg", fit=ft.ImageFit.CONTAIN, width=800, height=800),
-                    ft.Container(
-                    content=ft.Text(
-                        "Andarines",
-                        size=50,
-                        color=ft.Colors.WHITE,
-                        font_family="Britanic Bold",
-                        weight=ft.FontWeight.BOLD,
-                        italic=True,
-                   
-                ),
-                alignment=ft.alignment.center,  # Posiciona el texto en la parte superior
-                padding=20,
-                bgcolor=ft.Colors.BLACK45,
-                border_radius=ft.border_radius.only(bottom_left=20, bottom_right=20)
-            ),
+                ft.Image(src="imagenes_home/andarines.jpg", 
+                         fit=ft.ImageFit.COVER, 
+                         border_radius=ft.border_radius.only(top_left=20, top_right=20)),
                 ft.Container(
                     content=ft.Text(
                         "12 de Julio de 2025",
@@ -51,30 +38,31 @@ class HomeScreen(ft.Container):
                     bgcolor=ft.Colors.BLACK54,
                     border_radius=ft.border_radius.only(top_left=20, top_right=20)
                 ),
-            ]
-        ),
+            ]),
                 width=800,
                 expand=True,
                 alignment=ft.alignment.center,
                 padding=10,
                 margin=0,
                 bgcolor=ft.Colors.WHITE,
-            )
+                )
 
         runers = ft.Container(
             content=ft.Stack(
             [    
-                ft.Image(src="imagenes_home/trail.jpg", fit=ft.ImageFit.CONTAIN, width=800, 
-                            height=800),
-                    ft.Container(
-                        content=ft.Text(
-                            "Cosío - Rionansa",
-                            size=40,
-                            color=ft.Colors.WHITE,
-                            font_family="Britanic Bold",
-                            weight=ft.FontWeight.BOLD,
-                            italic=True
-                        ),
+                ft.Image(src="imagenes_home/trail.jpg", 
+                         fit=ft.ImageFit.CONTAIN,
+                         border_radius=ft.border_radius.only(top_left=20, top_right=20)
+                ),
+                ft.Container(
+                    content=ft.Text(
+                        "Cosío - Rionansa",
+                        size=40,
+                        color=ft.Colors.WHITE,
+                        font_family="Britanic Bold",
+                        weight=ft.FontWeight.BOLD,
+                        italic=True
+                    ),
                     alignment=ft.alignment.bottom_center,  # Posiciona el texto en la parte inferior
                     padding=10,  # Espaciado opcional
                     bgcolor=ft.Colors.BLACK54,
@@ -82,12 +70,12 @@ class HomeScreen(ft.Container):
                 ),
             ]
         ),
-                width=800,
-                expand=True,
-                alignment=ft.alignment.center,
-                padding=10,
-                margin=0,
-                bgcolor=ft.Colors.WHITE,
+            width=800,
+            expand=True,
+            alignment=ft.alignment.center,
+            padding=10,
+            margin=0,
+            bgcolor=ft.Colors.WHITE,
         )
 
         portada= ft.Row(
