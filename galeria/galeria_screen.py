@@ -47,7 +47,7 @@ class GaleriaScreen(ft.Container):
             return fotos
 
         # carpeta = r"C:\Users\JOSE\Documents\Fotos_prueba_trail"
-        carpeta = "assets/imagenes_galeria"
+        carpeta = "assets\imagenes_galeria"
         
         fotografias = obtener_fotografias(carpeta)
         
