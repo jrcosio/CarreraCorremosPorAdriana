@@ -1,7 +1,6 @@
 import flet as ft
-import datetime
-import asyncio
-
+from contador import CountdownTimer
+from datetime import datetime, timedelta
 
 class HomeScreen(ft.Container):
     def __init__(self):
@@ -37,7 +36,35 @@ class HomeScreen(ft.Container):
             bgcolor=ft.Colors.RED_100
         )   
         
-       
+        
+        def main(page: ft.Page):
+            page.title = "Contador Regresivo"
+            page.vertical_alignment = ft.MainAxisAlignment.CENTER
+            page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    
+    # Fecha objetivo (ejemplo: 6 horas en el futuro)
+    #target = datetime.now() + timedelta(hours=6)
+        target = datetime(2025, 7, 12, 10, 00, 00)  # Fecha objetivo específica
+    
+        def on_countdown_finish(timer):
+                page.snack_bar = ft.SnackBar(content=ft.Text("¡Cuenta regresiva completada!"))
+                page.snack_bar.open = True
+                page.update()
+    
+    # Crear un contenedor centrado para el contador
+        countdown_container = ft.Container(
+                content=CountdownTimer(
+                target_date=target,
+                on_finish=on_countdown_finish,
+                padding=5,
+                bgcolor=None,  # Transparente para que se vea el fondo del contenedor principal
+        ),
+            alignment=ft.alignment.center,
+        #bgcolor=ft.Colors.LIGHT_BLUE_50,
+            padding=20,
+    )
+        
+            
         
         andarines = ft.Container(
             content=ft.Stack(
@@ -90,12 +117,13 @@ class HomeScreen(ft.Container):
                         content=ft.Text(
                             "Distancia: 20 km",
                         size=32,
-                        color=ft.Colors.BLUE,
+                        color=ft.Colors.YELLOW_ACCENT,
                         font_family="Britanic Bold",
                         weight=ft.FontWeight.BOLD,
                         italic=True,
             ),
-                alignment=ft.alignment.center,
+                alignment=ft.alignment.top_center,
+                padding=10,  # Añadido padding
                 expand=True,  # Movido expand=True al contenedor
         ),
                 ],
@@ -131,6 +159,7 @@ class HomeScreen(ft.Container):
         self.content = ft.Column(
             [
                 adriana,
+                countdown_container,
                 cabecera,
                 portada,
                 patrocinadores,
