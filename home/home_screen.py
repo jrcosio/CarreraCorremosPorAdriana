@@ -1,4 +1,6 @@
 import flet as ft
+import datetime
+import asyncio
 
 
 class HomeScreen(ft.Container):
@@ -35,28 +37,46 @@ class HomeScreen(ft.Container):
             bgcolor=ft.Colors.RED_100
         )   
         
+       
+        
         andarines = ft.Container(
             content=ft.Stack(
                 [
                     ft.Image(
                         src="imagenes_home/andarines.jpg", 
                         fit=ft.ImageFit.CONTAIN,
+                        expand=True,  # Añadido aquí
                     ),
                     ft.Container(
                         content=ft.Text(
                             "Distancia: 14 km",
-                        size=32,
-                        color=ft.Colors.BLACK,
-                        font_family="Britanic Bold",
-                        weight=ft.FontWeight.BOLD,
-                        italic=True,
+                            size=32,
+                            color=ft.Colors.BLACK,
+                            font_family="Britanic Bold",
+                            weight=ft.FontWeight.BOLD,
+                            italic=True,
             ),
-                alignment=ft.alignment.center,
-                expand=True,  # Movido expand=True al contenedor
+                        alignment=ft.alignment.top_center,
+                        padding=10,  # Añadido padding
+                        expand=True,  # Movido expand=True al contenedor    
         ),
+                    # ft.Container(
+                    #     content=ft.Text(
+                    #     "Andarines",
+                    #         size=32,
+                    #         color=ft.Colors.WHITE,
+                    #         font_family="Britanic Bold",
+                    #         weight=ft.FontWeight.BOLD,
+                    #         italic=True,
+                    # ),
+                    #     alignment=ft.alignment.bottom_center,  # Posiciona el texto en la parte inferior
+                    #     padding=10,  # Añadido padding
+                    #     expand=True,  # Movido expand=True al contenedor    
+                   
+                    # ),
                 ],
             ),
-            expand=True,
+        expand=True,
         )   
 
         runers = ft.Container(
@@ -79,11 +99,9 @@ class HomeScreen(ft.Container):
                 expand=True,  # Movido expand=True al contenedor
         ),
                 ],
-            
             ),
             expand=True,  # Movido expand=True al contenedor
         )
-        
         cabecera = ft.Row(
             [fecha_carrera, lugar_carrera],  # Eliminada coma adicional
             alignment=ft.MainAxisAlignment.CENTER,

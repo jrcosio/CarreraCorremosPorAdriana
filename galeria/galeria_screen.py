@@ -60,7 +60,7 @@ class GaleriaScreen(ft.Container):
             dialogo = ft.AlertDialog( 
                 modal=True,
                 title=ft.Text("Foto seleccionada"),
-                content=ft.Image(src=foto, fit=ft.ImageFit.CONTAIN, width=800, height=800),
+                content=ft.Image(src=foto, fit=ft.ImageFit.CONTAIN, width=900, height=900),
                 actions=[
                     ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo)),
                 ],
