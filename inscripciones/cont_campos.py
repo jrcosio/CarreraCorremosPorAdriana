@@ -120,8 +120,8 @@ txt_emergencia = ft.Text("Datos de emergencia", weight=ft.FontWeight.BOLD)
 
 class Campos(ft.Container):
     def __init__(self):
-        self.alignment = ft.MainAxisAlignment.CENTER
         super().__init__(
+            alignment=ft.Alignment(0, 0),
             content = ft.Column(
                 controls = [
                     ft.Container(
