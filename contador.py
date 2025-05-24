@@ -184,39 +184,7 @@ class CountdownTimer(ft.Container):
         self.update()
 
 
-# Ejemplo de uso del componente:
-# def main(page: ft.Page):
-#     page.title = "Contador Regresivo"
-#     page.vertical_alignment = ft.MainAxisAlignment.CENTER
-#     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    
-#     # Fecha objetivo (ejemplo: 6 horas en el futuro)
-#     #target = datetime.now() + timedelta(hours=6)
-#     target = datetime(2025, 7, 12, 10, 00, 00)  # Fecha objetivo específica
-    
-#     def on_countdown_finish(timer):
-#         page.snack_bar = ft.SnackBar(content=ft.Text("¡Cuenta regresiva completada!"))
-#         page.snack_bar.open = True
-#         page.update()
-    
-#     # Crear un contenedor centrado para el contador
-#     countdown_container = ft.Container(
-#         content=CountdownTimer(
-#             target_date=target,
-#             on_finish=on_countdown_finish,
-#             padding=5,
-#             bgcolor=None,  # Transparente para que se vea el fondo del contenedor principal
-#         ),
-#         alignment=ft.alignment.center,
-#         #bgcolor=ft.Colors.LIGHT_BLUE_50,
-#         padding=20,
-#     )
-#     # titulo = ft.Text(
-#     #     "Contador Regresivo para COSIO",
-#     #     style=ft.TextStyle(size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE),
-#     #     text_align=ft.TextAlign.CENTER,
-#     # )
-#     page.add(titulo, countdown_container)
+
 
 if __name__ == "__main__":
     ft.app(target=main)
