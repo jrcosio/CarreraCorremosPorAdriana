@@ -24,19 +24,19 @@ class CountdownTimer(ft.Container):
         self.on_finish = on_finish
         
         # Estilos por defecto
-        self._days_style = days_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE)
-        self._hours_style = hours_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE)
-        self._minutes_style = minutes_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE)
-        self._seconds_style = seconds_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE)
-        self._label_style = label_style or ft.TextStyle(size=16, color=ft.Colors.BLUE)
+        self._days_style = days_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK)
+        self._hours_style = hours_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK)
+        self._minutes_style = minutes_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK)
+        self._seconds_style = seconds_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK)
+        self._label_style = label_style or ft.TextStyle(size=16, color=ft.Colors.BLACK)
         self._box_style = box_style or {
             "bgcolor": ft.Colors.WHITE,
             "border_radius": 10,
             "padding": 20,
             "width": 120,
             "height": 150,  # Aumentado para dar más espacio
-            "alignment": ft.alignment.center
-        }
+            "alignment": ft.alignment.center,
+                    }
         
         # Crear componentes para los números y etiquetas
         self.days_text = ft.Text("0", style=self._days_style)
@@ -185,38 +185,38 @@ class CountdownTimer(ft.Container):
 
 
 # Ejemplo de uso del componente:
-def main(page: ft.Page):
-    page.title = "Contador Regresivo"
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+# def main(page: ft.Page):
+#     page.title = "Contador Regresivo"
+#     page.vertical_alignment = ft.MainAxisAlignment.CENTER
+#     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     
-    # Fecha objetivo (ejemplo: 6 horas en el futuro)
-    #target = datetime.now() + timedelta(hours=6)
-    target = datetime(2025, 7, 12, 10, 00, 00)  # Fecha objetivo específica
+#     # Fecha objetivo (ejemplo: 6 horas en el futuro)
+#     #target = datetime.now() + timedelta(hours=6)
+#     target = datetime(2025, 7, 12, 10, 00, 00)  # Fecha objetivo específica
     
-    def on_countdown_finish(timer):
-        page.snack_bar = ft.SnackBar(content=ft.Text("¡Cuenta regresiva completada!"))
-        page.snack_bar.open = True
-        page.update()
+#     def on_countdown_finish(timer):
+#         page.snack_bar = ft.SnackBar(content=ft.Text("¡Cuenta regresiva completada!"))
+#         page.snack_bar.open = True
+#         page.update()
     
-    # Crear un contenedor centrado para el contador
-    countdown_container = ft.Container(
-        content=CountdownTimer(
-            target_date=target,
-            on_finish=on_countdown_finish,
-            padding=5,
-            bgcolor=None,  # Transparente para que se vea el fondo del contenedor principal
-        ),
-        alignment=ft.alignment.center,
-        #bgcolor=ft.Colors.LIGHT_BLUE_50,
-        padding=20,
-    )
-    # titulo = ft.Text(
-    #     "Contador Regresivo para COSIO",
-    #     style=ft.TextStyle(size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE),
-    #     text_align=ft.TextAlign.CENTER,
-    # )
-    page.add(titulo, countdown_container)
+#     # Crear un contenedor centrado para el contador
+#     countdown_container = ft.Container(
+#         content=CountdownTimer(
+#             target_date=target,
+#             on_finish=on_countdown_finish,
+#             padding=5,
+#             bgcolor=None,  # Transparente para que se vea el fondo del contenedor principal
+#         ),
+#         alignment=ft.alignment.center,
+#         #bgcolor=ft.Colors.LIGHT_BLUE_50,
+#         padding=20,
+#     )
+#     # titulo = ft.Text(
+#     #     "Contador Regresivo para COSIO",
+#     #     style=ft.TextStyle(size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE),
+#     #     text_align=ft.TextAlign.CENTER,
+#     # )
+#     page.add(titulo, countdown_container)
 
 if __name__ == "__main__":
     ft.app(target=main)

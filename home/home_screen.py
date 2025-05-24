@@ -117,7 +117,7 @@ class HomeScreen(ft.Container):
                         content=ft.Text(
                             "Distancia: 20 km",
                         size=32,
-                        color=ft.Colors.YELLOW_ACCENT,
+                        color=ft.Colors.YELLOW,
                         font_family="Britanic Bold",
                         weight=ft.FontWeight.BOLD,
                         italic=True,
