@@ -120,6 +120,7 @@ txt_emergencia = ft.Text("Datos de emergencia", weight=ft.FontWeight.BOLD)
 
 class Campos(ft.Container):
     def __init__(self):
+        self.alignment = ft.MainAxisAlignment.CENTER
         super().__init__(
             content = ft.Column(
                 controls = [
@@ -133,102 +134,44 @@ class Campos(ft.Container):
                         bgcolor = "#1F2937",
                         height = 50,
                         border_radius=ft.BorderRadius(
-                            top_left=15, top_right=15, bottom_left=15, bottom_right=15
+                            top_left=15, top_right=15, bottom_left=0, bottom_right=0
                         ),
                     ),
-                    ft.Row(
-                        controls = [
-                            ft.Text("Nombre:"),
-                            txtf_nombre
-                        ],
-                        alignment = ft.MainAxisAlignment.CENTER,
-                        vertical_alignment = ft.CrossAxisAlignment.CENTER
+                    ft.Container(
+                        content = self.formulario(),
+                        bgcolor = "#B63333",
+                        padding = ft.Padding(10, 10, 10, 10),
+                        expand=True,
                     ),
-                    ft.Row(
-                        controls = [
-                            ft.Text("Apellidos:"),
-                            txtf_apellido
-                        ],
-                        alignment = ft.MainAxisAlignment.CENTER,
-                        vertical_alignment = ft.CrossAxisAlignment.CENTER
-                    ),
-                    ft.Row( 
-                        controls = [
-                            ft.Text("Sexo:"),
-                            radio_sexo,
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        vertical_alignment=ft.CrossAxisAlignment.CENTER
-                    ),
-                    ft.Row(
-                        controls = [
-                            ft.Text("Fecha de nacimiento:"),
-                            drop_edad,
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        vertical_alignment=ft.CrossAxisAlignment.CENTER
-                    ),
-                    ft.Row(
-                        controls = [
-                            ft.Text("Teléfono:"),
-                            txtf_tlfno,
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        vertical_alignment=ft.CrossAxisAlignment.CENTER
-                    ),
-                    ft.Row(
-                        controls = [
-                            ft.Text("Email:"),
-                            txtf_email
-                        ],
-                        alignment = ft.MainAxisAlignment.CENTER,
-                        vertical_alignment = ft.CrossAxisAlignment.CENTER
-                    ),
-                    ft.Row(
-                        controls = [
-                            ft.Text("Repite Email:"),
-                            txtf_rep_email
-                        ],
-                        alignment = ft.MainAxisAlignment.CENTER,
-                        vertical_alignment = ft.CrossAxisAlignment.CENTER
-                    ),
-                    ft.Row(
-                        controls = [
-                            ft.Text("Dirección:"),
-                            txtf_direccion
-                        ],
-                        alignment = ft.MainAxisAlignment.CENTER,
-                        vertical_alignment = ft.CrossAxisAlignment.CENTER
-                    ),
-                    ft.Row(controls = [
-                            ft.Text("Carrera:"),
-                            radio_carrera,
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        vertical_alignment=ft.CrossAxisAlignment.CENTER),
-                    ft.Row(
-                        controls = [
-                            drop_doc,
-                            ft.Container(width = 10),
-                            txtf_dni_codigo
-                        ],
-                        vertical_alignment = ft.CrossAxisAlignment.CENTER,
-                        alignment = ft.MainAxisAlignment.CENTER
-                    ),
-                    txt_emergencia,
-                    txtf_nombre_emergencia,
-                    txtf_numero_emergencia,
-                    btn_enviar
+                    
                 ],
-                horizontal_alignment = ft.CrossAxisAlignment.CENTER,
-                alignment = ft.MainAxisAlignment.CENTER,
-            ),
-            alignment = ft.Alignment(0, 0),
-            height= 900,
-            width = 800,
-            bgcolor = ft.Colors.BLACK26,
-            border_radius=ft.BorderRadius(
-                top_left=15, top_right=15, bottom_left=15, bottom_right=15
+                spacing=0,
+                width = 800,
+                alignment=ft.MainAxisAlignment.CENTER,
             )
+        )
+
+        
+    def formulario(self):
+        return ft.Column(
+            controls=[
+                txtf_nombre,
+                txtf_apellido,
+                radio_sexo,
+                drop_edad,
+                txtf_tlfno,
+                txtf_email,
+                txtf_rep_email,
+                drop_doc,
+                txtf_dni_codigo,
+                txtf_direccion,
+                radio_carrera,
+                txt_emergencia,
+                txtf_nombre_emergencia,
+                txtf_numero_emergencia,
+                btn_enviar
+            ],
+            scroll=ft.ScrollMode.AUTO,
+            expand=True
         )
 
