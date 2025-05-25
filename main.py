@@ -11,13 +11,22 @@ class MainApp:
         "titulo": "Trail Peñasagra",
         "descripcion": "Carrera de montaña con un recorrido espectacular por los Picos de Europa.",
         "wikilog": "214816740",
-        "distancia": 29,
+        "distancia": 20,
         "desnivel": 1029,
         "fecha": "2024-06-15",
         "hora": "09:00",
-        "lugar": "Potes, Cantabria"
+        "lugar": "Cosío, Cantabria"
     }
-    
+    andarines ={
+        "titulo": "Andarines",
+        "descripcion": "Carrera de montaña más centrada en amateur y gente sin practica.",
+        "wikilog": "214817578",
+        "distancia": 15,
+        "desnivel": 780,
+        "fecha": "2024-06-15",
+        "hora": "09:00",
+        "lugar": "Cosío, Cantabria"
+    }
     def __init__(self, page: ft.Page):
         self.page = page
         page.title = "Trail Peñasagra - Corremos por Adriana"
