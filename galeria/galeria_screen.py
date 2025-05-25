@@ -50,7 +50,7 @@ class GaleriaScreen(ft.Container):
             return fotos
 
         # carpeta = r"C:\Users\JOSE\Documents\Fotos_prueba_trail"
-        carpeta = "assets\imagenes_galeria"
+        carpeta = "assets\\imagenes_galeria"
         
         fotografias = obtener_fotografias(carpeta)
         
@@ -94,7 +94,7 @@ class GaleriaScreen(ft.Container):
                 width = random.choice([300])
                 height = random.choice([200,300,350,400])
                 datos.append((foto, width, height))
-            # random.shuffle(datos)
+            random.shuffle(datos)
             return datos
 
         datos_imagenes = obtener_datos_imagenes(fotografias)
