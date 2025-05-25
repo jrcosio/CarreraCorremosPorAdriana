@@ -19,10 +19,37 @@ class RecorridoScreen(ft.Container):
                         size=16,
                         color=ft.Colors.WHITE70
                     ),
-                    WikilocMapContainer(
-                        trail_id=recorrido_data["wikilog"],
-                        width=1000,
-                        height=600,  
+                    ft.Row(
+                        controls = [
+                            WikilocMapContainer(
+                                trail_id=recorrido_data["wikilog"],
+                                width=1000,
+                                height=600,
+                            ),
+                            ft.Column(
+                                controls=[
+                                    ft.Container(
+                                        content=ft.Text(
+                                            f"Distancia: {recorrido_data['distancia']} km",
+                                            size=25,
+                                            color=ft.Colors.RED
+                                        ),
+                                        bgcolor=ft.Colors.BLUE_GREY_400,
+                                        border_radius=ft.border_radius.all(20)
+                                        
+                                    ),
+                                    ft.Container(
+                                        content=ft.Text(
+                                            f"Desnivel: {recorrido_data['desnivel']} m",
+                                            size=25,
+                                            color=ft.Colors.RED
+                                        ),
+                                        bgcolor=ft.Colors.BLUE_GREY_400,
+                                        border_radius=ft.border_radius.all(20)
+                                    )
+                                ]
+                            )
+                        ]
                     )
                 ]
             )             

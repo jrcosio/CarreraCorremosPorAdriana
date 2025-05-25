@@ -7,7 +7,6 @@ from barra_navegacion import NavBar
 
 
 class MainApp:
-    
     trail ={
         "titulo": "Trail Peñasagra",
         "descripcion": "Carrera de montaña con un recorrido espectacular por los Picos de Europa.",
