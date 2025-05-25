@@ -35,7 +35,8 @@ class NavBar(ft.Container):
         self.buttons = [
             NavButton("HOME", "btn1", on_button_clicked),
             NavButton("INSCRIPCIÓN", "btn2", on_button_clicked),
-            NavButton("GALERÍA", "btn3", on_button_clicked)
+            NavButton("GALERÍA", "btn3", on_button_clicked),
+            NavButton("RECORRIDOS", "btn4", on_button_clicked)
         ]
         
         # Fila con logo y botones

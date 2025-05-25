@@ -2,10 +2,23 @@ import flet as ft
 from home.home_screen import HomeScreen
 from inscripciones.inscripciones_screen import InscripcionScreen
 from galeria.galeria_screen import GaleriaScreen
+from recorrido.recorrido_screen import RecorridoScreen
 from barra_navegacion import NavBar
 
 
 class MainApp:
+    
+    trail ={
+        "titulo": "Trail Peñasagra",
+        "descripcion": "Carrera de montaña con un recorrido espectacular por los Picos de Europa.",
+        "wikilog": "214816740",
+        "distancia": 29,
+        "desnivel": 1029,
+        "fecha": "2024-06-15",
+        "hora": "09:00",
+        "lugar": "Potes, Cantabria"
+    }
+    
     def __init__(self, page: ft.Page):
         self.page = page
         page.title = "Trail Peñasagra - Corremos por Adriana"
@@ -16,6 +29,7 @@ class MainApp:
         self.home_screen = HomeScreen()
         self.inscripcion_screen = InscripcionScreen()
         self.galeria_screen = GaleriaScreen()
+        self.recorrido_screen = RecorridoScreen(recorrido_data=self.trail)
         
         
         
@@ -24,7 +38,8 @@ class MainApp:
         self.screens = {
             "btn1": self.home_screen,
             "btn2": self.inscripcion_screen,
-            "btn3": self.galeria_screen
+            "btn3": self.galeria_screen,
+            "btn4": self.recorrido_screen
         }
         
         # Contenedor para mostrar la pantalla activa
