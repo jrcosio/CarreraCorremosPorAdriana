@@ -64,7 +64,7 @@ class HomeScreen(ft.Container):
                 bgcolor=None,  # Transparente para que se vea el fondo del contenedor principal
         ),
             alignment=ft.alignment.center,
-            bgcolor=ft.Colors.LIGHT_BLUE_50,
+            bgcolor=ft.Colors.WHITE,
             padding=20,
     )
         
