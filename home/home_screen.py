@@ -36,6 +36,10 @@ class HomeScreen(ft.Container):
             bgcolor=ft.Colors.RED_100
         )   
         
+        imagen1=ft.Image(src="imagenes_patrocinadores/descarga.jpg")
+        imagen2=ft.Image(src="imagenes_patrocinadores/imagen1.jpg")
+        imagen3=ft.Image(src="imagenes_patrocinadores/imagen2.jpg")
+        imagen4=ft.Image(src="imagenes_patrocinadores/imagen3.jpg")
         
         def main(page: ft.Page):
             page.title = "Contador Regresivo"
@@ -60,7 +64,7 @@ class HomeScreen(ft.Container):
                 bgcolor=None,  # Transparente para que se vea el fondo del contenedor principal
         ),
             alignment=ft.alignment.center,
-        #bgcolor=ft.Colors.LIGHT_BLUE_50,
+            bgcolor=ft.Colors.LIGHT_BLUE_50,
             padding=20,
     )
         
@@ -141,12 +145,18 @@ class HomeScreen(ft.Container):
         )
         
         patrocinadores = ft.Container(
-            content=ft.Text("Patrocinadores", size=40, color=ft.Colors.BLACK, 
-            font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
-            expand=True,
-            alignment=ft.alignment.top_center,  # Cambiado a una alineación estándar
-            bgcolor=ft.Colors.YELLOW, 
+            content=ft.Column(
+                [
+                    ft.Text("Patrocinadores", size=40, color=ft.Colors.BLACK, 
+                    font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
+                        
+                    ft.Row([imagen1, imagen2, imagen3, imagen4]),  # Añadido para mostrar las imágenes
+            # Añadido para que tenga una altura fija 
+         
+                ],
+        ),
         )
+        
         
         colaboradores = ft.Container(
             content=ft.Text("Colaboradores", size=40, color=ft.Colors.BLACK, 

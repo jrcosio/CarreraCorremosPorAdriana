@@ -24,13 +24,13 @@ class CountdownTimer(ft.Container):
         self.on_finish = on_finish
         
         # Estilos por defecto
-        self._days_style = days_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK)
-        self._hours_style = hours_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK)
-        self._minutes_style = minutes_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK)
-        self._seconds_style = seconds_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK)
-        self._label_style = label_style or ft.TextStyle(size=16, color=ft.Colors.BLACK)
+        self._days_style = days_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE)
+        self._hours_style = hours_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE)
+        self._minutes_style = minutes_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE)
+        self._seconds_style = seconds_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE)
+        self._label_style = label_style or ft.TextStyle(size=16, color=ft.Colors.WHITE)
         self._box_style = box_style or {
-            "bgcolor": ft.Colors.WHITE,
+            "bgcolor": ft.Colors.BLUE_300,
             "border_radius": 10,
             "padding": 20,
             "width": 120,
@@ -86,7 +86,7 @@ class CountdownTimer(ft.Container):
                 [self.seconds_text, self.seconds_label],
                 alignment=ft.MainAxisAlignment.CENTER,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                spacing=10
+                spacing=10,
             ),
             **self._box_style
         )

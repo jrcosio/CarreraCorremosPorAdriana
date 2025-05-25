@@ -19,6 +19,7 @@ class GaleriaScreen(ft.Container):
         fuente_aleatoria = random.choice(fuentes_disponibles)
         color_aleatorio=random.choice(colores_disponibles)
         
+        MAX_WIDTH = 1250
         
         Cabecera = ft.Container(
             content=ft.Text("TRAIL SIERRA DE PEÑASAGRA 2024 - Corremos por Adriana", size=40, 
@@ -27,7 +28,9 @@ class GaleriaScreen(ft.Container):
             alignment=ft.alignment.center,
             bgcolor=ft.Colors.BLUE_GREY_100,
             padding=10,
-            margin=0,
+            margin=10,
+            expand=True,
+            width=MAX_WIDTH,
         )
 
         def obtener_fotografias(carpeta):
@@ -119,6 +122,7 @@ class GaleriaScreen(ft.Container):
             alignment=ft.MainAxisAlignment.CENTER,  # Alineación vertical de las columnas dentro del Row
             spacing=15,
             expand=True,
+            width=MAX_WIDTH,
         )
 
         # Create the main layout
