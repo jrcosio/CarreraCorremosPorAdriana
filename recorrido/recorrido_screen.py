@@ -23,7 +23,73 @@ class RecorridoScreen(ft.Container):
                     ft.Row(
                         alignment=ft.MainAxisAlignment.CENTER,
                         controls = [
-                            WikilocMapContainer(
+                            ft.Column(
+                                controls=[
+                                    ft.Container(
+                                        content=ft.Column(
+                                            spacing=0,
+                                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                            controls=[  # Cambiado para usar "controls" con una lista
+                                                ft.Image(src="imagenes_recorrido/calendario.png", width=55, height=55),
+                                                ft.Column(
+                                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                    controls = [
+                                                        ft.Text(
+                                                            f"{recorrido_data['fecha']}",
+                                                            size=20,
+                                                            color=ft.Colors.BLACK
+                                                        ),
+                                                        ft.Text(
+                                                            f"{recorrido_data['hora']}",
+                                                            size=20,
+                                                            color=ft.Colors.BLACK
+                                                        ),
+                                                        ft.Text(
+                                                            "FECHA",
+                                                            size=10,
+                                                            color=ft.Colors.BLACK
+                                                        )
+                                                    ]
+                                                ),
+                                            ]
+                                        ),
+                                        bgcolor="#f1f18c",
+                                        border = ft.border.all(2, ft.Colors.BLACK),
+                                        border_radius=ft.border_radius.all(100),
+                                        width=160,
+                                    ),
+                                    ft.Container(
+                                        content=ft.Column(
+                                            spacing=0,
+                                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                            controls=[  # Cambiado para usar "controls" con una lista
+                                                ft.Image(src="imagenes_recorrido/punto.png", width=64),
+                                                ft.Text(
+                                                    f"{recorrido_data['lugar']}",
+                                                    size=20,
+                                                    color=ft.Colors.BLACK
+                                                ),
+                                                ft.Text(
+                                                    "Cantabria",
+                                                    size=20,
+                                                    color=ft.Colors.BLACK
+                                                ),
+                                                ft.Text(
+                                                    "LUGAR",
+                                                    size=10,
+                                                    color=ft.Colors.BLACK
+                                                )
+                                            ]
+                                        ),
+                                        bgcolor="#f1f18c",
+                                        border = ft.border.all(2, ft.Colors.BLACK),
+                                        border_radius=ft.border_radius.all(100),
+                                        width=160,
+                                    ),
+                                ],
+                                alignment=ft.MainAxisAlignment.CENTER,
+                            ),
+                            WikilocMapContainer( #Aquí se muestra el mapa del recorrido trail
                                 trail_id=recorrido_data["wikilog"],
                                 width=1000,
                                 height=600,
@@ -42,13 +108,13 @@ class RecorridoScreen(ft.Container):
                                                     color=ft.Colors.BLACK
                                                 ),
                                                 ft.Text(
-                                                    "DESNIVEL",
+                                                    "DISTANCIA",
                                                     size=10,
                                                     color=ft.Colors.BLACK
                                                 )
                                             ]
                                         ),
-                                        bgcolor=ft.Colors.BLUE_GREY_400,
+                                        bgcolor="#f1f18c",
                                         border = ft.border.all(2, ft.Colors.BLACK),
                                         border_radius=ft.border_radius.all(100),
                                         width=120,
@@ -71,7 +137,7 @@ class RecorridoScreen(ft.Container):
                                                 )
                                             ]
                                         ),
-                                        bgcolor=ft.Colors.BLUE_GREY_400,
+                                        bgcolor="#f1f18c",
                                         border = ft.border.all(2, ft.Colors.BLACK),
                                         border_radius=ft.border_radius.all(100),
                                         width=120,

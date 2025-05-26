@@ -15,7 +15,7 @@ class MainApp:
         "desnivel": 1029,
         "fecha": "2024-06-15",
         "hora": "09:00",
-        "lugar": "Cosío, Cantabria"
+        "lugar": "Cosío"
     }
     andarines ={
         "titulo": "Andarines",
@@ -25,7 +25,7 @@ class MainApp:
         "desnivel": 780,
         "fecha": "2024-06-15",
         "hora": "09:00",
-        "lugar": "Cosío, Cantabria"
+        "lugar": "Cosío"
     }
     def __init__(self, page: ft.Page):
         self.page = page
