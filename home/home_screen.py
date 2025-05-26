@@ -56,7 +56,7 @@ class HomeScreen(ft.Container):
             content= ft.Column(
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 controls=[
-                    ft.Text("Tan solo nos faltan", size=32, color=ft.Colors.BLACK),
+                    ft.Text("Tan solo nos faltan.", size=32, color=ft.Colors.BLACK),
                     CountdownTimer(
                         target_date=target,
                         on_finish=on_countdown_finish,
@@ -81,6 +81,8 @@ class HomeScreen(ft.Container):
                         fit=ft.ImageFit.CONTAIN,
                         expand=True,  # Añadido aquí
                     ),
+                    
+                    
                     ft.Container(
                         content=ft.Text(
                             "Distancia: 14 km",
