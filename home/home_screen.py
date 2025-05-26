@@ -156,8 +156,8 @@ class HomeScreen(ft.Container):
                             content=ft.Image(
                                 src=img[0],
                                 fit=ft.ImageFit.CONTAIN,
-                                width=200,
-                                height=200
+                                width=300,
+                                height=300
                             ),
                             on_click=lambda e, url=img[1]: print(f"Clicked: {url}"),
                             bgcolor=ft.Colors.TRANSPARENT,
