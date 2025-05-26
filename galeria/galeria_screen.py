@@ -49,7 +49,6 @@ class GaleriaScreen(ft.Container):
                 print(f"Error al obtener fotografías: {e}")
             return fotos
 
-        # carpeta = r"C:\Users\JOSE\Documents\Fotos_prueba_trail"
         carpeta = "assets\\imagenes_galeria"
         
         fotografias = obtener_fotografias(carpeta)
