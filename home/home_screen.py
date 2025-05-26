@@ -1,6 +1,7 @@
 import flet as ft
 from contador import CountdownTimer
 from datetime import datetime, timedelta
+import flet_video as fv
 
 class HomeScreen(ft.Container):
     def __init__(self):
@@ -72,30 +73,49 @@ class HomeScreen(ft.Container):
         )
         
             
+        def dlg_modal(video):
+            # Use self.page instead of page
+            if self.page is None:
+                print("Error: page is not defined")
+                return None
+                
+            dialogo = ft.AlertDialog( 
+                modal=False,
+                bgcolor=ft.Colors.GREY_500,
+                content=fv.Video(
+                    playlist=[fv.VideoMedia(video)],
+                    playlist_mode=fv.PlaylistMode.LOOP,
+                    show_controls=True,
+                    autoplay=True,
+                    muted=True,  # Necesario para autoplay
+                    width=1020,
+                    height=580,
+                ),
+                # actions=[
+                #     ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo)),
+                # ],
+                actions_alignment=ft.MainAxisAlignment.END,
+            )    
+            return dialogo
         
         andarines = ft.Container(
-            content=ft.Stack(
-                [
-                    ft.Image(
-                        src="imagenes_home/andarines.png", 
-                        fit=ft.ImageFit.CONTAIN,
-                        expand=True,  # Añadido aquí
-                    ),
-                ],
+            content=ft.Image(
+                    src="imagenes_home/andarines.png", 
+                    fit=ft.ImageFit.CONTAIN,
+                    expand=True,  # Añadido aquí
             ),
             expand=True,
+            on_click=lambda e: self.page.open(dlg_modal("videos/andarines.mp4")) if self.page else None,
         )
+        
         runers = ft.Container(
-            content=ft.Stack(
-                [
-                    ft.Image(
-                        src="imagenes_home/trail.png", 
-                        fit=ft.ImageFit.CONTAIN,
-                        expand=True,  # Añadido aquí
-                    ),
-                ],
+            content=ft.Image(
+                src="imagenes_home/trail.png", 
+                fit=ft.ImageFit.CONTAIN,
+                expand=True,  # Añadido aquí
             ),
             expand=True,
+            on_click=lambda e: self.page.open(dlg_modal("videos/trail.mp4")) if self.page else None, 
         )
         cabecera = ft.Row(
             [fecha_carrera, lugar_carrera],  # Eliminada coma adicional
