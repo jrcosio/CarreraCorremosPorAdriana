@@ -7,12 +7,20 @@ class RecorridoScreen(ft.Container):
             content = ft.Column(
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 controls = [
-                    ft.Text(
-                        recorrido_data["titulo"],
-                        weight=ft.FontWeight.BOLD,
-                        size=24,
-                        color=ft.Colors.BLACK,
-                        font_family = "Roboto",
+                    ft.Container(
+                        content= (
+                            ft.Text(
+                                recorrido_data["titulo"],
+                                weight=ft.FontWeight.BOLD,
+                                size=24,
+                                color=ft.Colors.BLACK,
+                                font_family = "Roboto",
+                            )
+                        ),
+                        bgcolor = "#EBE5D1",
+                        border = ft.border.all(2, ft.Colors.BLACK),
+                        width = 1500,
+                        alignment = ft.alignment.center,
                     ),
                     ft.Text(
                         recorrido_data["descripcion"],

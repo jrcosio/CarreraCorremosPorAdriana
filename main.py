@@ -9,7 +9,7 @@ from barra_navegacion import NavBar
 class MainApp:
     trail ={
         "titulo": "Trail Peñasagra",
-        "descripcion": "Carrera de montaña con un recorrido espectacular por los Picos de Europa.",
+        "descripcion": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
         "wikilog": "214816740",
         "distancia": 20,
         "desnivel": 1029,
@@ -19,7 +19,7 @@ class MainApp:
     }
     andarines ={
         "titulo": "Andarines",
-        "descripcion": "Carrera de montaña más centrada en amateur y gente sin practica.",
+        "descripcion": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
         "wikilog": "214817578",
         "distancia": 15,
         "desnivel": 780,
