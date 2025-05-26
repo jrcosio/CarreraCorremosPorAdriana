@@ -89,11 +89,7 @@ class HomeScreen(ft.Container):
             content=ft.Stack(
                 [
                     ft.Image(
-<<<<<<< HEAD
                         src="imagenes_home/trail.png", 
-=======
-                        src="imagenes_home/trailnuevo1.jpg", 
->>>>>>> 6bde9386a470c30b3612c3850e3b481b4648290f
                         fit=ft.ImageFit.CONTAIN,
                         expand=True,  # Añadido aquí
                     ),
