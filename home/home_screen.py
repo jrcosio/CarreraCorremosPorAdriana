@@ -81,8 +81,8 @@ class HomeScreen(ft.Container):
                         fit=ft.ImageFit.CONTAIN,
                         expand=True,  # Añadido aquí
                     ),
-                    
-                    
+                    ft.Column(
+                [
                     ft.Container(
                         content=ft.Text(
                             "Distancia: 14 km",
@@ -93,14 +93,30 @@ class HomeScreen(ft.Container):
                             italic=True,
                         ),
                         alignment=ft.alignment.top_center,
-                        padding=10,  # Añadido padding
-                        expand=True,  # Movido expand=True al contenedor    
+                        padding=10,
+                    ),
+                    ft.Container(
+                        expand=True  # Contenedor vacío que ocupa el espacio intermedio
+                    ),
+                    ft.Container(
+                        content=ft.Text(
+                            "Andarines",
+                            size=32,
+                            color=ft.Colors.BLACK,
+                            font_family="Britanic Bold",
+                            weight=ft.FontWeight.BOLD,
+                            italic=True,
+                        ),
+                        alignment=ft.alignment.bottom_center,
+                        padding=10,
                     ),
                 ],
+                expand=True,
             ),
-            expand=True,
-        )   
-
+        ],
+    ),
+    expand=True,
+)
         runers = ft.Container(
             content=ft.Stack(
                 [
@@ -108,23 +124,42 @@ class HomeScreen(ft.Container):
                         src="imagenes_home/trail.jpg", 
                         fit=ft.ImageFit.CONTAIN,
                     ),
+                    ft.Column(
+                [
                     ft.Container(
                         content=ft.Text(
                             "Distancia: 20 km",
-                        size=32,
-                        color=ft.Colors.YELLOW,
-                        font_family="Britanic Bold",
-                        weight=ft.FontWeight.BOLD,
-                        italic=True,
-            ),
-                alignment=ft.alignment.top_center,
-                padding=10,  # Añadido padding
-                expand=True,  # Movido expand=True al contenedor
-        ),
+                            size=32,
+                            color=ft.Colors.YELLOW,
+                            font_family="Britanic Bold",
+                            weight=ft.FontWeight.BOLD,
+                            italic=True,
+                        ),
+                        alignment=ft.alignment.top_center,
+                        padding=10,
+                    ),
+                    ft.Container(
+                        expand=True  # Contenedor vacío que ocupa el espacio intermedio
+                    ),
+                    ft.Container(
+                        content=ft.Text(
+                            "Trail",
+                            size=32,
+                            color=ft.Colors.YELLOW,
+                            font_family="Britanic Bold",
+                            weight=ft.FontWeight.BOLD,
+                            italic=True,
+                        ),
+                        alignment=ft.alignment.bottom_center,
+                        padding=10,
+                    ),
                 ],
+                # expand=True,
             ),
-            expand=True,  # Movido expand=True al contenedor
-        )
+        ],
+    ),
+    expand=True,
+)
         cabecera = ft.Row(
             [fecha_carrera, lugar_carrera],  # Eliminada coma adicional
             alignment=ft.MainAxisAlignment.CENTER,
