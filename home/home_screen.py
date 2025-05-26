@@ -121,7 +121,7 @@ class HomeScreen(ft.Container):
             content=ft.Stack(
                 [
                     ft.Image(
-                        src="imagenes_home/trail.jpg", 
+                        src="imagenes_home/trailnuevo.jpg", 
                         fit=ft.ImageFit.CONTAIN,
                         expand=True,  # Añadido aquí
                     ),
