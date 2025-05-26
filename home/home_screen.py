@@ -53,16 +53,23 @@ class HomeScreen(ft.Container):
     
     # Crear un contenedor centrado para el contador
         countdown_container = ft.Container(
-                content=CountdownTimer(
-                target_date=target,
-                on_finish=on_countdown_finish,
-                padding=5,
-                bgcolor=None,  # Transparente para que se vea el fondo del contenedor principal
-        ),
+            content= ft.Column(
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                controls=[
+                    ft.Text("Tan solo nos faltan", size=32, color=ft.Colors.BLACK),
+                    CountdownTimer(
+                        target_date=target,
+                        on_finish=on_countdown_finish,
+                        padding=5,
+                        bgcolor=None,  # Transparente para que se vea el fondo del contenedor principal
+                    ),
+                ]
+                
+            ),
             alignment=ft.alignment.center,
             bgcolor=ft.Colors.WHITE,
             padding=20,
-    )
+        )
         
             
         
@@ -82,28 +89,14 @@ class HomeScreen(ft.Container):
                             font_family="Britanic Bold",
                             weight=ft.FontWeight.BOLD,
                             italic=True,
-            ),
+                        ),
                         alignment=ft.alignment.top_center,
                         padding=10,  # Añadido padding
                         expand=True,  # Movido expand=True al contenedor    
-        ),
-                    # ft.Container(
-                    #     content=ft.Text(
-                    #     "Andarines",
-                    #         size=32,
-                    #         color=ft.Colors.WHITE,
-                    #         font_family="Britanic Bold",
-                    #         weight=ft.FontWeight.BOLD,
-                    #         italic=True,
-                    # ),
-                    #     alignment=ft.alignment.bottom_center,  # Posiciona el texto en la parte inferior
-                    #     padding=10,  # Añadido padding
-                    #     expand=True,  # Movido expand=True al contenedor    
-                   
-                    # ),
+                    ),
                 ],
             ),
-        expand=True,
+            expand=True,
         )   
 
         runers = ft.Container(
@@ -140,184 +133,80 @@ class HomeScreen(ft.Container):
             alignment=ft.MainAxisAlignment.CENTER,
         )
 
-        imagenes_patrocinadores = [
-            ("imagenes_patrocinadores/descarga.jpg","URL"),
-            ("imagenes_patrocinadores/imagen1.jpg","URL"),
-            ("imagenes_patrocinadores/imagen2.jpg","URL"),
-            ("imagenes_patrocinadores/imagen3.jpg","URL"),
-            ("imagenes_patrocinadores/descarga.jpg","URL"),
-            ("imagenes_patrocinadores/imagen1.jpg","URL"),
-            ("imagenes_patrocinadores/imagen2.jpg","URL"),
-            ("imagenes_patrocinadores/imagen3.jpg","URL"),
-            ("imagenes_patrocinadores/descarga.jpg","URL"),
-            ("imagenes_patrocinadores/imagen1.jpg","URL"),
-            ("imagenes_patrocinadores/imagen2.jpg","URL"),
-            ("imagenes_patrocinadores/imagen3.jpg","URL"),
-            ("imagenes_patrocinadores/descarga.jpg","URL"),
-            ("imagenes_patrocinadores/imagen1.jpg","URL"),
-            ("imagenes_patrocinadores/imagen2.jpg","URL"),
-            
-        ]
         
-        # Agrupar las imágenes en filas de 4
-        filas_imagenes = [
-            imagenes_patrocinadores[i:i+4]
-            for i in range(0, len(imagenes_patrocinadores), 4)
-        ]
+        
+        def logos_container(titulo, imagenes_lista, color_fondo=ft.Colors.TRANSPARENT):
+            # Agrupar las imágenes en filas de 4
+            filas_imagenes = [
+                imagenes_lista[i:i+4]
+                for i in range(0, len(imagenes_lista), 4)
+            ]
 
-        patrocinadores = ft.Container(
-            padding=10,
-            content=ft.Column(
-            [
-                ft.Text(
-                "Patrocinadores",
-                size=27,
-                color=ft.Colors.BLACK,
-                font_family="Britanic Bold",
-                weight=ft.FontWeight.BOLD,
-                italic=True
-                ),
-                *[
-                ft.Row(
-                    [
-                    ft.Container(
-                        content=ft.Image(
-                            src=img[0],
-                            fit=ft.ImageFit.CONTAIN,
-                            width=250,
-                            height=150
-                        ),
-                        on_click=lambda e, url=img[1]: print(f"Clicked: {url}"),
-                        bgcolor=ft.Colors.TRANSPARENT,
-                        border_radius=10,
-                        padding=2,
+            return ft.Container(
+                padding=10,
+                bgcolor=color_fondo,
+                content=ft.Column(
+                [
+                    ft.Text(
+                    value=titulo,
+                    size=27,
+                    color=ft.Colors.BLACK,
+                    font_family="Britanic Bold",
+                    weight=ft.FontWeight.BOLD,
+                    italic=True
+                    ),
+                    *[
+                    ft.Row(
+                        [
+                        ft.Container(
+                            content=ft.Image(
+                                src=img[0],
+                                fit=ft.ImageFit.CONTAIN,
+                                width=200,
+                                height=200
+                            ),
+                            on_click=lambda e, url=img[1]: print(f"Clicked: {url}"),
+                            bgcolor=ft.Colors.TRANSPARENT,
+                            border_radius=10,
+                            padding=2,
+                        )
+                        for img in fila
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        spacing=10
                     )
-                    for img in fila
-                    ],
-                    alignment=ft.MainAxisAlignment.CENTER,
-                    spacing=10
-                )
-                for fila in filas_imagenes
-                ]
-            ],
-            ),
-        )
+                    for fila in filas_imagenes
+                    ]
+                ],
+                ),
+            )
+        
+        imagenes_patrocinadores = [
+            ("imagenes_patrocinadores/patrocinador.png","URL"),
+            ("imagenes_patrocinadores/patrocinador.png","URL"),
+            ("imagenes_patrocinadores/patrocinador.png","URL"),
+            ("imagenes_patrocinadores/patrocinador.png","URL"),
+            ("imagenes_patrocinadores/patrocinador.png","URL"),
+            ("imagenes_patrocinadores/patrocinador.png","URL"), 
+        ]
         
         imagenes_colaboradores = [
-            ("imagenes_colaboradores/colab1.jpg","URL"),
-            ("imagenes_colaboradores/colab2.jpg","URL"),
-            ("imagenes_colaboradores/colab3.jpg","URL"),
-            ("imagenes_colaboradores/colab4.jpg","URL"),
-            ("imagenes_colaboradores/colab1.jpg","URL"),
-            ("imagenes_colaboradores/colab2.jpg","URL"),
-            ("imagenes_colaboradores/colab3.jpg","URL"),
-            ("imagenes_colaboradores/colab4.jpg","URL"),
-            ("imagenes_colaboradores/colab1.jpg","URL"),
-            ("imagenes_colaboradores/colab2.jpg","URL"),
-            ("imagenes_colaboradores/colab3.jpg","URL")
-           
+            ("imagenes_colaboradores/colaborador.png","URL"),
+            ("imagenes_colaboradores/colaborador.png","URL"),
+            ("imagenes_colaboradores/colaborador.png","URL"),
+            ("imagenes_colaboradores/colaborador.png","URL"),
+            ("imagenes_colaboradores/colaborador.png","URL"),
+            ("imagenes_colaboradores/colaborador.png","URL"),           
         ]
-        
-        filas_imagenes = [
-            imagenes_colaboradores[i:i+4]
-            for i in range(0, len(imagenes_colaboradores), 4)
-        ]
-        
-        colaboradores =  ft.Container(
-            padding=10,
-            bgcolor=ft.Colors.GREEN_200,
-            content=ft.Column(
-            [
-                ft.Text(
-                "Colaboradores",
-                size=27,
-                color=ft.Colors.BLACK,
-                font_family="Britanic Bold",
-                weight=ft.FontWeight.BOLD,
-                italic=True
-                ),
-                *[
-                ft.Row(
-                    [
-                    ft.Container(
-                        content=ft.Image(
-                            src=img[0],
-                            fit=ft.ImageFit.CONTAIN,
-                            width=250,
-                            height=150
-                        ),
-                        on_click=lambda e, url=img[1]: print(f"Clicked: {url}"),
-                        bgcolor=ft.Colors.TRANSPARENT,
-                        border_radius=10,
-                        padding=2,
-                    )
-                    for img in fila
-                    ],
-                    alignment=ft.MainAxisAlignment.CENTER,
-                    spacing=10
-                )
-                for fila in filas_imagenes
-                ]
-            ],
-            ),
-        )
-        
-        #---------------------------------------------
-        # Lista de imágenes de organizadores
-        # Asegúrate de que las imágenes están en la carpeta correcta
-        # y que las URLs son correctas.
-        # Si las imágenes están en una carpeta local, usa la ruta relativa
-        # o absoluta correcta. Si son URLs, asegúrate de que son accesibles.
         
         imagenes_organizadores = [
             ("imagenes_organizadores/logo.png","URL"),
         ]
         
-        filas_imagenes = [
-            imagenes_organizadores[i:i+4]
-            for i in range(0, len(imagenes_organizadores), 4)
-        ]
         
-        organizadores =  ft.Container(
-            padding=10,
-            bgcolor=ft.Colors.BLUE_GREY_200,  # Un color claro para el fondo
-            content=ft.Column(
-            [
-                ft.Text(
-                "Organizadores",
-                size=27,
-                color=ft.Colors.WHITE,
-                font_family="Britanic Bold",
-                weight=ft.FontWeight.BOLD,
-                italic=True
-                ),
-                *[
-                ft.Row(
-                    [
-                    ft.Container(
-                        content=ft.Image(
-                            src=img[0],
-                            fit=ft.ImageFit.CONTAIN,
-                            width=250,
-                            height=150
-                        ),
-                        on_click=lambda e, url=img[1]: print(f"Clicked: {url}"),
-                        bgcolor=ft.Colors.TRANSPARENT,
-                        border_radius=10,
-                        padding=2,
-                    )
-                    for img in fila
-                    ],
-                    alignment=ft.MainAxisAlignment.CENTER,
-                    spacing=10
-                )
-                for fila in filas_imagenes
-                ]
-            ],
-            ),
-        )
-        
-        
+        patrocinadores = logos_container("Patrocinadores", imagenes_patrocinadores , ft.Colors.YELLOW_100)
+        colaboradores = logos_container("Colaboradores", imagenes_colaboradores, ft.Colors.GREEN_100)
+        organizadores = logos_container("Organizadores", imagenes_organizadores, ft.Colors.BLUE_GREY_300)
         
         
         self.content = ft.Column(
