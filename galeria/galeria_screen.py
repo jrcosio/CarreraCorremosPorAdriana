@@ -127,7 +127,8 @@ class GaleriaScreen(ft.Container):
 
         # Create the main layout
         main_column = ft.Column(
-            [Cabecera, Cuerpo],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            controls=[Cabecera, Cuerpo],
             expand=True,
         )
         

@@ -8,6 +8,7 @@ from barra_navegacion import NavBar
 class MainApp:
     def __init__(self, page: ft.Page):
         self.page = page
+        self.page.theme_mode = ft.ThemeMode.LIGHT
         page.title = "Trail Peñasagra - Corremos por Adriana"
         page.scroll = None
         page.auto_scroll = False
