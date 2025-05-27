@@ -9,51 +9,51 @@ from barra_navegacion import NavBar
 class MainApp:
     trail ={
         "titulo": "Trail Peñasagra",
-        "descripcion": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "descripcion": "Trail de montaña con un recorrido espectacular,con vistas a Peñasagra.\nOjo con la dureza del corta fuegos, no es apta para todos los públicos.",
         "wikilog": "214816740",
         "distancia": 20,
         "desnivel": 1029,
         "fecha": "2024-06-15",
-        "hora": "09:00",
-        "lugar": "Cosío"
+        "hora": "10:30",
+        "lugar": "Cosío",
+        "track": "tracks/trailpenasagra.gpx",
     }
     andarines ={
-        "titulo": "Andarines",
-        "descripcion": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "titulo": "Andarines Peñasagra",
+        "descripcion": "Carrera de montaña más centrada en amateur y para gente con ganas de\ndescubrir los montes de Cosío con vista a Peñasagra.",
         "wikilog": "214817578",
         "distancia": 15,
         "desnivel": 780,
         "fecha": "2024-06-15",
         "hora": "09:00",
-        "lugar": "Cosío"
+        "lugar": "Cosío",
+        "track": "tracks/andarinespenasagra.gpx",
     }
     def __init__(self, page: ft.Page):
         self.page = page
         page.title = "Trail Peñasagra - Corremos por Adriana"
         page.scroll = None
+        page.theme_mode = ft.ThemeMode.LIGHT
         page.auto_scroll = False
-        
-       # Crear instancias de cada pantalla
-        self.home_screen = HomeScreen()
-        self.inscripcion_screen = InscripcionScreen()
-        self.galeria_screen = GaleriaScreen()
-        self.recorrido_screen = RecorridoScreen(recorrido_data=self.trail)
-        
+                
         
         
         # Mapeo de botones a pantallas
         # Si hubiera mas pantallas se añaden aquí para que los botones la encuentren
         self.screens = {
-            "btn1": self.home_screen,
-            "btn2": self.inscripcion_screen,
-            "btn3": self.galeria_screen,
-            "btn4": self.recorrido_screen
+            "btn_home": HomeScreen(),
+            "btn_inscripcion": InscripcionScreen(),
+            "btn_inscritos": InscripcionScreen(),  # Reutilizando la pantalla de inscripción pero sera otra pantalla
+            "btn_galeria": GaleriaScreen(),
+            "btn_trail": RecorridoScreen(recorrido_data=self.trail),
+            "btn_andarines": RecorridoScreen(recorrido_data=self.andarines),
+            "btn_contacto": HomeScreen(),  # Reutilizando la pantalla de inicio para contacto
         }
         
         # Contenedor para mostrar la pantalla activa
         self.body_container = ft.Container(
             content=ft.Column(
-                [self.screens["btn1"]],
+                [self.screens["btn_home"]],
                 scroll=ft.ScrollMode.AUTO,
                 expand=True,
             ),
