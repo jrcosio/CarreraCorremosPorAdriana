@@ -31,6 +31,7 @@ class MainApp:
         self.page = page
         page.title = "Trail Peñasagra - Corremos por Adriana"
         page.scroll = None
+        page.theme_mode = ft.ThemeMode.LIGHT
         page.auto_scroll = False
         
        # Crear instancias de cada pantalla
