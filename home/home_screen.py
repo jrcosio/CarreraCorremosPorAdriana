@@ -29,14 +29,19 @@ class HomeScreen(ft.Container):
             border_radius=ft.border_radius.only(top_left=20, top_right=20) 
         )
         
-        adriana = ft.Container(
-            content=ft.Text("Texto Adri", size=40, color=ft.Colors.BLACK, 
-                font_family="Britanic Bold", weight=ft.FontWeight.BOLD, italic=True),
-            alignment=ft.alignment.center,
-            height=100,  
-            bgcolor=ft.Colors.RED_100
-        )          
+        # portada1 = ft.Image(src="imagenes_home/cabecera1.jpg", fit=ft.ImageFit.COVER, 
+        #                     width=600, height=200
+        #                     )  # Ajusta el tamaño según sea necesario
+        # portada2 = ft.Image(src="imagenes_home/textocabecera.jpg",expand=True, fit=ft.ImageFit.COVER, 
+        #                     width=100, height=300)  # Ajusta el tamaño según sea necesario
+        # portada3 = ft.Image(src="imagenes_home/cabecera2.jpg", fit=ft.ImageFit.COVER, 
+        #                     width=600, height=200)  # Ajusta el tamaño según sea necesario
         
+        adriana = ft.Container(
+            content=ft.Image(src="imagenes_home/cabecera.jpg",
+                              fit=ft.ImageFit.COVER, 
+                              width=800, height=500),
+        )
         def main(page: ft.Page):
             page.title = "Contador Regresivo"
             page.vertical_alignment = ft.MainAxisAlignment.CENTER
@@ -89,9 +94,10 @@ class HomeScreen(ft.Container):
                     width=1020,
                     height=580,
                 ),
-                # actions=[
-                #     ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo)),
-                # ],
+                actions=[
+                    ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo),
+                                  style=ft.ButtonStyle(color=ft.Colors.BLACK)),
+                ],
                 actions_alignment=ft.MainAxisAlignment.END,
             )    
             return dialogo
