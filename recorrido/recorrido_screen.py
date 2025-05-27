@@ -2,6 +2,7 @@ import flet as ft
 import flet_video as fv
 from recorrido.WikilocMapContainer import WikilocMapContainer
 
+
 class RecorridoScreen(ft.Container):
     """
     Pantalla que muestra los detalles de un recorrido incluyendo información
