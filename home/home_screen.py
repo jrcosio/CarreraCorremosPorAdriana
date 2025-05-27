@@ -227,4 +227,5 @@ class HomeScreen(ft.Container):
         
         
 if __name__ == "__main__":
-    print("Esta clase no se puede ejecutar de forma independiente.")
+    print("A donde vas so animal... no se ejecuta este archivo")
+    print("Ve a main.py y ejecuta desde ahí")

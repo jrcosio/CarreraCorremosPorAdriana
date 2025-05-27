@@ -33,9 +33,13 @@ class NavBar(ft.Container):
         
         # Botones de navegación
         self.buttons = [
-            NavButton("HOME", "btn1", on_button_clicked),
-            NavButton("INCRIPCIÓN", "btn2", on_button_clicked),
-            NavButton("GALERÍA", "btn3", on_button_clicked)
+            NavButton("HOME", "btn_home", on_button_clicked),
+            NavButton("INSCRIPCIÓN", "btn_inscripcion", on_button_clicked),
+            NavButton("INSCRITOS", "btn_inscritos", on_button_clicked),
+            NavButton("TRAIL", "btn_trail", on_button_clicked),
+            NavButton("ANDARINES", "btn_andarines", on_button_clicked),
+            NavButton("GALERÍA", "btn_galeria", on_button_clicked),
+            NavButton("CONTACTO", "btn_contacto", on_button_clicked),
         ]
         
         # Fila con logo y botones
