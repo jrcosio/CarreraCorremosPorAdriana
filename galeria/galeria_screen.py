@@ -58,17 +58,40 @@ class GaleriaScreen(ft.Container):
             if self.page is None:
                 print("Error: page is not defined")
                 return None
+            def download_image(e):
+            # Launch the image URL directly to download it
+                self.page.launch_url(foto)
                 
             dialogo = ft.AlertDialog( 
                 modal=True,
                 title=ft.Text("Foto seleccionada"),
                 content=ft.Image(src=foto, fit=ft.ImageFit.CONTAIN),#, width=800, height=800),
                 actions=[
+                    ft.TextButton("Descargar", on_click=download_image, icon=ft.Icons.DOWNLOAD),
                     ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo)),
                 ],
                 actions_alignment=ft.MainAxisAlignment.END,
             )    
             return dialogo
+        
+        
+            """
+            def download_image(e):
+            # Launch the image URL directly to download it
+                self.page.launch_url(foto)
+            
+            dialogo = ft.AlertDialog( 
+            modal=True,
+            title=ft.Text("Foto seleccionada"),
+            content=ft.Image(src=foto, fit=ft.ImageFit.CONTAIN),
+            actions=[
+                ft.TextButton("Descargar", on_click=download_image, icon=ft.icons.DOWNLOAD),
+                ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo)),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+            )    
+            return dialogo
+            """
                 
         def imagen_contenedor(foto, width, height):
             return ft.Container(
