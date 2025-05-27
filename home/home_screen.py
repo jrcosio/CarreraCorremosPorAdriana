@@ -35,9 +35,7 @@ class HomeScreen(ft.Container):
             alignment=ft.alignment.center,
             height=100,  
             bgcolor=ft.Colors.RED_100
-        )   
-        
-       
+        )          
         
         def main(page: ft.Page):
             page.title = "Contador Regresivo"
