@@ -35,25 +35,19 @@ class MainApp:
         page.scroll = None
         page.theme_mode = ft.ThemeMode.LIGHT
         page.auto_scroll = False
-        
-       # Crear instancias de cada pantalla
-        self.home_screen = HomeScreen()
-        self.inscripcion_screen = InscripcionScreen()
-        self.galeria_screen = GaleriaScreen()
-        self.recorrido_screen = RecorridoScreen(recorrido_data=self.trail)
-        
+                
         
         
         # Mapeo de botones a pantallas
         # Si hubiera mas pantallas se añaden aquí para que los botones la encuentren
         self.screens = {
-            "btn_home": self.home_screen,
-            "btn_inscripcion": self.inscripcion_screen,
-            "btn_inscritos": self.inscripcion_screen,  # Reutilizando la pantalla de inscripción pero sera otra pantalla
-            "btn_galeria": self.galeria_screen,
-            "btn_trail": self.recorrido_screen,
+            "btn_home": HomeScreen(),
+            "btn_inscripcion": InscripcionScreen(),
+            "btn_inscritos": InscripcionScreen(),  # Reutilizando la pantalla de inscripción pero sera otra pantalla
+            "btn_galeria": GaleriaScreen(),
+            "btn_trail": RecorridoScreen(recorrido_data=self.trail),
             "btn_andarines": RecorridoScreen(recorrido_data=self.andarines),
-            "btn_contacto": self.home_screen,  # Reutilizando la pantalla de inicio para contacto
+            "btn_contacto": HomeScreen(),  # Reutilizando la pantalla de inicio para contacto
         }
         
         # Contenedor para mostrar la pantalla activa
