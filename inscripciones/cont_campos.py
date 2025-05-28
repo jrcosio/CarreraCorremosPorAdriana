@@ -125,7 +125,7 @@ class Campos(ft.Container):
             content = ft.Column(
                 controls = [
                     ft.Container(
-                        content = ft.Text("Formulario de inscrpición", 
+                        content = ft.Text("Formulario de inscripción", 
                                         weight = ft.FontWeight.BOLD,
                                         color = ft.Colors.WHITE,
                                         size = 16,
