@@ -30,19 +30,34 @@ class HomeScreen(ft.Container):
             border_radius=ft.border_radius.only(top_left=20, top_right=20) 
         )
         
-        # portada1 = ft.Image(src="imagenes_home/cabecera1.jpg", fit=ft.ImageFit.COVER, 
-        #                     width=600, height=200
-        #                     )  # Ajusta el tamaño según sea necesario
-        # portada2 = ft.Image(src="imagenes_home/textocabecera.jpg",expand=True, fit=ft.ImageFit.COVER, 
-        #                     width=100, height=300)  # Ajusta el tamaño según sea necesario
-        # portada3 = ft.Image(src="imagenes_home/cabecera2.jpg", fit=ft.ImageFit.COVER, 
-        #                     width=600, height=200)  # Ajusta el tamaño según sea necesario
-        
-        adriana = ft.Container(
-            content=ft.Image(src="imagenes_home/cabecera.jpg",
-                              fit=ft.ImageFit.CONTAIN, 
-                              width=800, height=500),
+        portada1 = ft.Image(
+            src="imagenes_home/portadaizq.jpg",
+            fit=ft.ImageFit.COVER,
+            width=400,
+            height=200,
+            )
+        portada2 = ft.Image(
+            src="imagenes_home/texto.jpg",
+            expand=True,
+            height=200,
+            fit=ft.ImageFit.COVER,
         )
+        portada3 = ft.Image(
+            src="imagenes_home/portadader.jpg",
+            fit=ft.ImageFit.COVER,
+            width=400,
+            height=200,
+        )
+
+        adriana = ft.Row(
+            [portada1, portada2, portada3],
+            alignment=ft.MainAxisAlignment.CENTER,
+            vertical_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=0,
+            expand=True,
+        )
+     
+    
         def main(page: ft.Page):
             page.title = "Contador Regresivo"
             page.vertical_alignment = ft.MainAxisAlignment.CENTER
