@@ -123,7 +123,7 @@ class GaleriaScreen(ft.Container):
             columnas,
             vertical_alignment=ft.CrossAxisAlignment.START,  # Alineación horizontal de las columnas dentro del Row
             alignment=ft.MainAxisAlignment.CENTER,  # Alineación vertical de las columnas dentro del Row
-            spacing=15,
+            spacing=10,
             expand=True,
             width=MAX_WIDTH,
         )
