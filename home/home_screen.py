@@ -183,7 +183,7 @@ class HomeScreen(ft.Container):
             ("imagenes_patrocinadores/patrocinador.png","URL"),
             ("imagenes_patrocinadores/patrocinador.png","URL"),
             ("imagenes_patrocinadores/patrocinador.png","URL"),
-            ("imagenes_patrocinadores/patrocinador.png","URL"),
+            ("imagenes_patrocinadores/banner_LIS.png","URL"),
             ("imagenes_patrocinadores/patrocinador.png","URL"),
             ("imagenes_patrocinadores/patrocinador.png","URL"), 
         ]
