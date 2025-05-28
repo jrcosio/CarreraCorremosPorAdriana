@@ -63,7 +63,7 @@ class GaleriaScreen(ft.Container):
                 self.page.launch_url(foto)
                 
             dialogo = ft.AlertDialog( 
-                modal=True,
+                modal=False,
                 title=ft.Text("Foto seleccionada"),
                 content=ft.Image(src=foto, fit=ft.ImageFit.CONTAIN),#, width=800, height=800),
                 actions=[
