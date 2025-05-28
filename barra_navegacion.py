@@ -8,8 +8,8 @@ class NavButton(ft.TextButton):
                 color=color,
                 padding=10,
                 text_style=ft.TextStyle(
-                    size=20,
-                    weight=ft.FontWeight.BOLD,
+                    size=18,
+                    #weight=ft.FontWeight.BOLD,
                 ),
             ),
             data=data,
