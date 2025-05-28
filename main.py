@@ -62,7 +62,7 @@ class MainApp:
             ),
             expand=True,
             bgcolor= ft.Colors.WHITE,
-            padding=ft.padding.symmetric(horizontal = 150) # Añadido padding horizontal para que no se vea tan pegado a los bordes
+            padding=ft.padding.symmetric(horizontal = 100) # Añadido padding horizontal para que no se vea tan pegado a los bordes
         )
         
         # Barra de navegación, acordaros de que es unafuncion Callback

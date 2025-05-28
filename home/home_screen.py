@@ -2,6 +2,7 @@ import flet as ft
 from contador import CountdownTimer
 from datetime import datetime, timedelta
 import flet_video as fv
+import flet_webview as fw
 
 class HomeScreen(ft.Container):
     def __init__(self):
@@ -39,7 +40,7 @@ class HomeScreen(ft.Container):
         
         adriana = ft.Container(
             content=ft.Image(src="imagenes_home/cabecera.jpg",
-                              fit=ft.ImageFit.COVER, 
+                              fit=ft.ImageFit.CONTAIN, 
                               width=800, height=500),
         )
         def main(page: ft.Page):
