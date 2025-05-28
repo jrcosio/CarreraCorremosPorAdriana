@@ -40,16 +40,16 @@ class MainApp:
         page.padding = 0
                 
         
-        
         # Mapeo de botones a pantallas
         # Si hubiera mas pantallas se añaden aquí para que los botones la encuentren
         self.screens = {
             "btn_home": HomeScreen(),
             "btn_inscripcion": InscripcionScreen(),
-            "btn_inscritos": InscripcionScreen(),  # Reutilizando la pantalla de inscripción pero sera otra pantalla
+            "btn_inscritos": HomeScreen(),  # Reutilizando la pantalla de inscripción pero sera otra pantalla
             "btn_galeria": GaleriaScreen(),
             "btn_trail": RecorridoScreen(recorrido_data=self.trail),
             "btn_andarines": RecorridoScreen(recorrido_data=self.andarines),
+            "btn_clasificacion": HomeScreen(),  # Reutilizando la pantalla de inicio para clasificación
             "btn_contacto": HomeScreen(),  # Reutilizando la pantalla de inicio para contacto
         }
         
@@ -61,6 +61,8 @@ class MainApp:
                 expand=True,
             ),
             expand=True,
+            bgcolor= ft.Colors.WHITE,
+            padding=ft.padding.symmetric(horizontal = 150) # Añadido padding horizontal para que no se vea tan pegado a los bordes
         )
         
         # Barra de navegación, acordaros de que es unafuncion Callback
@@ -71,6 +73,7 @@ class MainApp:
         self.page.add(
             ft.Column([
                 self.nav_bar,
+                ft.Divider(color=ft.Colors.GREEN_300),
                 self.body_container,
             ], spacing=0, expand=True)
         )
