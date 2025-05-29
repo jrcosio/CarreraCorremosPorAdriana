@@ -63,7 +63,7 @@ class GaleriaScreen(ft.Container):
                 self.page.launch_url(foto)
                 
             dialogo = ft.AlertDialog( 
-                modal=True,
+                modal=False,
                 title=ft.Text("Foto seleccionada"),
                 content=ft.Image(src=foto, fit=ft.ImageFit.CONTAIN),#, width=800, height=800),
                 actions=[
@@ -123,7 +123,7 @@ class GaleriaScreen(ft.Container):
             columnas,
             vertical_alignment=ft.CrossAxisAlignment.START,  # Alineación horizontal de las columnas dentro del Row
             alignment=ft.MainAxisAlignment.CENTER,  # Alineación vertical de las columnas dentro del Row
-            spacing=15,
+            spacing=10,
             expand=True,
             width=MAX_WIDTH,
         )

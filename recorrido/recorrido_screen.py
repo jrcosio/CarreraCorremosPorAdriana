@@ -193,8 +193,8 @@ class RecorridoScreen(ft.Container):
         """Crea el contenedor del mapa."""
         return WikilocMapContainer(
             trail_id=self.recorrido_data["wikilog"],
-            width=1000,
-            height=600,
+            width=900,
+            height=450,
         )
         
     def _create_map3D_container(self):

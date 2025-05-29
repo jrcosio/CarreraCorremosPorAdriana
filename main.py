@@ -9,7 +9,7 @@ from barra_navegacion import NavBar
 class MainApp:
     trail ={
         "titulo": "Trail Peñasagra",
-        "descripcion": "Trail de montaña con un recorrido espectacular,con vistas a Peñasagra.\nOjo con la dureza del corta fuegos, no es apta para todos los públicos.",
+        "descripcion": "Trail de montaña con un recorrido espectacular, con vistas a Peñasagra.\nOjo con la dureza del corta fuegos, no es apta para todos los públicos.",
         "wikilog": "214816740",
         "distancia": 20,
         "desnivel": 1029,
@@ -62,7 +62,7 @@ class MainApp:
             ),
             expand=True,
             bgcolor= ft.Colors.WHITE,
-            padding=ft.padding.symmetric(horizontal = 150) # Añadido padding horizontal para que no se vea tan pegado a los bordes
+            padding=ft.padding.symmetric(horizontal = 60) # Añadido padding horizontal para que no se vea tan pegado a los bordes
         )
         
         # Barra de navegación, acordaros de que es unafuncion Callback
