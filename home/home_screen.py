@@ -33,6 +33,7 @@ class HomeScreen(ft.Container):
         portada1 = ft.Image(
             src="imagenes_home/header_izq_adri.png",
             fit=ft.ImageFit.COVER,
+            border_radius=ft.border_radius.all(20),
             # width=400,
             # height=200,
             )
@@ -46,6 +47,7 @@ class HomeScreen(ft.Container):
         portada3 = ft.Image(
             src="imagenes_home/header_der_adri.png",
             fit=ft.ImageFit.COVER,
+            border_radius=ft.border_radius.all(20),
             # width=400,
             # height=200,
         )
