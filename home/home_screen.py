@@ -31,22 +31,25 @@ class HomeScreen(ft.Container):
         )
         
         portada1 = ft.Image(
-            src="imagenes_home/portadaizq.jpg",
+            src="imagenes_home/header_izq_adri.png",
             fit=ft.ImageFit.COVER,
-            width=400,
-            height=200,
+            border_radius=ft.border_radius.all(20),
+            # width=400,
+            # height=200,
             )
         portada2 = ft.Image(
-            src="imagenes_home/texto.jpg",
+            src="imagenes_home/banner_adriana_rosa.png",
             expand=True,
+            #width=400,
             height=200,
-            fit=ft.ImageFit.COVER,
+            fit=ft.ImageFit.CONTAIN,
         )
         portada3 = ft.Image(
-            src="imagenes_home/portadader.jpg",
+            src="imagenes_home/header_der_adri.png",
             fit=ft.ImageFit.COVER,
-            width=400,
-            height=200,
+            border_radius=ft.border_radius.all(20),
+            # width=400,
+            # height=200,
         )
 
         adriana = ft.Row(
@@ -54,17 +57,12 @@ class HomeScreen(ft.Container):
             alignment=ft.MainAxisAlignment.CENTER,
             vertical_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=0,
-            expand=True,
+            #expand=True,
         )
      
-    
-        def main(page: ft.Page):
-            page.title = "Contador Regresivo"
-            page.vertical_alignment = ft.MainAxisAlignment.CENTER
-            page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    
-    # Fecha objetivo (ejemplo: 6 horas en el futuro)
-    #target = datetime.now() + timedelta(hours=6)
+        
+        # Fecha objetivo (ejemplo: 6 horas en el futuro)
+        #target = datetime.now() + timedelta(hours=6)
         target = datetime(2025, 7, 12, 10, 00, 00)  # Fecha objetivo específica
     
         def on_countdown_finish(timer):
