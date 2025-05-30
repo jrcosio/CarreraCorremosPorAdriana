@@ -35,6 +35,7 @@ class GaleriaScreen(ft.Container):
 
         def obtener_fotografias(carpeta):
             # Make sure the os module is used properly
+            print(f"Obteniendo fotografías de la carpeta: {carpeta}")
             extensiones_validas = (".jpg", ".jpeg", ".png", ".gif")
             fotos = []
             try:
@@ -49,7 +50,7 @@ class GaleriaScreen(ft.Container):
                 print(f"Error al obtener fotografías: {e}")
             return fotos
 
-        carpeta = "assets\\imagenes_galeria"
+        carpeta = "assets/imagenes_galeria"
         
         fotografias = obtener_fotografias(carpeta)
         

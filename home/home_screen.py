@@ -1,5 +1,5 @@
 import flet as ft
-from contador import CountdownTimer
+from home.contador import CountdownTimer
 from datetime import datetime, timedelta
 import flet_video as fv
 import flet_webview as fw

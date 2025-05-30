@@ -92,4 +92,4 @@ def main(page: ft.Page):
     app = MainApp(page)
 
 if __name__ == "__main__":
-    ft.app(target=main, port=80, view=ft.WEB_BROWSER)#, host="0.0.0.0")
+    ft.app(target=main, port=80, view=ft.WEB_BROWSER, host="0.0.0.0", assets_dir="assets")
