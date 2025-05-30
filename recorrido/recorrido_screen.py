@@ -34,6 +34,7 @@ class RecorridoScreen(ft.Container):
                     self._create_header(),
                     self._create_main_content(),
                     self._create_boton_tracking(),
+                    ft.Text("En la ventana que se abre puedes descargar el track del recorrido", size=12, color=ft.Colors.BLACK54),
                     self._create_map3D_container(),
                     ft.Container(height=50),  # Espacio al final
                 ]
@@ -193,7 +194,7 @@ class RecorridoScreen(ft.Container):
         """Crea el contenedor del mapa."""
         return WikilocMapContainer(
             trail_id=self.recorrido_data["wikilog"],
-            width=900,
+            width=800,
             height=450,
         )
         
@@ -201,8 +202,8 @@ class RecorridoScreen(ft.Container):
         """Crea el contenedor del mapa."""
         return ft.Container(
             padding= 10,
-            width=1000,
-            height=580,
+            width=800,
+            height=460,
             border=ft.border.all(1, ft.Colors.GREY_400),
             border_radius = 10,
             content=fv.Video(
@@ -244,7 +245,7 @@ class RecorridoScreen(ft.Container):
             ),
             ),
             alignment=ft.alignment.center,
-            padding=ft.padding.all(20),
+            #padding=ft.padding.all(20),
         )
     
     def _get_circular_container_style(self):
