@@ -10,6 +10,28 @@ class HomeScreen(ft.Container):
             alignment=ft.alignment.center,
             expand=True
         )
+        #------------------------------------------------------------
+        imagenes_patrocinadores = [
+            ("imagenes_patrocinadores/banner_carandia.png","URL"),
+            ("imagenes_patrocinadores/banner_artipublic.png","URL"),
+            ("imagenes_patrocinadores/banner_andros.png","URL"),
+            ("imagenes_patrocinadores/banner_LIS.png","URL"),
+            #("imagenes_patrocinadores/patrocinador.png","URL"),
+            #("imagenes_patrocinadores/patrocinador.png","URL"), 
+        ]
+        
+        imagenes_colaboradores = [
+            ("imagenes_colaboradores/colaborador.png","URL"),
+            ("imagenes_colaboradores/colaborador.png","URL"),
+            ("imagenes_colaboradores/colaborador.png","URL"),
+            ("imagenes_colaboradores/colaborador.png","URL"),
+            ("imagenes_colaboradores/colaborador.png","URL"),
+            ("imagenes_colaboradores/colaborador.png","URL"),           
+        ]
+        
+        imagenes_organizadores = [
+            ("imagenes_organizadores/logo.png","URL"),
+        ]
 
         #------------------------------------------------------------
         fecha_carrera = ft.Container(
@@ -192,29 +214,7 @@ class HomeScreen(ft.Container):
                 ],
                 ),
             )
-        
-        imagenes_patrocinadores = [
-            ("imagenes_patrocinadores/patrocinador.png","URL"),
-            ("imagenes_patrocinadores/patrocinador.png","URL"),
-            ("imagenes_patrocinadores/patrocinador.png","URL"),
-            ("imagenes_patrocinadores/banner_LIS.png","URL"),
-            ("imagenes_patrocinadores/patrocinador.png","URL"),
-            ("imagenes_patrocinadores/patrocinador.png","URL"), 
-        ]
-        
-        imagenes_colaboradores = [
-            ("imagenes_colaboradores/colaborador.png","URL"),
-            ("imagenes_colaboradores/colaborador.png","URL"),
-            ("imagenes_colaboradores/colaborador.png","URL"),
-            ("imagenes_colaboradores/colaborador.png","URL"),
-            ("imagenes_colaboradores/colaborador.png","URL"),
-            ("imagenes_colaboradores/colaborador.png","URL"),           
-        ]
-        
-        imagenes_organizadores = [
-            ("imagenes_organizadores/logo.png","URL"),
-        ]
-        
+                
         
         patrocinadores = logos_container("Patrocinadores", imagenes_patrocinadores , ft.Colors.YELLOW_100)
         colaboradores = logos_container("Colaboradores", imagenes_colaboradores, ft.Colors.GREEN_100)
