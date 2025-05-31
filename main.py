@@ -3,7 +3,7 @@ from home.home_screen import HomeScreen
 from inscripciones.inscripciones_screen import InscripcionScreen
 from galeria.galeria_screen import GaleriaScreen
 from recorrido.recorrido_screen import RecorridoScreen
-from barra_navegacion import NavBar
+from barra_navegacion.barra_navegacion import NavBar
 
 
 class MainApp:
@@ -46,7 +46,7 @@ class MainApp:
             "btn_home": HomeScreen(),
             "btn_inscripcion": InscripcionScreen(),
             "btn_inscritos": HomeScreen(),  # Reutilizando la pantalla de inscripción pero sera otra pantalla
-            "btn_galeria": GaleriaScreen(),
+            "btn_galeria": GaleriaScreen(page=self.page),
             "btn_trail": RecorridoScreen(recorrido_data=self.trail),
             "btn_andarines": RecorridoScreen(recorrido_data=self.andarines),
             "btn_clasificacion": HomeScreen(),  # Reutilizando la pantalla de inicio para clasificación

@@ -5,7 +5,8 @@ import flet_video as fv
 import flet_webview as fw
 
 class HomeScreen(ft.Container):
-    def __init__(self):
+    def __init__(self, page = None):
+        self.page = page
         super().__init__(
             alignment=ft.alignment.center,
             expand=True

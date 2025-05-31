@@ -1,6 +1,6 @@
 import flet as ft
 from .cont_campos import Campos
-from barra_navegacion import NavBar
+from barra_navegacion.barra_navegacion import NavBar
 
 class InscripcionScreen(ft.Container):
     def __init__(self):
