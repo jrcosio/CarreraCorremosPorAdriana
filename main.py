@@ -4,33 +4,11 @@ from inscripciones.inscripciones_screen import InscripcionScreen
 from galeria.galeria_screen import GaleriaScreen
 from recorrido.recorrido_screen import RecorridoScreen
 from barra_navegacion.barra_navegacion import NavBar
+from configurar_web import trail, andarines
+
 
 
 class MainApp:
-    trail ={
-        "titulo": "Trail Peñasagra",
-        "descripcion": "Trail de montaña con un recorrido espectacular, con vistas a Peñasagra.\nOjo con la dureza del corta fuegos, no es apta para todos los públicos.",
-        "wikilog": "214816740",
-        "distancia": 20,
-        "desnivel": 1029,
-        "fecha": "2024-06-15",
-        "hora": "10:30",
-        "lugar": "Cosío",
-        "track": "tracks/trailpenasagra.gpx",
-        "video": "videos/trail.mp4", 
-    }
-    andarines ={
-        "titulo": "Andarines Peñasagra",
-        "descripcion": "Carrera de montaña más centrada en amateur y para gente con ganas de\ndescubrir los montes de Cosío con vista a Peñasagra.",
-        "wikilog": "214817578",
-        "distancia": 15,
-        "desnivel": 780,
-        "fecha": "2024-06-15",
-        "hora": "09:00",
-        "lugar": "Cosío",
-        "track": "tracks/andarinespenasagra.gpx",
-        "video": "videos/andarines.mp4",  
-    }
     def __init__(self, page: ft.Page):
         self.page = page
         page.title = "Trail Peñasagra - Corremos por Adriana"
@@ -47,8 +25,8 @@ class MainApp:
             "btn_inscripcion": InscripcionScreen(),
             "btn_inscritos": HomeScreen(),  # Reutilizando la pantalla de inscripción pero sera otra pantalla
             "btn_galeria": GaleriaScreen(page=self.page),
-            "btn_trail": RecorridoScreen(recorrido_data=self.trail),
-            "btn_andarines": RecorridoScreen(recorrido_data=self.andarines),
+            "btn_trail": RecorridoScreen(recorrido_data = trail),
+            "btn_andarines": RecorridoScreen(recorrido_data = andarines),
             "btn_clasificacion": HomeScreen(),  # Reutilizando la pantalla de inicio para clasificación
             "btn_contacto": HomeScreen(),  # Reutilizando la pantalla de inicio para contacto
         }
