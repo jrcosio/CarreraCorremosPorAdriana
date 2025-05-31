@@ -4,7 +4,7 @@ from inscripciones.inscripciones_screen import InscripcionScreen
 from galeria.galeria_screen import GaleriaScreen
 from recorrido.recorrido_screen import RecorridoScreen
 from barra_navegacion import NavBar
-
+from contacto.contacto_screen import ContactoScreen
 
 class MainApp:
     trail ={
@@ -49,8 +49,8 @@ class MainApp:
             "btn_galeria": GaleriaScreen(),
             "btn_trail": RecorridoScreen(recorrido_data=self.trail),
             "btn_andarines": RecorridoScreen(recorrido_data=self.andarines),
-            "btn_clasificacion": HomeScreen(),  # Reutilizando la pantalla de inicio para clasificación
-            "btn_contacto": HomeScreen(),  # Reutilizando la pantalla de inicio para contacto
+            "btn_contacto": ContactoScreen(),  # Reutilizando la pantalla de inicio para contacto
+            "btn_clasificacion": HomeScreen(),  # Reutilizando la pantalla de inicio para contacto
         }
         
         # Contenedor para mostrar la pantalla activa
