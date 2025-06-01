@@ -3,8 +3,9 @@ from home.home_screen import HomeScreen
 from inscripciones.inscripciones_screen import InscripcionScreen
 from galeria.galeria_screen import GaleriaScreen
 from recorrido.recorrido_screen import RecorridoScreen
-from barra_navegacion import NavBar
+from barra_navegacion.barra_navegacion import NavBar
 from contacto.contacto_screen import ContactoScreen
+from configurar_web import trail, andarines
 
 class MainApp:
     def __init__(self, page: ft.Page):
@@ -23,8 +24,8 @@ class MainApp:
             "btn_inscripcion": InscripcionScreen(),
             "btn_inscritos": HomeScreen(),  # Reutilizando la pantalla de inscripción pero sera otra pantalla
             "btn_galeria": GaleriaScreen(),
-            "btn_trail": RecorridoScreen(recorrido_data=self.trail),
-            "btn_andarines": RecorridoScreen(recorrido_data=self.andarines),
+            "btn_trail": RecorridoScreen(recorrido_data = trail),
+            "btn_andarines": RecorridoScreen(recorrido_data = andarines),
             "btn_contacto": ContactoScreen(),  # Reutilizando la pantalla de inicio para contacto
             "btn_clasificacion": HomeScreen(),  # Reutilizando la pantalla de inicio para contacto
         }
