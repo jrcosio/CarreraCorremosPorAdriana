@@ -561,7 +561,12 @@ class InscripcionScreen(ft.Container):
             datos = self.obtener_datos_formulario()
             print("Formulario enviado:", datos)
             # Aquí puedes agregar la lógica para procesar los datos
-
+            #------------------------------------------------------
+            
+            
+            
+            
+            #------------------------------------------------------
             self.mostrar_mensaje("El Formulario ha sido enviado correctamente")
             self.limpiar_formulario()
   
