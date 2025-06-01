@@ -34,7 +34,17 @@ class ContactoScreen(ft.Container):
             text_align=ft.TextAlign.LEFT,
         )
 
-        enviar= ft.ElevatedButton("Enviar", icon=ft.Icons.SEND)
+        txtnemail = ft.Text("email: asociacionpeñasagra@gmail.com", 
+                            size=20,
+                            font_family="Britanic Bold",
+                            color=ft.Colors.BLACK,)
+        
+        enviar= ft.ElevatedButton("Enviar", icon=ft.Icons.SEND,
+                                  color=ft.Colors.BLACK,
+                                  icon_color=ft.Colors.BLACK, 
+                                  bgcolor=ft.Colors.GREEN_300
+                                  )
+        
         super().__init__(
             alignment=ft.alignment.center,
             expand=True,
@@ -43,7 +53,7 @@ class ContactoScreen(ft.Container):
                     ft.Text(
                         "Contacto",
                         size=40,
-                        color=ft.Colors.BLACK,
+                        color=ft.Colors.GREEN_900,
                         font_family="Britanic Bold",
                         weight=ft.FontWeight.BOLD,
                         text_align=ft.TextAlign.CENTER,
@@ -52,6 +62,7 @@ class ContactoScreen(ft.Container):
                     txtemail,
                     txtasunto,
                     txtcomentario,
+                    txtnemail,
                     enviar
  
                 ],
@@ -60,35 +71,3 @@ class ContactoScreen(ft.Container):
             ),  
         )
         
-        
-        # Contenido de la pantalla de contacto
-       
-
-
-
-
-# def main(page: ft.Page):
-#     page.bgcolor = ft.Colors.WHITE,
-#     page.title = "Contacto"
-#     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-#     page.vertical_alignment = ft.MainAxisAlignment.CENTER
-
-#     datos = ft.Column(
-#         [
-#             txtnombre,
-#             txtemail,
-#             txtasunto,
-#             txtcomentario,
-#             enviar,
-#         ],
-#         # expand=True,
-#         scroll=True,
-#         alignment=ft.MainAxisAlignment.CENTER,
-#         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-        
-#     )
-
-   
-    
-    
-   
