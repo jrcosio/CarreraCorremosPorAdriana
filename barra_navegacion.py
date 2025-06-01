@@ -49,9 +49,9 @@ class NavBar(ft.Container):
             content=ft.Row(
                 [self.logo, ft.Container(expand=True),*self.buttons],
                 alignment=ft.MainAxisAlignment.START,
-                spacing=20,
+                spacing=10,
             ),
-            padding=15,
+            padding=10,
             bgcolor=ft.Colors.WHITE,
         )
         
