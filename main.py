@@ -7,30 +7,6 @@ from barra_navegacion import NavBar
 from contacto.contacto_screen import ContactoScreen
 
 class MainApp:
-    trail ={
-        "titulo": "Trail Peñasagra",
-        "descripcion": "Trail de montaña con un recorrido espectacular, con vistas a Peñasagra.\nOjo con la dureza del corta fuegos, no es apta para todos los públicos.",
-        "wikilog": "214816740",
-        "distancia": 20,
-        "desnivel": 1029,
-        "fecha": "2024-06-15",
-        "hora": "10:30",
-        "lugar": "Cosío",
-        "track": "tracks/trailpenasagra.gpx",
-        "video": "videos/trail.mp4", 
-    }
-    andarines ={
-        "titulo": "Andarines Peñasagra",
-        "descripcion": "Carrera de montaña más centrada en amateur y para gente con ganas de\ndescubrir los montes de Cosío con vista a Peñasagra.",
-        "wikilog": "214817578",
-        "distancia": 15,
-        "desnivel": 780,
-        "fecha": "2024-06-15",
-        "hora": "09:00",
-        "lugar": "Cosío",
-        "track": "tracks/andarinespenasagra.gpx",
-        "video": "videos/andarines.mp4",  
-    }
     def __init__(self, page: ft.Page):
         self.page = page
         page.title = "Trail Peñasagra - Corremos por Adriana"
@@ -92,4 +68,4 @@ def main(page: ft.Page):
     app = MainApp(page)
 
 if __name__ == "__main__":
-    ft.app(target=main, port=80, view=ft.WEB_BROWSER, host="0.0.0.0", assets_dir="assets")
+    ft.app(target=main, port=80, view=ft.WEB_BROWSER)#, host="0.0.0.0", assets_dir="assets")
