@@ -130,7 +130,7 @@ class HomeScreen(ft.Container):
         
         runers = ft.Container(
             content=ft.Image(
-                src="imagenes_home/trail.png", 
+                src="imagenes_home/principal_trail1.png", 
                 fit=ft.ImageFit.CONTAIN,
                 expand=True,  # Añadido aquí
             ),

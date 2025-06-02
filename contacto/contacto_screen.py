@@ -34,12 +34,12 @@ class ContactoScreen(ft.Container):
             text_align=ft.TextAlign.LEFT,
         )
 
-        txtnemail = ft.Text("email: asociacionpeñasagra@gmail.com", 
+        self.txtnemail = ft.Text("email: asociacionpeñasagra@gmail.com", 
                             size=20,
                             font_family="Britanic Bold",
                             color=ft.Colors.BLACK,)
         
-        enviar= ft.ElevatedButton("Enviar", icon=ft.Icons.SEND,
+        self.enviar= ft.ElevatedButton("Enviar", icon=ft.Icons.SEND,
                                   color=ft.Colors.BLACK,
                                   icon_color=ft.Colors.BLACK, 
                                   bgcolor=ft.Colors.GREEN_300)
@@ -50,8 +50,7 @@ class ContactoScreen(ft.Container):
                                   height=50,
                                   bgcolor=ft.Colors.GREEN_300,
                                   color=ft.Colors.WHITE,
-                                  on_click=self.on_click_enviar,
->>>>>>> 15465c5aff7a0513b33160dac1d7a3ebce6d508e
+                                  #on_click=self.on_click_enviar,
                                   )
         
         super().__init__(
@@ -67,12 +66,12 @@ class ContactoScreen(ft.Container):
                         weight=ft.FontWeight.BOLD,
                         text_align=ft.TextAlign.CENTER,
                     ),
-                    txtnombre,
-                    txtemail,
-                    txtasunto,
-                    txtcomentario,
-                    txtnemail,
-                    enviar
+                    self.txtnombre,
+                    self.txtemail,
+                    self.txtasunto,
+                    self.txtcomentario,
+                    self.txtnemail,
+                    self.enviar
  
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
