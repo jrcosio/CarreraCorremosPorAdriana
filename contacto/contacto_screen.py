@@ -39,10 +39,6 @@ class ContactoScreen(ft.Container):
                             font_family="Britanic Bold",
                             color=ft.Colors.BLACK,)
         
-        # self.enviar= ft.ElevatedButton("Enviar", icon=ft.Icons.SEND,
-        #                           color=ft.Colors.BLACK,
-        #                           icon_color=ft.Colors.BLACK, 
-        #                           bgcolor=ft.Colors.GREEN_300)
 
         self.btn_enviar= ft.ElevatedButton("Enviar", 
                                   icon=ft.Icons.SEND,
