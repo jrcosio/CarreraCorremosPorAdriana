@@ -1,16 +1,18 @@
 import flet as ft
-from contador import CountdownTimer
+from home.contador import CountdownTimer
 from datetime import datetime, timedelta
 import flet_video as fv
 import flet_webview as fw
+from configurar_web import imagenes_colaboradores, imagenes_organizadores, imagenes_patrocinadores
 
 class HomeScreen(ft.Container):
-    def __init__(self):
+    def __init__(self, page = None):
+        self.page = page
         super().__init__(
             alignment=ft.alignment.center,
             expand=True
         )
-
+        
         #------------------------------------------------------------
         fecha_carrera = ft.Container(
             content=ft.Text("12 de Julio de 2025", size=40, color=ft.Colors.BLACK, 
@@ -192,29 +194,7 @@ class HomeScreen(ft.Container):
                 ],
                 ),
             )
-        
-        imagenes_patrocinadores = [
-            ("imagenes_patrocinadores/patrocinador.png","URL"),
-            ("imagenes_patrocinadores/patrocinador.png","URL"),
-            ("imagenes_patrocinadores/patrocinador.png","URL"),
-            ("imagenes_patrocinadores/patrocinador.png","URL"),
-            ("imagenes_patrocinadores/patrocinador.png","URL"),
-            ("imagenes_patrocinadores/patrocinador.png","URL"), 
-        ]
-        
-        imagenes_colaboradores = [
-            ("imagenes_colaboradores/colaborador.png","URL"),
-            ("imagenes_colaboradores/colaborador.png","URL"),
-            ("imagenes_colaboradores/colaborador.png","URL"),
-            ("imagenes_colaboradores/colaborador.png","URL"),
-            ("imagenes_colaboradores/colaborador.png","URL"),
-            ("imagenes_colaboradores/colaborador.png","URL"),           
-        ]
-        
-        imagenes_organizadores = [
-            ("imagenes_organizadores/logo.png","URL"),
-        ]
-        
+                
         
         patrocinadores = logos_container("Patrocinadores", imagenes_patrocinadores , ft.Colors.YELLOW_100)
         colaboradores = logos_container("Colaboradores", imagenes_colaboradores, ft.Colors.GREEN_100)

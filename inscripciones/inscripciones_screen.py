@@ -1,12 +1,579 @@
+# import flet as ft
+# from .cont_campos import Campos
+# from barra_navegacion.barra_navegacion import NavBar
+
+# class InscripcionScreen(ft.Container):
+#     def __init__(self):
+#         super().__init__(
+#             content=Campos()
+#         )
+
+# if __name__ == "__main__":
+#     print("Esta clase no se puede ejecutar de forma independiente.")
+
 import flet as ft
-from .cont_campos import Campos
-from barra_navegacion import NavBar
 
 class InscripcionScreen(ft.Container):
     def __init__(self):
+        # Inicializar todos los campos del formulario
+        self.inicializar_campos()
+        
         super().__init__(
-            content=Campos()
+            alignment=ft.Alignment(0, 0),
+            content=self.crear_contenedor_principal()
         )
+
+    def inicializar_campos(self):
+        """Inicializa todos los campos del formulario"""
+        # Campos de texto personales
+        self.txtf_nombre = None
+        self.txtf_apellido = None
+        self.txtf_tlfno = None
+        self.txtf_email = None
+        self.txtf_rep_email = None
+        self.txtf_direccion = None
+        self.drop_ccaa = None
+        self.txtf_poblacion = None
+        self.txtf_dni_codigo = None
+        
+        # Campos de emergencia
+        self.txtf_nombre_emergencia = None
+        self.txtf_numero_emergencia = None
+        
+        # Campos de selección
+        self.radio_sexo = None
+        self.radio_carrera = None
+        self.drop_dia = None
+        self.drop_mes = None
+        self.drop_año = None
+        self.drop_doc = None
+        
+        # Botón
+        self.btn_enviar = None
+
+    def crear_campos_personales(self):
+        """Crea los campos de información personal básica"""
+        estilo_campo = {
+            "bgcolor": "#FFFFFF",
+            "expand": True,
+            #"color": ft.Colors.WHITE,
+            "scroll_padding": ft.Padding(left=10, right=10, top=10, bottom=10)
+        }
+        
+        self.txtf_nombre = ft.TextField(
+            label="Nombre",
+            value="",
+            **estilo_campo
+        )
+        
+        self.txtf_apellido = ft.TextField(
+            label="Apellidos",
+            value="",
+            **estilo_campo
+        )
+        
+        self.txtf_tlfno = ft.TextField(
+            label="Teléfono",
+            value="",
+            **estilo_campo
+        )
+        
+        self.txtf_email = ft.TextField(
+            label="Email",
+            value="",
+            **estilo_campo
+        )
+        
+        self.txtf_rep_email = ft.TextField(
+            label="Repetir Email",
+            value="",
+            **estilo_campo
+        )
+        
+        self.txtf_direccion = ft.TextField(
+            label="Dirección",
+            value="",
+            **estilo_campo
+        )
+        
+      
+        self.txtf_poblacion = ft.TextField(
+            label="Municipio",
+            value="",
+            **estilo_campo
+        )
+    def crear_campo_ccaa(self):
+        """Crea el campo de selección de comunidad autónoma"""
+        self.drop_ccaa = ft.Dropdown(
+            label="Comunidad Autónoma",
+            options=[
+                ft.DropdownOption("Andalucía"),
+                ft.DropdownOption("Aragón"),
+                ft.DropdownOption("Asturias"),
+                ft.DropdownOption("Islas Baleares"),
+                ft.DropdownOption("Canarias"),
+                ft.DropdownOption("Cantabria"),
+                ft.DropdownOption("Castilla-La Mancha"),
+                ft.DropdownOption("Castilla y León"),
+                ft.DropdownOption("Cataluña"),
+                ft.DropdownOption("Extremadura"),
+                ft.DropdownOption("Galicia"),
+                ft.DropdownOption("Madrid"),
+                ft.DropdownOption("Murcia"),
+                ft.DropdownOption("Navarra"),
+                ft.DropdownOption("La Rioja"),
+                ft.DropdownOption("País Vasco"),
+            ],
+            width=200,
+            bgcolor="#FFFFFF",
+            filled=True,
+            fill_color=ft.Colors.WHITE,
+        )
+    
+    def crear_campos_seleccion(self):
+        """Crea los campos de selección (radio buttons y dropdowns)"""
+        self.radio_sexo = ft.RadioGroup(
+            content=ft.Row(
+                controls=[
+                    ft.Text("Sexo:"),
+                    ft.Radio(value="M", label="Masculino"),
+                    ft.Radio(value="F", label="Femenino")
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
+            )
+        )
+        
+        self.radio_carrera = ft.RadioGroup(
+            content=ft.Row(
+                controls=[
+                    ft.Text("Tipo de Carrera que desea realizar:"),
+                    ft.Radio(value="trail", label="Trail"),
+                    ft.Radio(value="andarines", label="Andarines"),
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
+            )
+        )
+
+    def crear_campos_fecha(self):
+        """Crea los dropdowns para la fecha de nacimiento"""
+        
+        self.drop_dia = ft.Dropdown(
+            label="Día",
+            options=[ft.DropdownOption(str(day)) for day in range(1, 32)],
+            width=105,
+            bgcolor="#FFFFFF",
+            filled=True,
+            fill_color=ft.Colors.WHITE,
+        )
+        
+        self.drop_mes = ft.Dropdown(
+            label="Mes",
+            options=[ft.DropdownOption(str(month)) for month in range(1, 13)],
+            width=105,
+            bgcolor="#FFFFFF",
+            filled=True,
+            fill_color=ft.Colors.WHITE,
+        )
+        
+        self.drop_año = ft.Dropdown(
+            label="Año",
+            options=[ft.DropdownOption(str(year)) for year in range(1940, 2015)],
+            width=105,
+            bgcolor="#FFFFFF",
+            filled=True,
+            fill_color=ft.Colors.WHITE,
+        )
+
+    def crear_campos_documento(self):
+        """Crea los campos relacionados con la documentación"""
+        self.drop_doc = ft.Dropdown(
+            label="Tipo de documento",
+            options=[
+                ft.DropdownOption("DNI"),
+                ft.DropdownOption("NIE"),
+                ft.DropdownOption("Pasaporte")
+            ],
+            width=200,
+            bgcolor="#FFFFFF",
+            filled=True,
+            fill_color=ft.Colors.WHITE,
+        )
+        
+        self.txtf_dni_codigo = ft.TextField(
+            label="Número de documento",
+            value="",
+            bgcolor="#FFFFFF",
+            expand=True,
+            scroll_padding=ft.Padding(left=10, right=10, top=10, bottom=10)
+        )
+
+    def crear_campos_emergencia(self):
+        """Crea los campos de contacto de emergencia"""
+        self.txtf_nombre_emergencia = ft.TextField(
+            label="Nombre de contacto en caso de emergencia",
+            value="",
+            bgcolor="#FFFFFF",
+            expand=True,
+        )
+        
+        self.txtf_numero_emergencia = ft.TextField(
+            label="Número de teléfono de contacto en caso de emergencia",
+            value="",
+            bgcolor="#FFFFFF",
+            expand=True,
+            scroll_padding=ft.Padding(left=10, right=10, top=10, bottom=10)
+        )
+
+    def crear_botones(self):
+        """Crea los botones del formulario"""
+        self.btn_enviar = ft.ElevatedButton(
+            text="Enviar formulario de inscripción",
+            icon=ft.Icons.SEND,
+            bgcolor=ft.Colors.GREEN_400,
+            color=ft.Colors.WHITE,
+            width=350,
+            height=60,
+            expand=True,
+            on_click=self.al_enviar_formulario
+        )
+
+    def crear_fila_fecha(self):
+        """Crea la fila con los dropdowns de fecha"""
+        return ft.Row(
+            controls=[ft.Text("Fecha de nacimiento:"), self.drop_dia, self.drop_mes, self.drop_año],
+            alignment=ft.MainAxisAlignment.CENTER,
+        )
+
+    def crear_titulo_emergencia(self):
+        """Crea el título de la sección de emergencia"""
+        return ft.Text(
+            "Datos de emergencia",
+            weight=ft.FontWeight.BOLD
+        )
+
+    def crear_formulario(self):
+        """Crea el formulario completo con todos los campos"""
+        # Crear todos los campos
+        self.crear_campos_personales()
+        self.crear_campos_seleccion()
+        self.crear_campos_fecha()
+        self.crear_campos_documento()
+        self.crear_campos_emergencia()
+        self.crear_campo_ccaa()
+        self.crear_botones()
+        
+        return ft.Column(
+            controls=[
+                self.txtf_nombre,
+                self.txtf_apellido,
+                self.radio_sexo,
+                self.crear_fila_fecha(),
+                self.txtf_tlfno,
+                self.txtf_email,
+                self.txtf_rep_email,
+                ft.Row(
+                    controls=[
+                        self.drop_doc,
+                        self.txtf_dni_codigo
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+                self.txtf_direccion,
+                ft.Row(
+                    controls=[
+                        self.drop_ccaa,
+                        self.txtf_poblacion
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+                self.radio_carrera,
+                self.crear_titulo_emergencia(),
+                self.txtf_nombre_emergencia,
+                self.txtf_numero_emergencia,
+                ft.Divider(),
+                ft.Container(
+                    content=self.btn_enviar,
+                    alignment=ft.Alignment(0, 0),
+                )
+            ],
+            scroll=ft.ScrollMode.AUTO,
+            expand=True
+        )
+
+    def crear_encabezado(self):
+        """Crea el encabezado del formulario"""
+        return ft.Container(
+            content=ft.Text(
+                "Formulario de inscripción",
+                weight=ft.FontWeight.BOLD,
+                color=ft.Colors.WHITE,
+                size=24,
+            ),
+            alignment=ft.Alignment(0, 0),
+            bgcolor="#7BACF0",
+            height=50,
+            border_radius=ft.BorderRadius(
+                top_left=15, top_right=15, bottom_left=0, bottom_right=0
+            ),
+        )
+
+    def crear_contenedor_formulario(self):
+        """Crea el contenedor principal del formulario"""
+        return ft.Container(
+            content=self.crear_formulario(),
+            bgcolor="#DBF3D6",
+            padding=ft.Padding(10, 10, 10, 10),
+            expand=True,
+        )
+
+    def crear_contenedor_principal(self):
+        """Crea el contenedor principal de toda la pantalla"""
+        return ft.Column(
+            controls=[
+                self.crear_encabezado(),
+                self.crear_contenedor_formulario(),
+            ],
+            spacing=0,
+            width=800,
+            alignment=ft.MainAxisAlignment.CENTER,
+        )
+
+    def obtener_datos_formulario(self):
+        """Obtiene todos los datos del formulario en un diccionario"""
+        return {
+            "nombre": self.txtf_nombre.value,
+            "apellido": self.txtf_apellido.value,
+            "sexo": self.radio_sexo.value,
+            "dia": self.drop_dia.value,
+            "mes": self.drop_mes.value,
+            "año": self.drop_año.value,
+            "telefono": self.txtf_tlfno.value,
+            "email": self.txtf_email.value,
+            "repetir_email": self.txtf_rep_email.value,
+            "tipo_documento": self.drop_doc.value,
+            "codigo_documento": self.txtf_dni_codigo.value,
+            "direccion": self.txtf_direccion.value,
+            "ccaa": self.drop_ccaa.value,
+            "poblacion": self.txtf_poblacion.value,
+            "carrera": self.radio_carrera.value,
+            "nombre_emergencia": self.txtf_nombre_emergencia.value,
+            "numero_emergencia": self.txtf_numero_emergencia.value,
+        }
+
+    def validar_formulario(self):
+        """Valida que todos los campos requeridos estén completos"""
+        datos = self.obtener_datos_formulario()
+        
+        campos_requeridos = [
+            "nombre", "apellido", "sexo", "telefono", 
+            "email", "repetir_email", "codigo_documento",
+            "direccion", "ccaa", "poblacion", "carrera",
+            "nombre_emergencia", "numero_emergencia"
+        ]
+        
+        if not datos["nombre"] or datos["nombre"].strip() == "":
+            self.txtf_nombre.error_text = "El campo Nombre es requerido"
+            self.txtf_nombre.update()
+            return False, "El campo 'nombre' es requerido"
+        else:
+            self.txtf_nombre.error_text = ""
+            self.txtf_nombre.update()
+        if not datos["apellido"] or datos["apellido"].strip() == "":
+            self.txtf_apellido.error_text = "El campo Apellido es requerido"
+            self.txtf_apellido.update()
+            return False, "El campo 'apellido' es requerido"
+        else:
+            self.txtf_apellido.error_text = ""
+            self.txtf_apellido.update()
+        if not datos["telefono"] or datos["telefono"].strip() == "":
+            self.txtf_tlfno.error_text = "El campo Teléfono es requerido"
+            self.txtf_tlfno.update()
+            return False, "El campo 'telefono' es requerido"
+        else:
+            self.txtf_tlfno.error_text = ""
+            self.txtf_tlfno.update()
+        if not datos["sexo"]:
+            self.radio_sexo.error_text = "El campo Sexo es requerido"
+            self.radio_sexo.update()
+            return False, "El campo 'sexo' es requerido"
+        else:
+            self.radio_sexo.error_text = ""
+            self.radio_sexo.update()
+        if not datos["dia"] or not datos["mes"] or not datos["año"]:
+            self.drop_dia.error_text = "El campo 'Día' es requerido"
+            self.drop_mes.error_text = "El campo 'Mes' es requerido"
+            self.drop_año.error_text = "El campo 'Año' es requerido"
+            self.drop_dia.update()
+            self.drop_mes.update()
+            self.drop_año.update()
+            return False, "La fecha de nacimiento es requerida"
+        else:
+            self.drop_dia.error_text = ""
+            self.drop_mes.error_text = ""
+            self.drop_año.error_text = ""
+            self.drop_dia.update()
+            self.drop_mes.update()
+            self.drop_año.update()
+        if not datos["email"] or datos["email"].strip() == "":
+            self.txtf_email.error_text = "El campo Email es requerido"
+            self.txtf_email.update()
+            return False, "El campo 'email' es requerido"
+        else:
+            self.txtf_email.error_text = ""
+            self.txtf_email.update()
+        if not datos["repetir_email"] or datos["repetir_email"].strip() == "":
+            self.txtf_rep_email.error_text = "El campo Repetir Email es requerido"
+            self.txtf_rep_email.update()
+            return False, "El campo 'repetir email' es requerido"
+        else:
+            self.txtf_rep_email.error_text = ""
+            self.txtf_rep_email.update()
+        if not datos["codigo_documento"] or datos["codigo_documento"].strip() == "":
+            self.txtf_dni_codigo.error_text = "El campo Código de Documento es requerido"
+            self.txtf_dni_codigo.update()
+            return False, "El campo 'número documento' es requerido"
+        else:
+            self.txtf_dni_codigo.error_text = ""
+            self.txtf_dni_codigo.update()
+        if not datos["tipo_documento"]:
+            self.drop_doc.error_text = "El campo Tipo de Documento es requerido"
+            self.drop_doc.update()
+            return False, "El campo 'tipo documento' es requerido"
+        else:
+            self.drop_doc.error_text = ""
+            self.drop_doc.update()
+        if not datos["direccion"] or datos["direccion"].strip() == "":
+            self.txtf_direccion.error_text = "El campo Dirección es requerido"
+            self.txtf_direccion.update()
+            return False, "El campo 'direccion' es requerido"
+        else:
+            self.txtf_direccion.error_text = ""
+            self.txtf_direccion.update()
+        if not datos["ccaa"] or datos["ccaa"].strip() == "":
+            self.drop_ccaa.error_text = "El campo Comunidad Autónoma es requerido"
+            self.drop_ccaa.update()
+            return False, "El campo 'ccaa' es requerido"
+        else:
+            self.drop_ccaa.error_text = ""
+            self.drop_ccaa.update()
+        if not datos["poblacion"] or datos["poblacion"].strip() == "":
+            self.txtf_poblacion.error_text = "El campo Municipio es requerido"
+            self.txtf_poblacion.update()
+            return False, "El campo 'poblacion' es requerido"
+        else:
+            self.txtf_poblacion.error_text = ""
+            self.txtf_poblacion.update()
+        if not datos["carrera"] or datos["carrera"].strip() == "":
+            self.radio_carrera.error_text = "El campo Carrera es requerido"
+            self.radio_carrera.update()
+            return False, "El campo 'carrera' es requerido"
+        else:
+            self.radio_carrera.error_text = ""
+            self.radio_carrera.update()
+        if not datos["nombre_emergencia"] or datos["nombre_emergencia"].strip() == "":
+            self.txtf_nombre_emergencia.error_text = "El campo Nombre de Emergencia es requerido"
+            self.txtf_nombre_emergencia.update()
+            return False, "El campo 'nombre emergencia' es requerido"
+        else:
+            self.txtf_nombre_emergencia.error_text = ""
+            self.txtf_nombre_emergencia.update()
+        if not datos["numero_emergencia"] or datos["numero_emergencia"].strip() == "":
+            self.txtf_numero_emergencia.error_text = "El campo Número de Emergencia es requerido"
+            self.txtf_numero_emergencia.update()
+            return False, "El campo 'numero emergencia' es requerido"
+        else:
+            self.txtf_numero_emergencia.error_text = ""
+            self.txtf_numero_emergencia.update()
+    
+        
+        # Validar que los emails coincidan
+        if datos["email"] != datos["repetir_email"]:
+            self.txtf_email.error_text = "Los emails no coinciden"
+            self.txtf_rep_email.error_text = "Los emails no coinciden"
+            self.txtf_email.update()
+            self.txtf_rep_email.update()
+            return False, "Los emails no coinciden"
+        
+        return True, "Formulario válido"
+
+    def limpiar_formulario(self):
+        """Limpia todos los campos del formulario"""
+        """Limpia todos los campos del formulario"""
+        self.txtf_nombre.value = ""
+        self.txtf_apellido.value = ""
+        self.txtf_tlfno.value = ""
+        self.txtf_email.value = ""
+        self.txtf_rep_email.value = ""
+        self.txtf_direccion.value = ""
+        self.drop_ccaa.value = None
+        self.txtf_poblacion.value = ""
+        self.radio_sexo.value = None
+        self.radio_carrera.value = None
+        self.drop_dia.value = None
+        self.drop_mes.value = None
+        self.drop_año.value = None
+        self.drop_doc.value = None
+        self.txtf_dni_codigo.value = ""
+        self.txtf_nombre_emergencia.value = ""
+        self.txtf_numero_emergencia.value = ""
+        
+        # Actualizar los campos para reflejar los cambios
+        for campo in [
+            self.txtf_nombre, self.txtf_apellido, self.txtf_tlfno,
+            self.txtf_email, self.txtf_rep_email, self.txtf_direccion,
+            self.drop_ccaa, self.txtf_poblacion, 
+            self.radio_sexo, self.radio_carrera,
+            self.drop_dia, self.drop_mes, self.drop_año,
+            self.drop_doc, self.txtf_dni_codigo,
+            self.txtf_nombre_emergencia, self.txtf_numero_emergencia
+        ]:
+            campo.update()
+
+    def dlg_modal(self, texto):
+            # Use self.page instead of page
+            if self.page is None:
+                print("Error: page is not defined")
+                return None
+                
+            dialogo = ft.AlertDialog( 
+                modal=False,
+                bgcolor=ft.Colors.GREEN_200,
+                content=ft.Text(
+                    texto,
+                    size=20,
+                    color=ft.Colors.WHITE,
+                ),
+                actions=[
+                    ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo),
+                                  style=ft.ButtonStyle(color=ft.Colors.BLACK)),
+                ],
+                actions_alignment=ft.MainAxisAlignment.END,
+            )    
+            return dialogo
+        
+    def al_enviar_formulario(self, e):
+        """Maneja el evento de envío del formulario"""
+        es_valido, mensaje = self.validar_formulario()
+        
+        if es_valido:
+            datos = self.obtener_datos_formulario()
+            print("Formulario enviado:", datos)
+            # Aquí puedes agregar la lógica para procesar los datos
+            #------------------------------------------------------
+            
+            
+            
+            
+            #------------------------------------------------------
+            self.mostrar_mensaje("El Formulario ha sido enviado correctamente")
+            self.limpiar_formulario()
+  
+
+    def mostrar_mensaje(self, texto):
+        """Muestra un mensaje al usuario"""
+        self.page.open(self.dlg_modal(texto) if self.page else None)
 
 if __name__ == "__main__":
     print("Esta clase no se puede ejecutar de forma independiente.")

@@ -2,33 +2,33 @@ import flet as ft
 
 class ContactoScreen(ft.Container):
     def __init__(self):
-        txtnombre = ft.TextField(
+        self.txtnombre = ft.TextField(
             label="Nombre y Apellidos",
             value="",
             color=ft.Colors.BLACK,
-            width=400,
+            width=500,
         )
 
-        txtemail = ft.TextField(
+        self.txtemail = ft.TextField(
             label="Email",  
             value="",
             color=ft.Colors.BLACK,
-            width=400,
+            width=500,
         )
 
-        txtasunto = ft.TextField(
+        self.txtasunto = ft.TextField(
             label="Asunto",
             value="",
             color=ft.Colors.BLACK,
-            width=400,
+            width=500,
         )
 
-        txtcomentario = ft.TextField(
+        self.txtcomentario = ft.TextField(
             label="Comentario",
             value="",
             color=ft.Colors.BLACK,
-            width=400,
-            min_lines=5,
+            width=500,
+            min_lines=10,
             max_length=500,
             multiline=True,
             text_align=ft.TextAlign.LEFT,
@@ -42,7 +42,16 @@ class ContactoScreen(ft.Container):
         enviar= ft.ElevatedButton("Enviar", icon=ft.Icons.SEND,
                                   color=ft.Colors.BLACK,
                                   icon_color=ft.Colors.BLACK, 
-                                  bgcolor=ft.Colors.GREEN_300
+                                  bgcolor=ft.Colors.GREEN_300)
+
+        self.btn_enviar= ft.ElevatedButton("Enviar", 
+                                  icon=ft.Icons.SEND,
+                                  width=200,
+                                  height=50,
+                                  bgcolor=ft.Colors.GREEN_300,
+                                  color=ft.Colors.WHITE,
+                                  on_click=self.on_click_enviar,
+>>>>>>> 15465c5aff7a0513b33160dac1d7a3ebce6d508e
                                   )
         
         super().__init__(
@@ -70,4 +79,14 @@ class ContactoScreen(ft.Container):
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             ),  
         )
+    
+    def validar_campos(self):
+        # Aquí puedes implementar la lógica para validar los campos del formulario
+        if not self.txtnombre.value or self.txtnombre.value.strip() == "":
+            self.txtnombre.error_text = "El nombre es obligatorio"
+            self.txtnombre.update()
+            return False
+        else:
+            self.txtnombre.error_text = None
+            self.txtnombre.update()
         

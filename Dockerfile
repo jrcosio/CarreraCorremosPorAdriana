@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Copiar la carpeta de assets
-COPY assets/ /app/assets/
+COPY assets/ ./assets/
 
 # Puerto en el que se ejecutará la aplicación
 EXPOSE 80
