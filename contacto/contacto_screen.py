@@ -34,11 +34,16 @@ class ContactoScreen(ft.Container):
             text_align=ft.TextAlign.LEFT,
         )
 
+        self.txtnemail = ft.Text("email: asociacionpeñasagra@gmail.com", 
+                            size=20,
+                            font_family="Britanic Bold",
+                            color=ft.Colors.BLACK,)
+        
+
         self.btn_enviar= ft.ElevatedButton("Enviar", 
                                   icon=ft.Icons.SEND,
                                   width=200,
                                   height=50,
-
                                   bgcolor=ft.Colors.GREEN_300,
                                   color=ft.Colors.WHITE,
                                   on_click=self.on_click_enviar,
@@ -52,7 +57,7 @@ class ContactoScreen(ft.Container):
                     ft.Text(
                         "Contacto",
                         size=40,
-                        color=ft.Colors.BLACK,
+                        color=ft.Colors.GREEN_900,
                         font_family="Britanic Bold",
                         weight=ft.FontWeight.BOLD,
                         text_align=ft.TextAlign.CENTER,
@@ -61,6 +66,7 @@ class ContactoScreen(ft.Container):
                     self.txtemail,
                     self.txtasunto,
                     self.txtcomentario,
+                    self.txtnemail,
                     self.btn_enviar
  
                 ],
@@ -78,7 +84,7 @@ class ContactoScreen(ft.Container):
         else:
             self.txtnombre.error_text = None
             self.txtnombre.update()
-        
+            
         if not self.txtemail.value or self.txtemail.value.strip() == "":
             self.txtemail.error_text = "El email es obligatorio"
             self.txtemail.update()
@@ -129,6 +135,4 @@ class ContactoScreen(ft.Container):
            
             self.limpiar_campos()
             print("Enviar comentario")
-       
-
-
+        

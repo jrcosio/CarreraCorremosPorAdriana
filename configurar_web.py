@@ -2,7 +2,7 @@ imagenes_patrocinadores = [
     ("imagenes_patrocinadores/banner_carandia.png","URL"),
     ("imagenes_patrocinadores/banner_artipublic.png","URL"),
     ("imagenes_patrocinadores/banner_andros.png","URL"),
-    #("imagenes_patrocinadores/banner_LIS.png","URL"),
+    ("imagenes_patrocinadores/banner_LIS.png","URL"),
     #("imagenes_patrocinadores/patrocinador.png","URL"),
     #("imagenes_patrocinadores/patrocinador.png","URL"), 
 ]
