@@ -479,6 +479,7 @@ class InscripcionScreen(ft.Container):
         else:
             self.txtf_nombre_emergencia.error_text = ""
             self.txtf_nombre_emergencia.update()
+            
         if not datos["numero_emergencia"] or datos["numero_emergencia"].strip() == "":
             self.txtf_numero_emergencia.error_text = "El campo Número de Emergencia es requerido"
             self.txtf_numero_emergencia.update()
@@ -486,7 +487,6 @@ class InscripcionScreen(ft.Container):
         else:
             self.txtf_numero_emergencia.error_text = ""
             self.txtf_numero_emergencia.update()
-    
         
         # Validar que los emails coincidan
         if datos["email"] != datos["repetir_email"]:
