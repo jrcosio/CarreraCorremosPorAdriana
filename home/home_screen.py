@@ -177,7 +177,7 @@ class HomeScreen(ft.Container):
                                 src=img[0],
                                 fit=ft.ImageFit.CONTAIN,
                                 width=300,
-                                height=300
+                                height=200
                             ),
                             on_click=lambda e, url=img[1]: print(f"Clicked: {url}"),
                             bgcolor=ft.Colors.TRANSPARENT,

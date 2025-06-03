@@ -1,23 +1,25 @@
 imagenes_patrocinadores = [
     ("imagenes_patrocinadores/banner_carandia.png","URL"),
+    ("imagenes_patrocinadores/banner_LIS.png","URL"),
     ("imagenes_patrocinadores/banner_artipublic.png","URL"),
     ("imagenes_patrocinadores/banner_andros.png","URL"),
-    ("imagenes_patrocinadores/banner_LIS.png","URL"),
-    #("imagenes_patrocinadores/patrocinador.png","URL"),
-    #("imagenes_patrocinadores/patrocinador.png","URL"), 
+    ("imagenes_patrocinadores/banner_grupochovi.png","URL"),
 ]
         
 imagenes_colaboradores = [
-    ("imagenes_colaboradores/colaborador.png","URL"),
-    ("imagenes_colaboradores/colaborador.png","URL"),
-    ("imagenes_colaboradores/colaborador.png","URL"),
-    # ("imagenes_colaboradores/colaborador.png","URL"),
-    # ("imagenes_colaboradores/colaborador.png","URL"),
-    # ("imagenes_colaboradores/colaborador.png","URL"),           
+    ("imagenes_colaboradores/banner_jvcosio.png","URL"),
+    ("imagenes_colaboradores/banner_rionansa.png","URL"),
+    ("imagenes_colaboradores/banner_panpuentenansa.png","URL"),
+    ("imagenes_colaboradores/banner_fotoalejandro.png","URL"),
+    ("imagenes_colaboradores/banner_ruben.png","URL"),
+    ("imagenes_colaboradores/banner_blancoj.png","URL"),
+ 
 ]
         
 imagenes_organizadores = [
     ("imagenes_organizadores/logo.png","URL"),
+    ("imagenes_organizadores/logo2.png","URL"),
+    ("imagenes_organizadores/logo3.png","URL"),
 ]
 
 trail ={
