@@ -295,19 +295,20 @@ class Gmail:
 # Ejemplo de uso
 if __name__ == "__main__":
     # Configurar credenciales
-    GMAIL_USER = "tu_email@gmail.com"
-    GMAIL_PASSWORD = "tu_contraseña_de_aplicacion" # La contraseña de aplicación no es tu password es una generada en tu cuenta de Google
+    GMAIL_USER = "asociacionpenasagra@gmail.com"
+    GMAIL_PASSWORD = "cfri bxoq hsub uegt"
+    
     
     # Crear instancia del Objeto Gmail --> Obligatorio hacerlo antes de enviar emails
     email_send = Gmail(GMAIL_USER, GMAIL_PASSWORD)
     
     # Enviar email de preinscripción
-    email_send.enviar_email("correo_participante@example.com", "Juan Pérez")
+    email_send.enviar_email("jr.cosio1@gmail.com", "Jose Ramon Blanco")
     
     # Enviar mensaje de contacto (auto-envío)
-    email_send.enviar_contacto(
-        nombre_usuario="María García",
-        email_usuario="maria@example.com", 
-        asunto_usuario="Consulta sobre la carrera",
-        comentario="Hola, me gustaría saber más información sobre las categorías disponibles y los horarios de salida. ¿Hay algún límite de edad? Gracias."
-    )
+    # email_send.enviar_contacto(
+    #     nombre_usuario="María García",
+    #     email_usuario="maria@example.com", 
+    #     asunto_usuario="Consulta sobre la carrera",
+    #     comentario="Hola, me gustaría saber más información sobre las categorías disponibles y los horarios de salida. ¿Hay algún límite de edad? Gracias."
+    # )
