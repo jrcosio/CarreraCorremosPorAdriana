@@ -48,6 +48,9 @@ class InscripcionScreen(ft.Container):
         self.drop_año = None
         self.drop_doc = None
         
+        self.condiciones = None
+        self.precio_carrera = ""
+        
         # Botón
         self.btn_enviar = None
 
@@ -102,6 +105,12 @@ class InscripcionScreen(ft.Container):
             value="",
             **estilo_campo
         )
+        
+        self.condiciones = ft.Checkbox(
+            label="Acepto el reglamento de la carrera",
+            value=False,  
+            label_style=ft.TextStyle(size=20),
+        )
     def crear_campo_ccaa(self):
         """Crea el campo de selección de comunidad autónoma"""
         self.drop_ccaa = ft.Dropdown(
@@ -147,14 +156,19 @@ class InscripcionScreen(ft.Container):
         self.radio_carrera = ft.RadioGroup(
             content=ft.Row(
                 controls=[
-                    ft.Text("Tipo de Carrera que desea realizar:"),
-                    ft.Radio(value="trail", label="Trail"),
-                    ft.Radio(value="andarines", label="Andarines"),
+                    ft.Text("Tipo de prueba:", size=24),
+                    ft.Radio(value="trail", label="Trail [20€]", label_style=ft.TextStyle(size=24, weight=ft.FontWeight.BOLD)),
+                    ft.Radio(value="andarines", label="Andarines [15€]", label_style=ft.TextStyle(size=24, weight=ft.FontWeight.BOLD)),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
-            )
+            ),
+            on_change=self.calcula_precio_carrera
         )
+
+    def calcula_precio_carrera(self,e):
+        """Calcula el precio de la carrera según la selección"""
+        self.precio_carrera = "15" if self.radio_carrera.value == "trail" else "10"
 
     def crear_campos_fecha(self):
         """Crea los dropdowns para la fecha de nacimiento"""
@@ -263,7 +277,7 @@ class InscripcionScreen(ft.Container):
         self.crear_campos_emergencia()
         self.crear_campo_ccaa()
         self.crear_botones()
-        
+                
         return ft.Column(
             controls=[
                 self.txtf_nombre,
@@ -293,6 +307,31 @@ class InscripcionScreen(ft.Container):
                 self.txtf_nombre_emergencia,
                 self.txtf_numero_emergencia,
                 ft.Divider(),
+                ft.Row(
+                    controls=[
+                        self.condiciones,
+                        ft.TextButton(
+                            "Leer REGLAMENTO DE LA CARRERA",
+                            on_click=lambda e: self.page.open(self.ventana_condiciones() if self.page else None),
+                            style=ft.ButtonStyle(
+                                color=ft.Colors.BLUE_400,
+                                text_style=ft.TextStyle(size=20)
+                            )
+                        )  
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                ),
+                ft.Container(
+                    content=ft.Text(
+                        "Asociación Sierra de Peñasagra - NIF: G21911052",
+                        size=20,
+                        weight=ft.FontWeight.BOLD,
+                        color=ft.Colors.BLACK
+                    ),  
+                    alignment=ft.Alignment(0, 0)
+                ),
+                ft.Divider(),
                 ft.Container(
                     content=self.btn_enviar,
                     alignment=ft.Alignment(0, 0),
@@ -301,6 +340,38 @@ class InscripcionScreen(ft.Container):
             scroll=ft.ScrollMode.AUTO,
             expand=True
         )
+    def ventana_condiciones(self):
+        
+        from inscripciones.reglamento import reglamento
+        
+        if self.page is None:
+            print("Error: page is not defined")
+            return None
+            
+        dialogo = ft.AlertDialog( 
+            title=ft.Text("REGLAMENTO TRAIL SIERRA DE PEÑASAGRA"),
+            modal=False,
+            bgcolor=ft.Colors.BLUE_GREY_100,
+            content=ft.Column(
+                controls=[
+                    ft.Text(
+                        reglamento,
+                        size=20,
+                        color=ft.Colors.BLACK,
+                    )
+                ],
+                scroll=ft.ScrollMode.AUTO,
+            ),
+            actions=[
+                ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo),
+                                style=ft.ButtonStyle(
+                                    text_style=ft.TextStyle(size=20),
+                                    color=ft.Colors.BLACK)),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+        )    
+        return dialogo
+        
 
     def crear_encabezado(self):
         """Crea el encabezado del formulario"""
@@ -360,6 +431,8 @@ class InscripcionScreen(ft.Container):
             "carrera": self.radio_carrera.value,
             "nombre_emergencia": self.txtf_nombre_emergencia.value,
             "numero_emergencia": self.txtf_numero_emergencia.value,
+            "condiciones": self.condiciones.value,
+            "precio_carrera": self.precio_carrera,
         }
 
     def validar_formulario(self):
@@ -532,26 +605,26 @@ class InscripcionScreen(ft.Container):
             campo.update()
 
     def dlg_modal(self, texto):
-            # Use self.page instead of page
-            if self.page is None:
-                print("Error: page is not defined")
-                return None
-                
-            dialogo = ft.AlertDialog( 
-                modal=False,
-                bgcolor=ft.Colors.GREEN_200,
-                content=ft.Text(
-                    texto,
-                    size=20,
-                    color=ft.Colors.WHITE,
-                ),
-                actions=[
-                    ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo),
-                                  style=ft.ButtonStyle(color=ft.Colors.BLACK)),
-                ],
-                actions_alignment=ft.MainAxisAlignment.END,
-            )    
-            return dialogo
+        # Use self.page instead of page
+        if self.page is None:
+            print("Error: page is not defined")
+            return None
+            
+        dialogo = ft.AlertDialog( 
+            modal=False,
+            bgcolor=ft.Colors.GREEN_200,
+            content=ft.Text(
+                texto,
+                size=20,
+                color=ft.Colors.WHITE,
+            ),
+            actions=[
+                ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo),
+                                style=ft.ButtonStyle(color=ft.Colors.BLACK)),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+        )    
+        return dialogo
         
     def al_enviar_formulario(self, e):
         """Maneja el evento de envío del formulario"""
