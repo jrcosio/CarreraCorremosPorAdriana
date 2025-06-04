@@ -428,8 +428,8 @@ class InscripcionScreen(ft.Container):
     def obtener_datos_formulario(self):
         """Obtiene todos los datos del formulario en un diccionario"""
         return {
-            "nombre": self.txtf_nombre.value,
-            "apellido": self.txtf_apellido.value,
+            "nombre": self.txtf_nombre.value.lower().title(),
+            "apellido": self.txtf_apellido.value.upper(),
             "sexo": self.radio_sexo.value,
             "dia": self.drop_dia.value,
             "mes": self.drop_mes.value,

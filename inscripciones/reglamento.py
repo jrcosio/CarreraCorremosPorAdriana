@@ -30,8 +30,7 @@ Categoría veterano A: a partir de los 40 a 45 años
 Categoría veterano B: a partir de los 46 a 50 años 
 Categoría veterano C: a partir de los 50 años. 
 Además, se establecen los siguientes premios: 
-Ganadores absolutos de las pruebas (masculino y femenino): a los tres primeros en cruzar la 
-línea de meta. 
+Ganadores absolutos de las pruebas (masculino y femenino): a los tres primeros en cruzar la línea de meta. 
 Ganadores locales (masculino y femenino) empadronados en el municipio de Rionansa.
 
 DORSALES 
