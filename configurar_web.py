@@ -1,9 +1,9 @@
 imagenes_patrocinadores = [
-    ("imagenes_patrocinadores/banner_carandia.png","URL"),
-    ("imagenes_patrocinadores/banner_LIS.png","URL"),
-    ("imagenes_patrocinadores/banner_artipublic.png","URL"),
-    ("imagenes_patrocinadores/banner_andros.png","URL"),
-    ("imagenes_patrocinadores/banner_grupochovi.png","URL"),
+    ("imagenes_patrocinadores/banner_carandia.png","https://carandiadistribuciones.com/L"),
+    ("imagenes_patrocinadores/banner_LIS.png","https://www.lisdatasolutions.com/es/"),
+    ("imagenes_patrocinadores/banner_artipublic.png","https://www.artipubli.com/"),
+    ("imagenes_patrocinadores/banner_andros.png","https://androsvegetal.es/"),
+    ("imagenes_patrocinadores/banner_grupochovi.png","https://www.chovi.com/es/"),
 ]
         
 imagenes_colaboradores = [

@@ -149,11 +149,11 @@ class HomeScreen(ft.Container):
 
         
         
-        def logos_container(titulo, imagenes_lista, color_fondo=ft.Colors.TRANSPARENT):
+        def logos_container(titulo, lista, color_fondo=ft.Colors.TRANSPARENT):
             # Agrupar las imágenes en filas de 4
             filas_imagenes = [
-                imagenes_lista[i:i+4]
-                for i in range(0, len(imagenes_lista), 4)
+                lista[i:i+4]
+                for i in range(0, len(lista), 4)
             ]
 
             return ft.Container(
@@ -179,7 +179,7 @@ class HomeScreen(ft.Container):
                                 width=300,
                                 height=200
                             ),
-                            on_click=lambda e, url=img[1]: print(f"Clicked: {url}"),
+                            on_click=lambda e, url=img[1]: self.page.launch_url(url) if self.page else None,
                             bgcolor=ft.Colors.TRANSPARENT,
                             border_radius=10,
                             padding=2,
