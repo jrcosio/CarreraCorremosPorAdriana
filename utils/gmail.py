@@ -3,7 +3,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import ssl
 
-class EmailSender:
+class Gmail:
     """
     Clase para enviar emails de preinscripción al Trail Peñasagra usando Gmail
     """
@@ -109,6 +109,152 @@ class EmailSender:
         """
         return html
     
+    def crear_mensaje_contacto_html(self, nombre_usuario, email_usuario, asunto_usuario, comentario):
+        """
+        Crea el contenido HTML del email de contacto
+        
+        Args:
+            nombre_usuario (str): Nombre del usuario que contacta
+            email_usuario (str): Email del usuario que contacta
+            asunto_usuario (str): Asunto del mensaje
+            comentario (str): Comentario del usuario
+            
+        Returns:
+            str: Contenido HTML del mensaje de contacto
+        """
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }}
+                .header {{
+                    background-color: #2c5530;
+                    color: white;
+                    padding: 20px;
+                    text-align: center;
+                    border-radius: 8px 8px 0 0;
+                }}
+                .contenido {{
+                    background-color: #f9f9f9;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    border-radius: 0 0 8px 8px;
+                }}
+                .campo {{
+                    margin-bottom: 15px;
+                    padding: 10px;
+                    background-color: white;
+                    border-radius: 4px;
+                    border-left: 4px solid #2c5530;
+                }}
+                .label {{
+                    font-weight: bold;
+                    color: #2c5530;
+                    display: block;
+                    margin-bottom: 5px;
+                }}
+                .comentario {{
+                    background-color: #fff;
+                    padding: 15px;
+                    border-radius: 4px;
+                    border: 1px solid #ddd;
+                    white-space: pre-wrap;
+                }}
+                .responder {{
+                    background-color: #e8f5e8;
+                    padding: 15px;
+                    border-radius: 4px;
+                    margin-top: 20px;
+                    text-align: center;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h2>📧 Nuevo mensaje de contacto - Trail Peñasagra</h2>
+            </div>
+            
+            <div class="contenido">
+                <div class="campo">
+                    <span class="label">👤 Nombre:</span>
+                    {nombre_usuario}
+                </div>
+                
+                <div class="campo">
+                    <span class="label">📧 Email:</span>
+                    <a href="mailto:{email_usuario}">{email_usuario}</a>
+                </div>
+                
+                <div class="campo">
+                    <span class="label">📝 Asunto:</span>
+                    {asunto_usuario}
+                </div>
+                
+                <div class="campo">
+                    <span class="label">💬 Comentario:</span>
+                    <div class="comentario">{comentario}</div>
+                </div>
+                
+                <div class="responder">
+                    <p><strong>💡 Para responder:</strong> Simplemente haz clic en el email del usuario para abrir tu cliente de correo</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        return html
+    
+    def enviar_contacto(self, nombre_usuario, email_usuario, asunto_usuario, comentario):
+        """
+        Envía un email de contacto al administrador (auto-envío)
+        
+        Args:
+            nombre_usuario (str): Nombre del usuario que contacta
+            email_usuario (str): Email del usuario que contacta
+            asunto_usuario (str): Asunto del mensaje
+            comentario (str): Comentario del usuario
+            
+        Returns:
+            bool: True si se envió correctamente, False en caso contrario
+        """
+        try:
+            # Crear el mensaje - se envía al mismo email configurado
+            mensaje = MIMEMultipart("alternative")
+            mensaje["From"] = self.gmail_user
+            mensaje["To"] = self.gmail_user  # Auto-envío
+            mensaje["Reply-To"] = email_usuario  # Para poder responder fácilmente
+            mensaje["Subject"] = f"Contacto Web: {asunto_usuario} - {nombre_usuario}"
+            
+            # Crear contenido HTML
+            html_content = self.crear_mensaje_contacto_html(
+                nombre_usuario, email_usuario, asunto_usuario, comentario
+            )
+            part_html = MIMEText(html_content, "html")
+            mensaje.attach(part_html)
+            
+            # Crear conexión segura y enviar
+            context = ssl.create_default_context()
+            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+                server.starttls(context=context)
+                server.login(self.gmail_user, self.gmail_password)
+                server.sendmail(self.gmail_user, self.gmail_user, mensaje.as_string())
+            
+            print(f"✅ Mensaje de contacto recibido de {nombre_usuario} ({email_usuario})")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Error al enviar mensaje de contacto: {str(e)}")
+            return False
+    
     def enviar_email(self, email_destinatario, nombre):
         """
         Envía el email de preinscripción
@@ -145,55 +291,23 @@ class EmailSender:
         except Exception as e:
             print(f"❌ Error al enviar email: {str(e)}")
             return False
-        
-    def enviar_info_contacto(self, email_destinatario, nombre, asunto, texto):
-        """
-        Envía un email de contacto con información adicional
-        
-        Args:
-            email_destinatario (str): Email del destinatario
-            nombre (str): Nombre del destinatario
-            
-        Returns:
-            bool: True si se envió correctamente, False en caso contrario
-        """
-        try:
-            # Crear el mensaje
-            mensaje = MIMEMultipart("alternative")
-            mensaje["From"] = self.gmail_user
-            mensaje["To"] = self.gmail_user
-            mensaje["Subject"] = f"Desde la WEB: [{asunto}]"
-            
-            # Crear contenido HTML
-            html_content = f"""
-            <p>Soy {nombre},</p>
-            <p>{texto}</p>
-            """
-            part_html = MIMEText(html_content, "html")
-            mensaje.attach(part_html)
-            
-            # Crear conexión segura y enviar
-            context = ssl.create_default_context()
-            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
-                server.starttls(context=context)
-                server.login(self.gmail_user, self.gmail_password)
-                server.sendmail(self.gmail_user, self.gmail_user, mensaje.as_string())
-            
-            print(f"✅ Información de contacto enviada a {email_destinatario}")
-            return True
-            
-        except Exception as e:
-            print(f"❌ Error al enviar información de contacto: {str(e)}")
-            return False
 
 # Ejemplo de uso
 if __name__ == "__main__":
     # Configurar credenciales
-    GMAIL_USER = "asociacionpenasagra@gmail.com"
-    GMAIL_PASSWORD = "cfri bxoq hsub uegt"
+    GMAIL_USER = "tu_email@gmail.com"
+    GMAIL_PASSWORD = "tu_contraseña_de_aplicacion" # La contraseña de aplicación no es tu password es una generada en tu cuenta de Google
     
-    # Crear instancia del sender
-    email_sender = EmailSender(GMAIL_USER, GMAIL_PASSWORD)
+    # Crear instancia del Objeto Gmail --> Obligatorio hacerlo antes de enviar emails
+    email_send = Gmail(GMAIL_USER, GMAIL_PASSWORD)
     
-    # Enviar email
-    email_sender.enviar_email("jr.cosio1@gmail.com", "José Ramón")
+    # Enviar email de preinscripción
+    email_send.enviar_email("correo_participante@example.com", "Juan Pérez")
+    
+    # Enviar mensaje de contacto (auto-envío)
+    email_send.enviar_contacto(
+        nombre_usuario="María García",
+        email_usuario="maria@example.com", 
+        asunto_usuario="Consulta sobre la carrera",
+        comentario="Hola, me gustaría saber más información sobre las categorías disponibles y los horarios de salida. ¿Hay algún límite de edad? Gracias."
+    )
