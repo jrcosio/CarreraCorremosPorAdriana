@@ -50,6 +50,7 @@ class InscripcionScreen(ft.Container):
         
         self.condiciones = None
         self.precio_carrera = ""
+        self.error_condiciones = None
         
         # Botón
         self.btn_enviar = None
@@ -110,6 +111,13 @@ class InscripcionScreen(ft.Container):
             label="Acepto el reglamento de la carrera",
             value=False,  
             label_style=ft.TextStyle(size=20),
+        )
+        
+        self.error_condiciones = ft.Text(
+            "",
+            color=ft.Colors.RED,
+            size=14,
+            visible=False
         )
     def crear_campo_ccaa(self):
         """Crea el campo de selección de comunidad autónoma"""
@@ -323,12 +331,18 @@ class InscripcionScreen(ft.Container):
                     vertical_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
                 ft.Container(
-                    content=ft.Text(
-                        "Asociación Sierra de Peñasagra - NIF: G21911052",
-                        size=20,
-                        weight=ft.FontWeight.BOLD,
-                        color=ft.Colors.BLACK
-                    ),  
+                    content=ft.Column(
+                        controls=[
+                            self.error_condiciones,
+                            ft.Text(
+                                "Asociación Sierra de Peñasagra - NIF: G21911052",
+                                size=20,
+                                weight=ft.FontWeight.BOLD,
+                                color=ft.Colors.BLACK
+                            ),  
+                        ],
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    ),
                     alignment=ft.Alignment(0, 0)
                 ),
                 ft.Divider(),
@@ -438,14 +452,7 @@ class InscripcionScreen(ft.Container):
     def validar_formulario(self):
         """Valida que todos los campos requeridos estén completos"""
         datos = self.obtener_datos_formulario()
-        
-        campos_requeridos = [
-            "nombre", "apellido", "sexo", "telefono", 
-            "email", "repetir_email", "codigo_documento",
-            "direccion", "ccaa", "poblacion", "carrera",
-            "nombre_emergencia", "numero_emergencia"
-        ]
-        
+     
         if not datos["nombre"] or datos["nombre"].strip() == "":
             self.txtf_nombre.error_text = "El campo Nombre es requerido"
             self.txtf_nombre.update()
@@ -560,6 +567,16 @@ class InscripcionScreen(ft.Container):
         else:
             self.txtf_numero_emergencia.error_text = ""
             self.txtf_numero_emergencia.update()
+            
+        if not datos["condiciones"]:
+            # En lugar de usar error_text, mostrar el mensaje de error
+            self.error_condiciones.value = "Debes aceptar el reglamento de la carrera"
+            self.error_condiciones.visible = True
+            self.error_condiciones.update()
+            return False, "Debes aceptar el reglamento de la carrera"
+        else:
+            self.error_condiciones.visible = False
+            self.error_condiciones.update()
         
         # Validar que los emails coincidan
         if datos["email"] != datos["repetir_email"]:
@@ -591,18 +608,9 @@ class InscripcionScreen(ft.Container):
         self.txtf_dni_codigo.value = ""
         self.txtf_nombre_emergencia.value = ""
         self.txtf_numero_emergencia.value = ""
+        self.condiciones.value = False
         
-        # Actualizar los campos para reflejar los cambios
-        for campo in [
-            self.txtf_nombre, self.txtf_apellido, self.txtf_tlfno,
-            self.txtf_email, self.txtf_rep_email, self.txtf_direccion,
-            self.drop_ccaa, self.txtf_poblacion, 
-            self.radio_sexo, self.radio_carrera,
-            self.drop_dia, self.drop_mes, self.drop_año,
-            self.drop_doc, self.txtf_dni_codigo,
-            self.txtf_nombre_emergencia, self.txtf_numero_emergencia
-        ]:
-            campo.update()
+        self.update()
 
     def dlg_modal(self, texto):
         # Use self.page instead of page
