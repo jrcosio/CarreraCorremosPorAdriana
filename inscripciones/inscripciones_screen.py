@@ -1,4 +1,12 @@
+from datetime import datetime
 import flet as ft
+from utils.TrailDataBase import TrailDataBase, Inscrito
+import logging
+
+log = logging.getLogger(__name__)
+# Configuración del logger
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
 
 class InscripcionScreen(ft.Container):
     def __init__(self):
@@ -450,6 +458,7 @@ class InscripcionScreen(ft.Container):
             "ccaa": self.drop_ccaa.value,
             "poblacion": self.txtf_poblacion.value,
             "carrera": self.radio_carrera.value,
+            "talla": self.drop_camiseta.value,
             "nombre_emergencia": self.txtf_nombre_emergencia.value,
             "numero_emergencia": self.txtf_numero_emergencia.value,
             "condiciones": self.condiciones.value,
@@ -650,13 +659,39 @@ class InscripcionScreen(ft.Container):
             print("Formulario enviado:", datos)
             # Aquí puedes agregar la lógica para procesar los datos
             #------------------------------------------------------
+            db = TrailDataBase()
             
+            dorsal = str((int(db.obtener_ultimo_dorsal(datetime.now().year) or "000") + 1)).zfill(3)
             
+            inscrito = Inscrito(
+                dorsal=dorsal,  # El dorsal se asignará automáticamente
+                nombre=datos["nombre"],
+                apellidos=datos["apellido"],
+                sexo=datos["sexo"],
+                fecha_nacimiento=datetime(int(datos["año"]), int(datos["mes"]), int(datos["dia"])),
+                telefono=datos["telefono"],
+                email=datos["email"],
+                tipo_documento=datos["tipo_documento"],
+                numero_documento=datos["codigo_documento"],
+                direccion=datos["direccion"],
+                ccaa=datos["ccaa"],
+                municipio=datos["poblacion"],
+                tipo_carrera=datos["carrera"],
+                talla=datos["talla"],
+                contacto_emergencia=datos["nombre_emergencia"],
+                telefono_emergencia=datos["numero_emergencia"],
+                edicion=datetime.now().year,
+            )
             
+            try:
+                db.insertar(inscrito)
+                
+                self.mostrar_mensaje("El Formulario ha sido enviado correctamente")
+                self.limpiar_formulario()
             
-            #------------------------------------------------------
-            self.mostrar_mensaje("El Formulario ha sido enviado correctamente")
-            self.limpiar_formulario()
+            except Exception as ex:
+                log.error(f"Error al insertar el inscrito: {ex}")
+            
   
 
     def mostrar_mensaje(self, texto):

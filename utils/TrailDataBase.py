@@ -7,6 +7,7 @@ from sqlalchemy.exc import SQLAlchemyError
 import os
 import logging
 from datetime import date, datetime
+from dotenv import load_dotenv
 
 log = logging.getLogger(__name__)
 # Configuración del logger
@@ -21,7 +22,7 @@ class Inscrito(Base):
     __tablename__ = "inscritos"
 
     id = Column(Integer, primary_key=True)
-    dorsal = Column(Integer, nullable=False)
+    dorsal = Column(String(4), nullable=False)
     nombre = Column(String(50), nullable=False)
     apellidos = Column(String(100), nullable=False)
     sexo = Column(CHAR(1), nullable=False)
@@ -34,6 +35,7 @@ class Inscrito(Base):
     ccaa = Column(String(60), nullable=False)
     municipio = Column(String(50), nullable=False)
     tipo_carrera = Column(String(20), nullable=False)
+    talla = Column(String(10), nullable=False)
     contacto_emergencia = Column(String(100), nullable=False)
     telefono_emergencia = Column(String(15), nullable=False)
     edicion = Column(Integer, nullable=False)
@@ -43,6 +45,7 @@ class Inscrito(Base):
     __table_args__ = (
         CheckConstraint(sexo.in_(['M', 'F']), name='chk_sexo_valido'),
         CheckConstraint(tipo_carrera.in_(['trail', 'andarines']), name='chk_tipo_carrera_valido'),
+        CheckConstraint(talla.in_(['S', 'M', 'L', 'XL', 'XXL']), name='chk_talla_valida'),
     )
 
 
@@ -84,11 +87,24 @@ class TrailDataBase:
     def _connect(self):
         """Establece la conexión con PostgreSQL"""
         try:
-            # Configuración de conexión PostgreSQL
-            # Puedes usar variables de entorno o configuración directa
-            db_url = os.getenv('DATABASE_URL', 
-                             'postgresql://user:12345678@localhost:5432/cosiotrail2025')
+            # Cargar variables de entorno desde .env
+            load_dotenv()
+
+            # Obtener credenciales de Gmail desde .env
+            server_bd_url = os.getenv('SERVER_BD_URL')
+            server_bd_user = os.getenv('SERVER_BD_USER')
+            server_bd_password = os.getenv('SERVER_BD_PASSWORD')
+            server_bd_name = os.getenv('SERVER_BD_NAME')
             
+            if not server_bd_url or not server_bd_user or not server_bd_password or not server_bd_name:
+                log.error("Faltan variables de entorno para la conexión a la base de datos")
+                raise ValueError("Faltan variables de entorno para la conexión a la base de datos")
+            # Construir URL de conexión PostgreSQL
+            # Ejemplo: 'postgresql://user:password@localhost:5432/database_name'
+            # Puedes usar variables de entorno o configuración directa
+            db_url = f'postgresql://{server_bd_user}:{server_bd_password}@{server_bd_url}/{server_bd_name}'
+            
+            log.info(f"Conectando a PostgreSQL en {db_url}")
             # Crear engine con echo=False para producción
             self._engine = create_engine(db_url, echo=True)
             
@@ -220,6 +236,17 @@ class TrailDataBase:
         except SQLAlchemyError as e:
             log.error(f"Error obteniendo inscrito por dorsal", exc_info=e)
             return None
+        
+    def obtener_ultimo_dorsal(self, edicion):
+        """Obtiene el último dorsal asignado en una edición"""
+        try:
+            ultimo_inscrito = self._session.query(Inscrito).filter(
+                Inscrito.edicion == edicion
+            ).order_by(Inscrito.id.desc()).first()
+            return ultimo_inscrito.dorsal if ultimo_inscrito else None
+        except SQLAlchemyError as e:
+            log.error(f"Error obteniendo último dorsal", exc_info=e)
+            return None
     
     def obtener_inscritos_por_tipo_carrera(self, tipo_carrera, edicion):
         """Obtiene inscritos por tipo de carrera y edición"""
@@ -306,30 +333,34 @@ class TrailDataBase:
 
 
 # =================== EJEMPLO DE USO ===================
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # Crear instancia singleton
-    db = TrailDataBase()
+    # db = TrailDataBase()
     
-    # Ejemplo de uso
-    try:
+    # # Ejemplo de uso
+    # try:
         
         
-        # filas = db.Iniciar_Carrera()   # hora de salida = ahora
-        # print(f"\n\n\n{filas} corredores añadidos a clasificacion")
+    #     # filas = db.Iniciar_Carrera()   # hora de salida = ahora
+    #     # print(f"\n\n\n{filas} corredores añadidos a clasificacion")
         
-        Clasificacion = db.obtener_clasificaciones_por_edicion(date.today().year)
-        print(f"Clasificaciones de la edición {date.today().year}:")
-        for clasif in Clasificacion:
-            print(f"Dorsal: {clasif.inscrito.dorsal} | {clasif.inscrito.nombre} | {clasif.inscrito.apellidos} | {clasif.inscrito.ccaa} | "
-                  f"Edición: {clasif.edicion} | "
-                  f"Tiempo Final: {clasif.tiempo_final}, ")
-                #   Tiempo P1: {clasif.tiempo_p1}, Finalizado: {clasif.finalizado}")
+    #     # Clasificacion = db.obtener_clasificaciones_por_edicion(date.today().year)
+    #     # print(f"Clasificaciones de la edición {date.today().year}:")
+    #     # for clasif in Clasificacion:
+    #     #     print(f"Dorsal: {clasif.inscrito.dorsal} | {clasif.inscrito.nombre} | {clasif.inscrito.apellidos} | {clasif.inscrito.ccaa} | "
+    #     #           f"Edición: {clasif.edicion} | "
+    #     #           f"Tiempo Final: {clasif.tiempo_final}, ")
+    #     #         #   Tiempo P1: {clasif.tiempo_p1}, Finalizado: {clasif.finalizado}")
+        
+    #     inscrito = db.obtener_ultimo_dorsal(date.today().year)
+    #     print(f"Último dorsal asignado en la edición {date.today().year}: {inscrito}")
         
         
         
-    except Exception as e:
-        print(f"Error en ejemplo: {e}")
+    # except Exception as e:
+    #     print(f"Error en ejemplo: {e}")
     
-    finally:
-        # Cerrar conexión al finalizar
-        db.cerrar_conexion()
+    # finally:
+    #     # Cerrar conexión al finalizar
+    #     db.cerrar_conexion()
+    

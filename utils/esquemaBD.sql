@@ -1,7 +1,7 @@
 -- Corredores inscritos
 CREATE TABLE IF NOT EXISTS inscritos (
     id                  SERIAL PRIMARY KEY,
-    dorsal              INTEGER       NOT NULL,
+    dorsal              VARCHAR(4)      NOT NULL,
     nombre              VARCHAR(50)   NOT NULL,
     apellidos           VARCHAR(100)  NOT NULL,
     sexo                CHAR(1)       NOT NULL CHECK (sexo IN ('M', 'F')),  -- M para masculino, F para femenino
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS inscritos (
     ccaa                VARCHAR(60)   NOT NULL,
     municipio           VARCHAR(50)   NOT NULL,
     tipo_carrera        VARCHAR(20)   NOT NULL CHECK (tipo_carrera IN ('trail', 'andarines')),  -- Tipos de carrera
-    talla_camiseta      VARCHAR(10)   NOT NULL CHECK (talla_camiseta IN ('S', 'M', 'L', 'XL', 'XXL')),  -- Tallas de camiseta
+    talla               VARCHAR(10)   NOT NULL CHECK (talla_camiseta IN ('S', 'M', 'L', 'XL', 'XXL')),  -- Tallas de camiseta
     contacto_emergencia VARCHAR(100)  NOT NULL,
     telefono_emergencia VARCHAR(15)   NOT NULL,
     edicion             INTEGER       NOT NULL   -- Año de la carrera 2025, 2026, etc.
