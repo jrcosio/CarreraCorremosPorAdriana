@@ -2,6 +2,11 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import ssl
+import logging
+
+log = logging.getLogger(__name__)
+# Configuración del logger
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class Gmail:
     """
@@ -248,11 +253,11 @@ class Gmail:
                 server.login(self.gmail_user, self.gmail_password)
                 server.sendmail(self.gmail_user, self.gmail_user, mensaje.as_string())
             
-            print(f"✅ Mensaje de contacto recibido de {nombre_usuario} ({email_usuario})")
+            log.info(f"Mensaje de contacto enviado correctamente: {asunto_usuario} - {nombre_usuario}")
             return True
             
         except Exception as e:
-            print(f"❌ Error al enviar mensaje de contacto: {str(e)}")
+            log.error(f"Error al enviar mensaje de contacto: {str(e)}")
             return False
     
     def enviar_email(self, email_destinatario, nombre):
@@ -285,25 +290,25 @@ class Gmail:
                 server.login(self.gmail_user, self.gmail_password)
                 server.sendmail(self.gmail_user, email_destinatario, mensaje.as_string())
             
-            print(f"✅ Email enviado correctamente a {email_destinatario}")
+            log.info(f"Email enviado correctamente a {email_destinatario} para {nombre}")
             return True
             
         except Exception as e:
-            print(f"❌ Error al enviar email: {str(e)}")
+            log.error(f"Error al enviar email: {str(e)}")
             return False
 
 # Ejemplo de uso
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # Configurar credenciales
-    GMAIL_USER = "asociacionpenasagra@gmail.com"
-    GMAIL_PASSWORD = "cfri bxoq hsub uegt"
+    # GMAIL_USER = "asociacionpenasagra@gmail.com"
+    # GMAIL_PASSWORD = "cfri bxoq hsub uegt"
     
     
-    # Crear instancia del Objeto Gmail --> Obligatorio hacerlo antes de enviar emails
-    email_send = Gmail(GMAIL_USER, GMAIL_PASSWORD)
+    # # Crear instancia del Objeto Gmail --> Obligatorio hacerlo antes de enviar emails
+    # email_send = Gmail(GMAIL_USER, GMAIL_PASSWORD)
     
-    # Enviar email de preinscripción
-    email_send.enviar_email("jr.cosio1@gmail.com", "Jose Ramon Blanco")
+    # # Enviar email de preinscripción
+    # email_send.enviar_email("jr.cosio1@gmail.com", "Jose Ramon Blanco")
     
     # Enviar mensaje de contacto (auto-envío)
     # email_send.enviar_contacto(

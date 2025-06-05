@@ -1,4 +1,12 @@
 import flet as ft
+from utils.gmail import Gmail
+import os
+from dotenv import load_dotenv
+import logging
+
+log = logging.getLogger(__name__)
+# Configuración del logger
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class ContactoScreen(ft.Container):
     def __init__(self):
@@ -34,10 +42,23 @@ class ContactoScreen(ft.Container):
             text_align=ft.TextAlign.LEFT,
         )
 
-        self.txtnemail = ft.Text("email: asociacionpeñasagra@gmail.com", 
-                            size=20,
-                            font_family="Britanic Bold",
-                            color=ft.Colors.BLACK,)
+        self.txtnemail = ft.Container(
+            content= ft.Column(
+                [
+                    ft.Text("Estas enviando un correo a la Asociación Peñasagra", 
+                                size=20,
+                                font_family="Britanic Bold",
+                                color=ft.Colors.BLUE_ACCENT,),
+                    ft.Text("asociacionpenasagra@gmail.com",
+                                size=20,
+                                font_family="Britanic Bold",
+                                color=ft.Colors.BLUE_ACCENT)
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            ),
+            alignment=ft.Alignment(0,0),
+        )
         
 
         self.btn_enviar= ft.ElevatedButton("Enviar", 
@@ -131,8 +152,43 @@ class ContactoScreen(ft.Container):
     def on_click_enviar(self, e):
         # Aquí puedes manejar el evento de clic en el botón de enviar
         if self.validar_campos():
-            # Si los campos son válidos, enviar el comentario
+            # Cargar variables de entorno
+            load_dotenv()
+
+            # Obtener credenciales de Gmail desde .env
+            gmail_user = os.getenv('GMAIL_USER')
+            gmail_pass = os.getenv('GMAIL_PASSWORD')
+
+            # Crear instancia de Gmail y enviar contacto
+            gmail = Gmail(gmail_user, gmail_pass)
+            
+            gmail.enviar_contacto(
+                nombre_usuario=self.txtnombre.value,
+                email_usuario=self.txtemail.value,
+                asunto_usuario=self.txtasunto.value,
+                comentario=self.txtcomentario.value
+            )
+            
+            
+            # gmail.enviar_correo(
+            #     destinatario="asociacionpeñasagra@gmail.com",
+            #     asunto=self.txtasunto.value,
+            #     mensaje=f"Nombre: {self.txtnombre.value}\nEmail: {self.txtemail.value}\n\nComentario:\n{self.txtcomentario.value}"
+            
+                
+            # )
            
-            self.limpiar_campos()
-            print("Enviar comentario")
-        
+            
+            log.info(f"Comentario enviado correctamente de {self.txtnombre.value}")
+            self.page.open(
+                ft.SnackBar(
+                    content=ft.Text(f"{self.txtnombre.value} has enviado el comentario correctamente.",
+                                    size=20,
+                                    font_family="Britanic Bold",
+                                    color=ft.Colors.WHITE),
+                    open=True,
+                    bgcolor=ft.Colors.GREEN_300,
+                    duration=ft.Duration(seconds=5),
+                )
+            )
+            self.limpiar_campos() 
