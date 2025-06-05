@@ -168,16 +168,7 @@ class ContactoScreen(ft.Container):
                 asunto_usuario=self.txtasunto.value,
                 comentario=self.txtcomentario.value
             )
-            
-            
-            # gmail.enviar_correo(
-            #     destinatario="asociacionpeñasagra@gmail.com",
-            #     asunto=self.txtasunto.value,
-            #     mensaje=f"Nombre: {self.txtnombre.value}\nEmail: {self.txtemail.value}\n\nComentario:\n{self.txtcomentario.value}"
-            
-                
-            # )
-           
+                   
             
             log.info(f"Comentario enviado correctamente de {self.txtnombre.value}")
             self.page.open(

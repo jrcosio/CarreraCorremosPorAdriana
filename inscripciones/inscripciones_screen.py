@@ -1,7 +1,11 @@
 from datetime import datetime
+import os
+from dotenv import load_dotenv
 import flet as ft
 from utils.TrailDataBase import TrailDataBase, Inscrito
 import logging
+
+from utils.gmail import Gmail
 
 log = logging.getLogger(__name__)
 # Configuración del logger
@@ -628,7 +632,7 @@ class InscripcionScreen(ft.Container):
         
         self.update()
 
-    def dlg_modal(self, texto):
+    def dlg_modal(self, texto, color=ft.Colors.GREEN_200):
         # Use self.page instead of page
         if self.page is None:
             print("Error: page is not defined")
@@ -636,7 +640,7 @@ class InscripcionScreen(ft.Container):
             
         dialogo = ft.AlertDialog( 
             modal=False,
-            bgcolor=ft.Colors.GREEN_200,
+            bgcolor=color,
             content=ft.Text(
                 texto,
                 size=20,
@@ -684,6 +688,17 @@ class InscripcionScreen(ft.Container):
             )
             
             try:
+                load_dotenv()
+
+                # Obtener credenciales de Gmail desde .env
+                gmail_user = os.getenv('GMAIL_USER')
+                gmail_pass = os.getenv('GMAIL_PASSWORD')
+
+                # Crear instancia de Gmail y enviar contacto
+                gmail = Gmail(gmail_user, gmail_pass)
+                
+                gmail.enviar_email_inscrito(inscrito)
+                
                 db.insertar(inscrito)
                 
                 self.mostrar_mensaje("El Formulario ha sido enviado correctamente")
@@ -691,12 +706,13 @@ class InscripcionScreen(ft.Container):
             
             except Exception as ex:
                 log.error(f"Error al insertar el inscrito: {ex}")
+                self.mostrar_mensaje("Error al realizar la inscripción. Por favor, inténtalo de nuevo.", ft.Colors.RED_200)
             
   
 
-    def mostrar_mensaje(self, texto):
+    def mostrar_mensaje(self, texto, color=ft.Colors.GREEN_200):
         """Muestra un mensaje al usuario"""
-        self.page.open(self.dlg_modal(texto) if self.page else None)
+        self.page.open(self.dlg_modal(texto, color) if self.page else None)
 
 if __name__ == "__main__":
     print("Esta clase no se puede ejecutar de forma independiente.")

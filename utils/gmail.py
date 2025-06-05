@@ -3,6 +3,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import ssl
 import logging
+import textwrap
 
 log = logging.getLogger(__name__)
 # Configuración del logger
@@ -26,93 +27,84 @@ class Gmail:
         self.smtp_server = "smtp.gmail.com"
         self.smtp_port = 587
     
-    def crear_mensaje_html(self, nombre):
-        """
-        Crea el contenido HTML del email
-        
+    def crear_mensaje_html(self, inscrito) -> str:  # type: ignore[override]
+        """Devuelve el HTML listo para enviar.
+
         Args:
-            nombre (str): Nombre del destinatario
-            
-        Returns:
-            str: Contenido HTML del mensaje
+            inscrito: Objeto con los datos del corredor.
         """
-        html = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <style>
-                body {{
-                    font-family: Arial, sans-serif;
-                    line-height: 1.6;
-                    color: #333;
-                    max-width: 600px;
-                    margin: 0 auto;
-                    padding: 20px;
-                }}
-                .logo {{
-                    text-align: center;
-                    margin-bottom: 30px;
-                }}
-                .logo img {{
-                    max-width: 200px;
-                    height: auto;
-                }}
-                .saludo {{
-                    font-size: 18px;
-                    color: #2c5530;
-                    margin-bottom: 20px;
-                }}
-                .contenido {{
-                    background-color: #f9f9f9;
-                    padding: 20px;
-                    border-radius: 8px;
-                    border-left: 4px solid #2c5530;
-                }}
-                .footer {{
-                    margin-top: 30px;
-                    text-align: center;
-                    font-size: 12px;
-                    color: #666;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="logo">
-                <!-- Aquí puedes poner tu logo como imagen -->
-                <h1 style="color: #2c5530; font-size: 28px;">🏔️ TRAIL PEÑASAGRA</h1>
-            </div>
-            
-            <div class="saludo">
-                ¡Hola {nombre}!
-            </div>
-            
-            <div class="contenido">
-                <p><strong>¡Enhorabuena!</strong> Estás preinscrito en el <strong>Trail Peñasagra</strong>.</p>
-                
-                <p>Tu preinscripción ha sido registrada correctamente. En cuanto sea verificado el pago de la carrera, 
-                recibirás otro email de confirmación de inscripción con tu <strong>número de dorsal</strong> asignado.</p>
-                
-                <p>Mientras tanto, te recomendamos que:</p>
-                <ul>
-                    <li>Revises toda la información de la carrera en nuestra web</li>
-                    <li>Comiences a preparar tu entrenamiento</li>
-                    <li>Sigas nuestras redes sociales para estar al día de las novedades</li>
-                </ul>
-                
-                <p>Si tienes alguna duda, no dudes en contactar con nosotros.</p>
-                
-                <p><strong>¡Nos vemos en la montaña!</strong></p>
-            </div>
-            
-            <div class="footer">
-                <p>Trail Peñasagra - Organización</p>
-                <p>Este es un email automático, por favor no responder a este mensaje.</p>
-            </div>
-        </body>
-        </html>
-        """
+
+        # Usamos textwrap.dedent para eliminar la indentación extra y evitar que aparezcan
+        # espacios no deseados en el código resultante.
+        html: str = textwrap.dedent(f"""
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8" />
+                <title>Preinscripción Trail Peñasagra</title>
+            </head>
+            <body style="margin:0;padding:0;background:#f0f4f8;">
+                <!-- Contenedor principal -->
+                <div style="max-width:600px;margin:0 auto;font-family:Helvetica,Arial,sans-serif;color:#333;">
+
+                <!-- Cabecera -->
+                <div style="background:linear-gradient(90deg,#16a34a 0%, #4ade80 100%);padding:24px 0;text-align:center;border-radius:0 0 12px 12px;">
+                    <h1 style="margin:0;font-size:28px;color:#fff;">¡Enhorabuena, {inscrito.nombre}!</h1>
+                    <p style="margin:8px 0 0;font-size:18px;color:#e0fbe2;">Tu preinscripción está confirmada</p>
+                </div>
+
+                <!-- Tarjeta principal -->
+                <div style="background:#ffffff;padding:32px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,0.08);margin-top:-12px;">
+                    <p style="font-size:16px;line-height:1.5;">
+                    Tu preinscripción en el <strong>Trail Peñasagra - Corremos por Adriana</strong> se ha registrado correctamente.
+                    </p>
+                    <p style="font-size:16px;line-height:1.5;">
+                    Estamos trabajando para, en breve, disponer de un sistema automático de pago con tarjeta o <em>Bizum</em>. En los próximos días recibirás un correo para que finalices el proceso de inscripción realizando el pago.
+                    </p>
+
+                    <!-- Datos de la inscripción -->
+                    <h2 style="font-size:20px;margin:24px 0 12px;border-bottom:2px solid #16a34a;display:inline-block;padding-bottom:4px;">Datos de tu inscripción</h2>
+
+                    <table role="presentation" cellpadding="8" cellspacing="0" width="100%" style="border-collapse:collapse;font-size:14px;">
+                    <tbody>
+                        <tr style="background:#f8fafc;"><td><strong>Nombre</strong></td><td>{inscrito.nombre} {inscrito.apellidos}</td></tr>
+                        <tr><td><strong>Sexo</strong></td><td>{inscrito.sexo}</td></tr>
+                        <tr style="background:#f8fafc;"><td><strong>Fecha de nacimiento</strong></td><td>{inscrito.fecha_nacimiento.strftime('%d/%m/%Y')}</td></tr>
+                        <tr><td><strong>Teléfono</strong></td><td>{inscrito.telefono}</td></tr>
+                        <tr style="background:#f8fafc;"><td><strong>Email</strong></td><td>{inscrito.email}</td></tr>
+                        <tr><td><strong>Tipo de documento</strong></td><td>{inscrito.tipo_documento}</td></tr>
+                        <tr style="background:#f8fafc;"><td><strong>N.º de documento</strong></td><td>{inscrito.numero_documento}</td></tr>
+                        <tr><td><strong>Dirección</strong></td><td>{inscrito.direccion}</td></tr>
+                        <tr style="background:#f8fafc;"><td><strong>CC. AA.</strong></td><td>{inscrito.ccaa}</td></tr>
+                        <tr><td><strong>Municipio</strong></td><td>{inscrito.municipio}</td></tr>
+                        <tr style="background:#f8fafc;"><td><strong>Tipo de carrera</strong></td><td>{inscrito.tipo_carrera}</td></tr>
+                        <tr><td><strong>Talla camiseta</strong></td><td>{inscrito.talla}</td></tr>
+                        <tr style="background:#f8fafc;"><td><strong>Contacto emergencia</strong></td><td>{inscrito.contacto_emergencia}</td></tr>
+                        <tr><td><strong>Tel. emergencia</strong></td><td>{inscrito.telefono_emergencia}</td></tr>
+                        <tr style="background:#f8fafc;"><td><strong>Edición</strong></td><td>{inscrito.edicion}</td></tr>
+                        <tr><td><strong>Dorsal</strong></td><td>{inscrito.dorsal or '<em>Se asignará al confirmar el pago</em>'}</td></tr>
+                    </tbody>
+                    </table>
+
+                    <!-- Recomendaciones -->
+                    <div style="margin-top:24px;">
+                    <p style="font-size:16px;"><strong>Mientras tanto, te recomendamos que:</strong></p>
+                    <ul style="font-size:15px;line-height:1.5;margin-left:20px;">
+                        <li>Revises toda la información de la carrera en nuestra web.</li>
+                        <li>Comiences a preparar tu entrenamiento.</li>
+                        <li>Sigas nuestras redes sociales para estar al día de las novedades.</li>
+                    </ul>
+                    </div>
+
+                    <p style="font-size:16px;line-height:1.5;">Si tienes cualquier duda, no dudes en contactar con nosotros.</p>
+                    <p style="font-size:18px;font-weight:bold;text-align:center;margin-top:32px;">¡Nos vemos en la montaña!</p>
+                </div>
+                </div>
+            </body>
+            </html>
+        """)
         return html
+
     
     def crear_mensaje_contacto_html(self, nombre_usuario, email_usuario, asunto_usuario, comentario):
         """
@@ -260,7 +252,8 @@ class Gmail:
             log.error(f"Error al enviar mensaje de contacto: {str(e)}")
             return False
     
-    def enviar_email(self, email_destinatario, nombre):
+    
+    def enviar_email_inscrito(self, inscrito) -> str:
         """
         Envía el email de preinscripción
         
@@ -275,11 +268,11 @@ class Gmail:
             # Crear el mensaje
             mensaje = MIMEMultipart("alternative")
             mensaje["From"] = self.gmail_user
-            mensaje["To"] = email_destinatario
+            mensaje["To"] = inscrito.email
             mensaje["Subject"] = "Preinscrito en el Trail Peñasagra"
             
             # Crear contenido HTML
-            html_content = self.crear_mensaje_html(nombre)
+            html_content = self.crear_mensaje_html(inscrito)
             part_html = MIMEText(html_content, "html")
             mensaje.attach(part_html)
             
@@ -288,14 +281,51 @@ class Gmail:
             with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
                 server.starttls(context=context)
                 server.login(self.gmail_user, self.gmail_password)
-                server.sendmail(self.gmail_user, email_destinatario, mensaje.as_string())
+                server.sendmail(self.gmail_user, inscrito.email, mensaje.as_string())
             
-            log.info(f"Email enviado correctamente a {email_destinatario} para {nombre}")
+            log.info(f"Email enviado correctamente a {inscrito.email} para {inscrito.nombre}")
             return True
             
         except Exception as e:
             log.error(f"Error al enviar email: {str(e)}")
             return False
+    
+    # def enviar_email(self, email_destinatario, nombre):
+    #     """
+    #     Envía el email de preinscripción
+        
+    #     Args:
+    #         email_destinatario (str): Email del destinatario
+    #         nombre (str): Nombre del destinatario
+            
+    #     Returns:
+    #         bool: True si se envió correctamente, False en caso contrario
+    #     """
+    #     try:
+    #         # Crear el mensaje
+    #         mensaje = MIMEMultipart("alternative")
+    #         mensaje["From"] = self.gmail_user
+    #         mensaje["To"] = email_destinatario
+    #         mensaje["Subject"] = "Preinscrito en el Trail Peñasagra"
+            
+    #         # Crear contenido HTML
+    #         html_content = self.crear_mensaje_html(nombre)
+    #         part_html = MIMEText(html_content, "html")
+    #         mensaje.attach(part_html)
+            
+    #         # Crear conexión segura y enviar
+    #         context = ssl.create_default_context()
+    #         with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+    #             server.starttls(context=context)
+    #             server.login(self.gmail_user, self.gmail_password)
+    #             server.sendmail(self.gmail_user, email_destinatario, mensaje.as_string())
+            
+    #         log.info(f"Email enviado correctamente a {email_destinatario} para {nombre}")
+    #         return True
+            
+    #     except Exception as e:
+    #         log.error(f"Error al enviar email: {str(e)}")
+    #         return False
 
 # Ejemplo de uso
 # if __name__ == "__main__":
