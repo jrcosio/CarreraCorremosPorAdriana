@@ -237,11 +237,12 @@ class TrailDataBase:
             log.error(f"Error obteniendo inscrito por dorsal", exc_info=e)
             return None
         
-    def obtener_ultimo_dorsal(self, edicion):
+    def obtener_ultimo_dorsal(self, edicion, tipo_carrera):
         """Obtiene el último dorsal asignado en una edición"""
         try:
             ultimo_inscrito = self._session.query(Inscrito).filter(
-                Inscrito.edicion == edicion
+                Inscrito.edicion == edicion,
+                Inscrito.tipo_carrera == tipo_carrera
             ).order_by(Inscrito.id.desc()).first()
             return ultimo_inscrito.dorsal if ultimo_inscrito else None
         except SQLAlchemyError as e:
@@ -333,12 +334,12 @@ class TrailDataBase:
 
 
 # =================== EJEMPLO DE USO ===================
-#if __name__ == "__main__":
+if __name__ == "__main__":
     # Crear instancia singleton
-    # db = TrailDataBase()
+    db = TrailDataBase()
     
     # # Ejemplo de uso
-    # try:
+    try:
         
         
     #     # filas = db.Iniciar_Carrera()   # hora de salida = ahora
@@ -352,13 +353,13 @@ class TrailDataBase:
     #     #           f"Tiempo Final: {clasif.tiempo_final}, ")
     #     #         #   Tiempo P1: {clasif.tiempo_p1}, Finalizado: {clasif.finalizado}")
         
-    #     inscrito = db.obtener_ultimo_dorsal(date.today().year)
-    #     print(f"Último dorsal asignado en la edición {date.today().year}: {inscrito}")
+         inscrito = db.obtener_ultimo_dorsal(date.today().year, 'andarines')
+         print(f"Último dorsal asignado en la edición {date.today().year}: {inscrito}")
         
         
         
-    # except Exception as e:
-    #     print(f"Error en ejemplo: {e}")
+    except Exception as e:
+         print(f"Error en ejemplo: {e}")
     
     # finally:
     #     # Cerrar conexión al finalizar

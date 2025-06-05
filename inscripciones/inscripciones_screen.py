@@ -663,9 +663,17 @@ class InscripcionScreen(ft.Container):
             print("Formulario enviado:", datos)
             # Aquí puedes agregar la lógica para procesar los datos
             #------------------------------------------------------
-            db = TrailDataBase()
+            try:
+                db = TrailDataBase()
+            except Exception as ex:
+                log.error(f"Error al conectar a la base de datos: {ex}")
+                self.mostrar_mensaje("Error al conectar a la base de datos. Por favor, inténtalo de nuevo.", ft.Colors.RED_200)
+                return
             
-            dorsal = str((int(db.obtener_ultimo_dorsal(datetime.now().year) or "000") + 1)).zfill(3)
+            if datos["carrera"] == "trail":
+                dorsal = str((int(db.obtener_ultimo_dorsal(datetime.now().year, tipo_carrera="trail") or "000") + 1)).zfill(3)
+            else:
+                dorsal = str((int(db.obtener_ultimo_dorsal(datetime.now().year, tipo_carrera="andarines") or "299") + 1)).zfill(3)
             
             inscrito = Inscrito(
                 dorsal=dorsal,  # El dorsal se asignará automáticamente
