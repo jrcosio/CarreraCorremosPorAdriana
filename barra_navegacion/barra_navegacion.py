@@ -1,7 +1,7 @@
 import flet as ft
 
 class NavButton(ft.TextButton):
-    def __init__(self, text, data, on_click, color=ft.Colors.BLACK):
+    def __init__(self, text, data, on_click, color=ft.Colors.BLACK, negrita=ft.FontWeight.NORMAL):
         super().__init__(
             text=text,
             style=ft.ButtonStyle(
@@ -9,7 +9,7 @@ class NavButton(ft.TextButton):
                 padding=10,
                 text_style=ft.TextStyle(
                     size=16,
-                    #weight=ft.FontWeight.BOLD,
+                    weight=negrita,
                 ),
             ),
             data=data,
@@ -35,11 +35,11 @@ class NavBar(ft.Container):
         # Botones de navegación
         self.buttons = [
             NavButton("PRINCIPAL", "btn_home", on_button_clicked),
-            NavButton("INSCRIPCIÓN", "btn_inscripcion", on_button_clicked, color=ft.Colors.RED_300),
-            NavButton("INSCRITOS", "btn_inscritos", on_button_clicked),
+            NavButton("INSCRIPCIÓN", "btn_inscripcion", on_button_clicked, color=ft.Colors.RED_300, negrita=ft.FontWeight.BOLD),
+            # NavButton("INSCRITOS", "btn_inscritos", on_button_clicked),
             NavButton("TRAIL", "btn_trail", on_button_clicked),
             NavButton("ANDARINES", "btn_andarines", on_button_clicked),
-            NavButton("CLASIFICACIÓN", "btn_clasificacion", on_button_clicked),
+            # NavButton("CLASIFICACIÓN", "btn_clasificacion", on_button_clicked),
             NavButton("GALERÍA", "btn_galeria", on_button_clicked),
             NavButton("CONTACTO", "btn_contacto", on_button_clicked),
         ]

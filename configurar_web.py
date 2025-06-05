@@ -7,12 +7,15 @@ imagenes_patrocinadores = [
 ]
         
 imagenes_colaboradores = [
-    ("imagenes_colaboradores/banner_jvcosio.png","URL"),
-    ("imagenes_colaboradores/banner_rionansa.png","URL"),
-    ("imagenes_colaboradores/banner_panpuentenansa.png","URL"),
-    ("imagenes_colaboradores/banner_fotoalejandro.png","URL"),
-    ("imagenes_colaboradores/banner_ruben.png","URL"),
-    ("imagenes_colaboradores/banner_blancoj.png","URL"),
+    ("imagenes_colaboradores/banner_jvcosio.png","https://juntavecinalcosiorozadio.blogspot.com/"),
+    ("imagenes_colaboradores/banner_rionansa.png","https://aytorionansa.com/"),
+    ("imagenes_colaboradores/banner_panpuentenansa.png","https://panaderiadelnansa.com/"),
+    ("imagenes_colaboradores/banner_fotoalejandro.png",""),
+    ("imagenes_colaboradores/banner_ruben.png",""),
+    ("imagenes_colaboradores/banner_lapasera.png",""),
+    ("imagenes_colaboradores/banner_blancoj.png","https://www.facebook.com/joyeriasblanco"),
+    ("imagenes_colaboradores/banner_recreo.png",""),
+
  
 ]
         
