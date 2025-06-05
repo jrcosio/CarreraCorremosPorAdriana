@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS inscritos (
     ccaa                VARCHAR(60)   NOT NULL,
     municipio           VARCHAR(50)   NOT NULL,
     tipo_carrera        VARCHAR(20)   NOT NULL CHECK (tipo_carrera IN ('trail', 'andarines')),  -- Tipos de carrera
+    talla_camiseta      VARCHAR(10)   NOT NULL CHECK (talla_camiseta IN ('S', 'M', 'L', 'XL', 'XXL')),  -- Tallas de camiseta
     contacto_emergencia VARCHAR(100)  NOT NULL,
     telefono_emergencia VARCHAR(15)   NOT NULL,
     edicion             INTEGER       NOT NULL   -- Año de la carrera 2025, 2026, etc.

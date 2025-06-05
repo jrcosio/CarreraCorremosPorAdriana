@@ -22,6 +22,7 @@ class InscripcionScreen(ft.Container):
         self.drop_ccaa = None
         self.txtf_poblacion = None
         self.txtf_dni_codigo = None
+        self.drop_camiseta = None
         
         # Campos de emergencia
         self.txtf_nombre_emergencia = None
@@ -234,6 +235,22 @@ class InscripcionScreen(ft.Container):
             expand=True,
             scroll_padding=ft.Padding(left=10, right=10, top=10, bottom=10)
         )
+    
+    def crear_drop_camiseta(self):
+        self.drop_camiseta = ft.Dropdown(
+            label="Talla de camiseta",
+            options=[
+                ft.DropdownOption("S"),
+                ft.DropdownOption("M"),
+                ft.DropdownOption("L"),
+                ft.DropdownOption("XL"),
+                ft.DropdownOption("XXL")                
+            ],
+            width=200,
+            bgcolor="#FFFFFF",
+            filled=True,
+            fill_color=ft.Colors.WHITE,
+        )
 
     def crear_botones(self):
         """Crea los botones del formulario"""
@@ -271,6 +288,7 @@ class InscripcionScreen(ft.Container):
         self.crear_campos_documento()
         self.crear_campos_emergencia()
         self.crear_campo_ccaa()
+        self.crear_drop_camiseta()
         self.crear_botones()
                 
         return ft.Column(
@@ -298,6 +316,8 @@ class InscripcionScreen(ft.Container):
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
                 self.radio_carrera,
+                self.drop_camiseta,
+                ft.Divider(),
                 self.crear_titulo_emergencia(),
                 self.txtf_nombre_emergencia,
                 self.txtf_numero_emergencia,
