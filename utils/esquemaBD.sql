@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS inscritos (
     contacto_emergencia VARCHAR(100)  NOT NULL,
     telefono_emergencia VARCHAR(15)   NOT NULL,
     edicion             INTEGER       NOT NULL   -- Año de la carrera 2025, 2026, etc.
+    pagado              BOOLEAN       DEFAULT FALSE,  -- Indica si el pago se ha realizado
 );
 
 CREATE TABLE IF NOT EXISTS clasificacion (

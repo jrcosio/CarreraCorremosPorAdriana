@@ -32,6 +32,20 @@ Para configurar este proyecto en tu entorno local:
    cd CarreraCorremosPorAdriana
    ```
 
+## Despliegue en Azure
+- Conectar con azure
+   ```
+   az login
+   ```
+- Iniciar sesión en el ACR (Tienes que tener docker en tu maquina abierto)
+   ```
+   az acr login --name acrjoseprod
+   ```
+- Construir tu imagen
+   ```
+   az acr build --registry acrjoseprod --image trail:latest .
+   ```
+
 ## 📋 Funcionalidades
 
 - Información detallada sobre la carrera y su causa

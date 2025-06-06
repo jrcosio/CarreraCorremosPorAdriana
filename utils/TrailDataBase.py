@@ -9,6 +9,8 @@ import logging
 from datetime import date, datetime
 from dotenv import load_dotenv
 
+load_dotenv(override=True)
+
 log = logging.getLogger(__name__)
 # Configuración del logger
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -39,6 +41,7 @@ class Inscrito(Base):
     contacto_emergencia = Column(String(100), nullable=False)
     telefono_emergencia = Column(String(15), nullable=False)
     edicion = Column(Integer, nullable=False)
+    pagado = Column(Boolean, default=False)
 
     clasificaciones = relationship("Clasificacion", back_populates="inscrito", cascade="all, delete")
 
@@ -95,6 +98,8 @@ class TrailDataBase:
             server_bd_user = os.getenv('SERVER_BD_USER')
             server_bd_password = os.getenv('SERVER_BD_PASSWORD')
             server_bd_name = os.getenv('SERVER_BD_NAME')
+            
+            print(f"Conectando a la base de datos {server_bd_name} en {server_bd_url} con usuario {server_bd_user}")
             
             if not server_bd_url or not server_bd_user or not server_bd_password or not server_bd_name:
                 log.error("Faltan variables de entorno para la conexión a la base de datos")
@@ -336,30 +341,32 @@ class TrailDataBase:
 # =================== EJEMPLO DE USO ===================
 if __name__ == "__main__":
     # Crear instancia singleton
+    print("Iniciando conexión a la base de datos...\n\n\n\n")
     db = TrailDataBase()
+    print("Conexión establecida.\n\n\n\n")
     
     # # Ejemplo de uso
-    try:
+    # try:
         
         
-    #     # filas = db.Iniciar_Carrera()   # hora de salida = ahora
-    #     # print(f"\n\n\n{filas} corredores añadidos a clasificacion")
+    # #     # filas = db.Iniciar_Carrera()   # hora de salida = ahora
+    # #     # print(f"\n\n\n{filas} corredores añadidos a clasificacion")
         
-    #     # Clasificacion = db.obtener_clasificaciones_por_edicion(date.today().year)
-    #     # print(f"Clasificaciones de la edición {date.today().year}:")
-    #     # for clasif in Clasificacion:
-    #     #     print(f"Dorsal: {clasif.inscrito.dorsal} | {clasif.inscrito.nombre} | {clasif.inscrito.apellidos} | {clasif.inscrito.ccaa} | "
-    #     #           f"Edición: {clasif.edicion} | "
-    #     #           f"Tiempo Final: {clasif.tiempo_final}, ")
-    #     #         #   Tiempo P1: {clasif.tiempo_p1}, Finalizado: {clasif.finalizado}")
+    # #     # Clasificacion = db.obtener_clasificaciones_por_edicion(date.today().year)
+    # #     # print(f"Clasificaciones de la edición {date.today().year}:")
+    # #     # for clasif in Clasificacion:
+    # #     #     print(f"Dorsal: {clasif.inscrito.dorsal} | {clasif.inscrito.nombre} | {clasif.inscrito.apellidos} | {clasif.inscrito.ccaa} | "
+    # #     #           f"Edición: {clasif.edicion} | "
+    # #     #           f"Tiempo Final: {clasif.tiempo_final}, ")
+    # #     #         #   Tiempo P1: {clasif.tiempo_p1}, Finalizado: {clasif.finalizado}")
         
-         inscrito = db.obtener_ultimo_dorsal(date.today().year, 'andarines')
-         print(f"Último dorsal asignado en la edición {date.today().year}: {inscrito}")
+    #     #  inscrito = db.obtener_ultimo_dorsal(date.today().year, 'andarines')
+    #     #  print(f"Último dorsal asignado en la edición {date.today().year}: {inscrito}")
         
         
         
-    except Exception as e:
-         print(f"Error en ejemplo: {e}")
+    # except Exception as e:
+    #      print(f"Error en ejemplo: {e}")
     
     # finally:
     #     # Cerrar conexión al finalizar
