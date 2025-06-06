@@ -15,8 +15,23 @@ imagenes_colaboradores = [
     ("imagenes_colaboradores/banner_lapasera.png",""),
     ("imagenes_colaboradores/banner_blancoj.png","https://www.facebook.com/joyeriasblanco"),
     ("imagenes_colaboradores/banner_recreo.png",""),
-
- 
+    ("imagenes_colaboradores/banner_gomber.png",""),
+    ("imagenes_colaboradores/banner_casacofino.png",""),
+    ("imagenes_colaboradores/banner_hoznayo.png",""),
+    ("imagenes_colaboradores/banner_martiko.png",""),
+    ("imagenes_colaboradores/banner_farina.png",""),
+    ("imagenes_colaboradores/banner_bathco.png",""),
+    ("imagenes_colaboradores/banner_royal3.png",""),
+    ("imagenes_colaboradores/banner_godelia.png",""),
+    ("imagenes_colaboradores/banner_casuca.png",""),
+    ("imagenes_colaboradores/banner_asturiana.png",""),
+    ("imagenes_colaboradores/banner_masaveu.png",""),
+    ("imagenes_colaboradores/banner_cocacola.png",""),
+    ("imagenes_colaboradores/banner_avan.png",""),
+    ("imagenes_colaboradores/banner_cabezablanco.png",""),
+    
+    
+    
 ]
         
 imagenes_organizadores = [
