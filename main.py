@@ -1,5 +1,3 @@
-# main.py
-
 import flet as ft
 from home.home_screen import HomeScreen
 from inscripciones.inscripciones_screen import InscripcionScreen

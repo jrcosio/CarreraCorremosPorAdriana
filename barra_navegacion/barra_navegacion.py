@@ -1,5 +1,3 @@
-# barra_navegacion/barra_navegacion.py
-
 import flet as ft
 
 # La clase NavButton no necesita cambios.
