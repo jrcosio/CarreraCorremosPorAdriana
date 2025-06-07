@@ -1,5 +1,6 @@
 imagenes_patrocinadores = [
     ("imagenes_patrocinadores/banner_carandia.png","https://carandiadistribuciones.com/L"),
+    ("imagenes_colaboradores/banner_jvcosio.png","https://juntavecinalcosiorozadio.blogspot.com/"),
     ("imagenes_patrocinadores/banner_LIS.png","https://www.lisdatasolutions.com/es/"),
     ("imagenes_patrocinadores/banner_artipublic.png","https://www.artipubli.com/"),
     ("imagenes_patrocinadores/banner_andros.png","https://androsvegetal.es/"),
@@ -7,7 +8,6 @@ imagenes_patrocinadores = [
 ]
         
 imagenes_colaboradores = [
-    ("imagenes_colaboradores/banner_jvcosio.png","https://juntavecinalcosiorozadio.blogspot.com/"),
     ("imagenes_colaboradores/banner_rionansa.png","https://aytorionansa.com/"),
     ("imagenes_colaboradores/banner_panpuentenansa.png","https://panaderiadelnansa.com/"),
     ("imagenes_colaboradores/banner_fotoalejandro.png",""),
