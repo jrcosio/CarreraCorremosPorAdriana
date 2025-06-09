@@ -11,6 +11,18 @@ class MainApp:
     def __init__(self, page: ft.Page):
         self.page = page
         page.title = "Trail Peñasagra - Corremos por Adriana"
+        # Metaetiquetas usando page.meta (diccionario)
+        page.meta = {
+            "description": "Toda la información del Trail Peñasagra: inscripciones, recorridos, clasificaciones y galería de fotos.",
+            "og:type": "website",
+            "og:title": "Trail Peñasagra – Corremos por Adriana",
+            "og:description": "Únete al Trail Peñasagra y apoya la causa de Adriana. Distancias de 30 km y 12 km andarines.",
+            "og:image": "https://trailpenasagra.com/assets/images/logomenu.png", # Asegúrate que esta ruta sea accesible
+            "og:url": "https://trailpenasagra.com/",
+            "twitter:card": "summary_large_image",
+            # Puedes añadir más metaetiquetas aquí si es necesario
+            "keywords": "trail, peñasagra, carrera, montaña, adriana, cosio, cosío, nansa, cantabria, soplao",
+        }
         page.theme_mode = ft.ThemeMode.LIGHT
         page.padding = 0
         
@@ -93,4 +105,4 @@ def main(page: ft.Page):
     app = MainApp(page)
 
 if __name__ == "__main__":
-    ft.app(target=main, port=80, view=ft.WEB_BROWSER, host="0.0.0.0", assets_dir="assets",)
+    ft.app(target=main, port=80, view=ft.WEB_BROWSER, host="0.0.0.0", assets_dir="assets")

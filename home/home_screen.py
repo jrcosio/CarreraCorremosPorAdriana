@@ -200,8 +200,8 @@ class HomeScreen(ft.Container):
         # Reemplazamos la Column principal por un ResponsiveRow.
         # Cada elemento es ahora un Container con una propiedad `col` que define su ancho.
         self.content = ft.ResponsiveRow(
-            spacing=10,
-            run_spacing=10,
+            spacing=20,
+            run_spacing=0,
             controls=[
                 # --- Cabecera de 3 imágenes ---
                 # En escritorio (md): 3-6-3 columnas. En móvil (xs, sm): 12 columnas (apilado)
@@ -209,17 +209,16 @@ class HomeScreen(ft.Container):
                 ft.Container(portada2, col={"md": 6, "xs": 12, "sm": 12}, alignment=ft.alignment.center, padding=10 ),
                 ft.Container(portada3, col={"md": 3, "xs": 12, "sm": 12}),
                 
+                ft.Container(height=20),  # Espacio entre secciones
                 ft.Container(btn_inscripcion, col=12, alignment=ft.alignment.center),
+                
                 # --- Contador ---
-                # Siempre ocupa el ancho completo
                 ft.Container(countdown_container, col=12, expand= True, alignment=ft.alignment.center),
                 
+                ft.Container(height=20),  # Espacio entre secciones
                 # --- Fecha y Lugar ---
-        
                 andarine_block,
                 trail_block,
-    
-                
                 # --- Logos ---
                 # Cada sección de logos ya es responsive por sí misma y ocupa todo el ancho
                 ft.Container(patrocinadores, col=12),
