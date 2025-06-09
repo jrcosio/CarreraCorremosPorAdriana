@@ -16,7 +16,7 @@ class MainApp:
         
         # Mapeo de botones a pantallas
         self.screens = {
-            "btn_home": HomeScreen(),
+            "btn_home": HomeScreen(on_click=self.on_button_clicked),
             "btn_inscripcion": InscripcionScreen(),
             "btn_inscritos": HomeScreen(),
             "btn_galeria": GaleriaScreen(),
@@ -93,4 +93,4 @@ def main(page: ft.Page):
     app = MainApp(page)
 
 if __name__ == "__main__":
-    ft.app(target=main, port=80, view=ft.WEB_BROWSER, host="0.0.0.0", assets_dir="assets")
+    ft.app(target=main, port=80, view=ft.WEB_BROWSER, host="0.0.0.0", assets_dir="assets",)

@@ -1,16 +1,19 @@
 import flet as ft
+import flet_video as fv
+import flet_webview as fw
 from home.contador import CountdownTimer # Asumimos que este import es correcto
 from datetime import datetime
 from configurar_web import imagenes_colaboradores, imagenes_organizadores, imagenes_patrocinadores
 
 
 class HomeScreen(ft.Container):
-    def __init__(self, page: ft.Page = None):
+    def __init__(self, page: ft.Page = None, on_click=None):
         super().__init__(
             alignment=ft.alignment.center,
             expand=True
         )
         self.page = page
+        self.on_click = on_click
         
         # --- SECCIÓN 1: CABECERA CON 3 IMÁGENES ---
         portada1 = ft.Image(
@@ -29,16 +32,35 @@ class HomeScreen(ft.Container):
             border_radius=ft.border_radius.all(20),
             height=104,
         )
+        
+        # --- SECCIÓN NEW --- Boton de Inscripción ---
+        btn_inscripcion = ft.TextButton(
+                " Inscríbete aquí ",
+                data="btn_inscripcion",
+                on_click= self.on_click,
+                style=ft.ButtonStyle(
+                    text_style=ft.TextStyle(
+                        size=30,
+                        font_family="Britanic Bold",
+                        weight=ft.FontWeight.BOLD,
+                        color=ft.Colors.WHITE,
+                    ),
+                    color=ft.Colors.WHITE,
+                    bgcolor=ft.Colors.RED_300,
+                    shape=ft.RoundedRectangleBorder(radius=10),
+                    padding=ft.padding.all(20)
+                ),
+            )
 
         # --- SECCIÓN 2: CONTADOR ---
-        target = datetime(2025, 7, 12, 10, 0, 0)
+        target = datetime(datetime.now().year, 7, 12, 10, 0, 0)
         countdown_container = ft.Container(
             content=ft.Column(
                 spacing=0,
                 alignment=ft.MainAxisAlignment.CENTER,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 controls=[
-                    ft.Text("Tan solo nos faltan.", size=30, color=ft.Colors.BLACK),
+                    ft.Text("Tan solo nos faltan", size=30, color=ft.Colors.BLACK),
                     CountdownTimer(target_date=target, on_finish=lambda: None),                ]
             ),
             
@@ -48,14 +70,32 @@ class HomeScreen(ft.Container):
         
         
         # --- SECCIÓN 4: VÍDEOS (ANDARINES Y RUNNERS) ---
-        def dlg_modal(video_path):
-            # ... (tu código para el diálogo de vídeo)
-            # Como flet_video no está disponible, creamos un placeholder
-            return ft.AlertDialog(
-                title=ft.Text("Reproduciendo Vídeo"),
-                content=ft.Text(f"Ruta del vídeo: {video_path}"),
-                actions=[ft.TextButton("Cerrar", on_click=lambda e: self.page.close(e.control.parent.parent))]
-            )
+        def dlg_modal(video):
+            # Use self.page instead of page
+            if self.page is None:
+                print("Error: page is not defined")
+                return None
+                
+            dialogo = ft.AlertDialog( 
+                modal=False,
+                bgcolor=ft.Colors.GREY_500,
+                content=fv.Video(
+                    playlist=[fv.VideoMedia(video)],
+         
+                    playlist_mode=fv.PlaylistMode.LOOP,
+                    show_controls=True,
+                    autoplay=True,
+                    muted=True,  # Necesario para autoplay
+                    width=1020,
+                    # height=580,
+                ),
+                actions=[
+                    ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo),
+                                  style=ft.ButtonStyle(color=ft.Colors.BLACK)),
+                ],
+                actions_alignment=ft.MainAxisAlignment.END,
+            )    
+            return dialogo
 
         fecha_carrera = ft.Container(
             content=ft.Text("12 de Julio de 2025", size=30, color=ft.Colors.BLACK,
@@ -76,12 +116,12 @@ class HomeScreen(ft.Container):
             border_radius=ft.border_radius.only(top_left=20, top_right=20)
         )
         andarines = ft.Container(
-            content=ft.Image(src="imagenes_home/andarines.png", fit=ft.ImageFit.FIT_WIDTH, expand=True),
+            content=ft.Image(src="imagenes_home/andarines.png", fit=ft.ImageFit.CONTAIN, expand=True),
             # expand=True,
             on_click=lambda e: self.page.open(dlg_modal("videos/andarines.mp4")) if self.page else None,
         )
         trail = ft.Container(
-            content=ft.Image(src="imagenes_home/principal_trail1.png", fit=ft.ImageFit.FIT_WIDTH, expand=True),
+            content=ft.Image(src="imagenes_home/principal_trail1.png", fit=ft.ImageFit.CONTAIN, expand=True),
             expand=True,
             on_click=lambda e: self.page.open(dlg_modal("videos/trail.mp4")) if self.page else None,
         )
@@ -169,9 +209,10 @@ class HomeScreen(ft.Container):
                 ft.Container(portada2, col={"md": 6, "xs": 12, "sm": 12}, alignment=ft.alignment.center, padding=10 ),
                 ft.Container(portada3, col={"md": 3, "xs": 12, "sm": 12}),
                 
+                ft.Container(btn_inscripcion, col=12, alignment=ft.alignment.center),
                 # --- Contador ---
                 # Siempre ocupa el ancho completo
-                ft.Container(countdown_container, col=12, alignment=ft.alignment.center),
+                ft.Container(countdown_container, col=12, expand= True, alignment=ft.alignment.center),
                 
                 # --- Fecha y Lugar ---
         

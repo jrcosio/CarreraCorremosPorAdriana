@@ -21,6 +21,7 @@ class CountdownTimer(ft.Container):
         **kwargs
     ):
         super().__init__(**kwargs)
+        self.transform_alignment = ft.alignment.center
         
         # --- Lógica existente ---
         self.target_date = target_date or (datetime.now() + timedelta(hours=4, minutes=26, seconds=38))
