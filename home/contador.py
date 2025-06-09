@@ -8,183 +8,164 @@ class CountdownTimer(ft.Container):
         self,
         target_date=None,
         on_finish=None,
+        # --- Estilos del widget ---
         days_style=None,
         hours_style=None,
         minutes_style=None,
         seconds_style=None,
         label_style=None,
         box_style=None,
+        # --- NUEVO: Parámetros para la responsividad ---
+        reference_width=550.0,
+        min_scale=0.5,
         **kwargs
     ):
-        # Inicializar el container padre
         super().__init__(**kwargs)
         
-        # Valores por defecto
+        # --- Lógica existente ---
         self.target_date = target_date or (datetime.now() + timedelta(hours=4, minutes=26, seconds=38))
         self.on_finish = on_finish
         
-        # Estilos por defecto
+        # --- Estilos ---
         self._days_style = days_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE)
         self._hours_style = hours_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE)
         self._minutes_style = minutes_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE)
         self._seconds_style = seconds_style or ft.TextStyle(size=60, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE)
         self._label_style = label_style or ft.TextStyle(size=16, color=ft.Colors.WHITE)
         self._box_style = box_style or {
-            "bgcolor": ft.Colors.BLUE_300,
-            "border_radius": 10,
-            "padding": 20,
-            "width": 120,
-            "height": 150,  # Aumentado para dar más espacio
-            "alignment": ft.alignment.center,
-                    }
+            "bgcolor": ft.Colors.BLUE_300, "border_radius": 10, "padding": 10,
+            "width": 100, "height": 130, "alignment": ft.alignment.center,
+        }
         
-        # Crear componentes para los números y etiquetas
-        self.days_text = ft.Text("0", style=self._days_style)
-        self.hours_text = ft.Text("0", style=self._hours_style)
-        self.minutes_text = ft.Text("0", style=self._minutes_style)
-        self.seconds_text = ft.Text("0", style=self._seconds_style)
+        # --- Componentes UI ---
+        self.days_text = ft.Text("00", style=self._days_style)
+        self.hours_text = ft.Text("00", style=self._hours_style)
+        self.minutes_text = ft.Text("00", style=self._minutes_style)
+        self.seconds_text = ft.Text("00", style=self._seconds_style)
         
-        # Etiquetas con textos explícitos
         self.days_label = ft.Text("Días", style=self._label_style)
         self.hours_label = ft.Text("Horas", style=self._label_style)
         self.minutes_label = ft.Text("Minutos", style=self._label_style)
         self.seconds_label = ft.Text("Segundos", style=self._label_style)
         
-        # Crear los contenedores para cada unidad de tiempo con espaciado entre número y etiqueta
-        self.days_box = ft.Container(
-            content=ft.Column(
-                [self.days_text, self.days_label],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                spacing=10  # Espacio entre el número y la etiqueta
-            ),
-            **self._box_style
-        )
+        # --- Contenedores ---
+        def create_box(text_control, label_control):
+            return ft.Container(
+                content=ft.Column(
+                    [text_control, label_control],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    spacing=0
+                ),
+                **self._box_style
+            )
         
-        self.hours_box = ft.Container(
-            content=ft.Column(
-                [self.hours_text, self.hours_label],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                spacing=10
-            ),
-            **self._box_style
-        )
+        self.days_box = create_box(self.days_text, self.days_label)
+        self.hours_box = create_box(self.hours_text, self.hours_label)
+        self.minutes_box = create_box(self.minutes_text, self.minutes_label)
+        self.seconds_box = create_box(self.seconds_text, self.seconds_label)
         
-        self.minutes_box = ft.Container(
-            content=ft.Column(
-                [self.minutes_text, self.minutes_label],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                spacing=10
-            ),
-            **self._box_style
-        )
-        
-        self.seconds_box = ft.Container(
-            content=ft.Column(
-                [self.seconds_text, self.seconds_label],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                spacing=10,
-            ),
-            **self._box_style
-        )
-        
-        # Crear el contenido principal con una fila de los contadores
         self.content = ft.Row(
             [self.days_box, self.hours_box, self.minutes_box, self.seconds_box],
             alignment=ft.MainAxisAlignment.CENTER,
-            spacing=10
+            spacing=5
         )
         
-        # Iniciar el temporizador
+        # --- Lógica de hilos ---
         self.is_running = False
         self.timer_thread = None
         self.stop_event = threading.Event()
-        
+
+        # --- NUEVO: Propiedades para la responsividad ---
+        self.reference_width = reference_width
+        self.min_scale = min_scale
+        # Aseguramos que el control se pueda escalar
+        self.scale = 1.0
+
+    # MODIFICADO: did_mount ahora también gestiona la responsividad
     def did_mount(self):
-        """Se llama cuando el componente es montado en la UI"""
-        self.start()
+        """Se llama cuando el componente es montado en la UI."""
+        self.start()  # Inicia el temporizador
         
+        # --- NUEVO: Lógica de responsividad ---
+        if self.page:
+            self.page.on_resize = self._handle_resize
+            self._handle_resize(None) # Llama una vez para ajustar tamaño inicial
+
+    # MODIFICADO: will_unmount ahora limpia el evento on_resize
     def will_unmount(self):
-        """Se llama cuando el componente es desmontado de la UI"""
-        self.stop()
+        """Se llama cuando el componente es desmontado de la UI."""
+        self.stop()  # Detiene el temporizador
         
+        # --- NUEVO: Limpieza del evento ---
+        if self.page and self.page.on_resize == self._handle_resize:
+            self.page.on_resize = None
+    
+    # NUEVO: Método interno para manejar el redimensionamiento
+    def _handle_resize(self, e):
+        """Ajusta la escala del widget basado en el ancho de la página."""
+        if not self.page:
+            return
+
+        page_width = self.page.width or self.reference_width
+        
+        new_scale = min(1.0, page_width / self.reference_width)
+        self.scale = max(self.min_scale, new_scale)
+        
+        self.update()
+
+    # --- Resto de los métodos del temporizador (sin cambios) ---
     def _timer_loop(self):
-        """Función que ejecuta el hilo del temporizador"""
         while not self.stop_event.is_set():
-            # Actualizar los valores de tiempo
             self._update_time_values()
-            # Solicitar actualización en el hilo principal
-            if hasattr(self, 'page') and self.page:
+            if self.page:
                 self.page.update()
-            time.sleep(1)  # Esperar un segundo
+            time.sleep(1)
     
     def start(self):
-        """Inicia el contador"""
         if not self.is_running:
             self.is_running = True
             self.stop_event.clear()
-            self._update_time_values()  # Actualizar inmediatamente
-            # Iniciar hilo para actualizaciones periódicas
-            self.timer_thread = threading.Thread(target=self._timer_loop)
-            self.timer_thread.daemon = True  # Hilo en segundo plano
+            self._update_time_values()
+            self.timer_thread = threading.Thread(target=self._timer_loop, daemon=True)
             self.timer_thread.start()
     
     def stop(self):
-        """Detiene el contador"""
         if self.is_running:
             self.is_running = False
-            self.stop_event.set()  # Señal para detener el hilo
+            self.stop_event.set()
             if self.timer_thread:
-                self.timer_thread.join(timeout=1)  # Esperar a que termine el hilo
+                self.timer_thread.join(timeout=1)
                 self.timer_thread = None
     
     def set_target_date(self, new_date):
-        """Actualiza la fecha objetivo"""
         self.target_date = new_date
         self._update_time_values()
         if self.page:
             self.page.update()
     
     def _update_time_values(self):
-        """Actualiza los valores de tiempo sin actualizar la UI"""
         now = datetime.now()
-        
-        # Calcular la diferencia de tiempo
         if now >= self.target_date:
-            # Si ya pasó la fecha, mostrar 0 en todos los campos
             time_diff = timedelta(0)
             if self.on_finish and self.is_running:
+                # Detener antes de llamar a on_finish
                 self.stop()
-                # El callback se ejecutará después, no aquí
-                if hasattr(self, 'page') and self.page:
-                    # Ejecutamos el callback sólo cuando sea seguro
-                    self.on_finish(self)
+                self.on_finish()
         else:
             time_diff = self.target_date - now
         
-        # Extraer los componentes de tiempo
         days = time_diff.days
         seconds = time_diff.seconds
         hours = seconds // 3600
         minutes = (seconds % 3600) // 60
         seconds = seconds % 60
         
-        # Actualizar los textos
         self.days_text.value = str(days)
-        self.hours_text.value = str(hours)
-        self.minutes_text.value = str(minutes)
-        self.seconds_text.value = str(seconds)
+        self.hours_text.value = f"{hours:02d}"
+        self.minutes_text.value = f"{minutes:02d}"
+        self.seconds_text.value = f"{seconds:02d}"
     
     def update_countdown(self):
-        """Método público para actualizar manualmente el contador"""
         self._update_time_values()
         self.update()
-
-
-
-
-if __name__ == "__main__":
-    ft.app(target=main)

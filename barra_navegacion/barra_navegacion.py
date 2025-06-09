@@ -2,25 +2,27 @@ import flet as ft
 
 # La clase NavButton no necesita cambios.
 class NavButton(ft.TextButton):
-    def __init__(self, text, data, on_click, color=ft.Colors.BLACK, negrita=ft.FontWeight.NORMAL):
+    def __init__(self, text, data, on_click, resaltar = False):
+
         super().__init__(
             text=text,
             style=ft.ButtonStyle(
-                color=color,
+                color=ft.Colors.WHITE if resaltar else ft.Colors.BLACK,
+                bgcolor=ft.Colors.RED_300 if resaltar else None,
                 padding=10,
                 text_style=ft.TextStyle(
-                    size=16,
-                    weight=negrita,
+                    size= 20 if resaltar else 16,
+                    weight=ft.FontWeight.BOLD if resaltar else ft.FontWeight.NORMAL,
                 ),
             ),
             data=data,
-            on_hover=lambda e: self._on_hover_change(e, color),
+            on_hover=lambda e: self._on_hover_change(e, ft.Colors.WHITE if resaltar else ft.Colors.BLACK),
             on_click=on_click
         )
     
     def _on_hover_change(self, e, color):
         if e.data == "true":
-            e.control.style.color = ft.Colors.BLUE
+            e.control.style.color = ft.Colors.LIGHT_BLUE_ACCENT
         else:
             e.control.style.color = color
         e.control.update()
@@ -57,7 +59,7 @@ class NavBar(ft.Container):
                 ft.Image(src="images/logomenu.png", fit=ft.ImageFit.CONTAIN, height=35),
                 ft.Container(expand=True),
                 NavButton("PRINCIPAL", "btn_home", self.on_button_clicked),
-                NavButton("INSCRIPCIÓN", "btn_inscripcion", self.on_button_clicked, color=ft.Colors.RED_300, negrita=ft.FontWeight.BOLD),
+                NavButton("INSCRIPCIÓN", "btn_inscripcion", self.on_button_clicked, True),
                 NavButton("TRAIL", "btn_trail", self.on_button_clicked),
                 NavButton("ANDARINES", "btn_andarines", self.on_button_clicked),
                 NavButton("GALERÍA", "btn_galeria", self.on_button_clicked),
@@ -80,8 +82,11 @@ class NavBar(ft.Container):
                 ft.PopupMenuButton(
                     icon=ft.Icons.MENU,
                     items=[
-                        ft.PopupMenuItem(text=item, on_click=self.on_button_clicked, data=data)
-                        for item, data in menu_items_map.items()
+                        ft.PopupMenuItem(
+                            text=item, 
+                            on_click=self.on_button_clicked, 
+                            data=data
+                        ) for item, data in menu_items_map.items()
                     ],
                 )
             ],
