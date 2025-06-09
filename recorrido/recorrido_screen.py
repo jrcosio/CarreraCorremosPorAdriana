@@ -35,6 +35,9 @@ class RecorridoScreen(ft.Container):
                     self._create_main_content(),
                     self._create_boton_tracking(),
                     ft.Text("En la ventana que se abre puedes descargar el track del recorrido", size=12, color=ft.Colors.BLACK54),
+                    ft.Text("se te abrirá una ventana emergente con el track", size=12, color=ft.Colors.BLACK54),
+                    ft.Text("y con el botón derecho del raton o la opción de descargar del móvil", size=12, color=ft.Colors.BLACK54),
+                    ft.Text("podrás descargar el track en formato GPX", size=12, color=ft.Colors.BLACK54),
                     self._create_map3D_container(),
                     ft.Container(height=50),  # Espacio al final
                 ]
@@ -64,29 +67,47 @@ class RecorridoScreen(ft.Container):
     
     def _create_main_content(self):
         """Crea el contenido principal con información del recorrido y mapa."""
-        return ft.Row(
+        return ft.Column(
             alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
-                self._create_left_info_panel(),
-                self._create_map_container(),
-                self._create_right_info_panel(),
+                ft.Container(
+                    self._create_left_info_panel(),
+                ),
+                ft.Container(
+                     self._create_map_container(),
+                     expand=True,),   
             ]
         )
     
     def _create_left_info_panel(self):
         """Crea el panel izquierdo con información de fecha y lugar."""
-        return ft.Column(
+        return ft.ResponsiveRow(
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=20,  # Espaciado entre los círculos
             controls=[
-                self._create_date_container(),
-                self._create_location_container(),
+                ft.Container(
+                    self._create_date_container(),
+                    col={"xs": 6, "sm": 3}
+                ),
+                ft.Container(
+                    self._create_location_container(),
+                    col={"xs": 6, "sm": 3}
+                ),
+                ft.Container(
+                    self._create_distance_container(),
+                    col={"xs": 6, "sm": 3}
+                ),
+                ft.Container(
+                    self._create_elevation_container(),
+                    col={"xs": 6, "sm": 3}
+                ),                        
             ]
         )
     
     def _create_right_info_panel(self):
         """Crea el panel derecho con información de distancia y desnivel."""
-        return ft.Column(
+        return ft.Row(
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=20,  # Espaciado entre los contenedores
             controls=[
