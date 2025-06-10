@@ -676,6 +676,8 @@ class InscripcionScreen(ft.Container):
         es_valido, mensaje = self.validar_formulario()
         
         if es_valido:
+            self.btn_enviar.disabled = True  # Deshabilitar el botón para evitar múltiples envíos
+            self.btn_enviar.update()  # Actualizar el botón para reflejar el cambio
             datos = self.obtener_datos_formulario()
             log.info(f"Formulario que se procede a enviar: {datos}")
             # Aquí puedes agregar la lógica para procesar los datos
@@ -685,6 +687,8 @@ class InscripcionScreen(ft.Container):
             except Exception as ex:
                 log.error(f"Error al conectar a la base de datos: {ex}")
                 self.mostrar_mensaje("Error al conectar a la base de datos. Por favor, inténtalo de nuevo.", ft.Colors.RED_200)
+                self.btn_enviar.disabled = False  # Rehabilitar el botón
+                self.btn_enviar.update()
                 return
             
             if datos["carrera"] == "trail":
@@ -728,10 +732,14 @@ class InscripcionScreen(ft.Container):
                 
                 self.mostrar_mensaje(f"¡Inscripción realizada con éxito!\nTu dorsal es: {dorsal}\nRevisa tu email para la confirmación.", ft.Colors.GREEN_200, ft.Colors.BLACK)
                 self.limpiar_formulario()
+                self.btn_enviar.disabled = False  # Rehabilitar el botón
+                self.btn_enviar.update()
             
             except Exception as ex:
                 log.error(f"Error al insertar el inscrito: {ex}")
                 self.mostrar_mensaje("Error al procesar la inscripción. Inténtalo de nuevo o contacta con la organización.", ft.Colors.RED_200, ft.Colors.WHITE)
+                self.btn_enviar.disabled = False  # Rehabilitar el botón
+                self.btn_enviar.update()
             
   
 
