@@ -680,8 +680,7 @@ class InscripcionScreen(ft.Container):
             self.btn_enviar.update()  # Actualizar el botón para reflejar el cambio
             datos = self.obtener_datos_formulario()
             log.info(f"Formulario que se procede a enviar: {datos}")
-            # Aquí puedes agregar la lógica para procesar los datos
-            #------------------------------------------------------
+            
             try:
                 db = TrailDataBase()
             except Exception as ex:
@@ -690,6 +689,7 @@ class InscripcionScreen(ft.Container):
                 self.btn_enviar.disabled = False  # Rehabilitar el botón
                 self.btn_enviar.update()
                 return
+            print(f"\n\n\n{db.obtener_ultimo_dorsal(datetime.now().year, tipo_carrera="trail")}\n\n\n")
             
             if datos["carrera"] == "trail":
                 dorsal = str((int(db.obtener_ultimo_dorsal(datetime.now().year, tipo_carrera="trail") or "000") + 1)).zfill(3)
@@ -730,14 +730,14 @@ class InscripcionScreen(ft.Container):
                 db.insertar(inscrito)
                 log.info(f"Inscrito {inscrito.nombre} {inscrito.apellidos} insertado con dorsal {inscrito.dorsal}")
                 
-                self.mostrar_mensaje(f"¡Inscripción realizada con éxito!\nTu dorsal es: {dorsal}\nRevisa tu email para la confirmación.", ft.Colors.GREEN_200, ft.Colors.BLACK)
+                self.mostrar_mensaje(f"¡Inscripción realizada con éxito!\nTu dorsal es: {dorsal}\nRevisa tu email para la confirmación.", ft.Colors.GREEN_200)
                 self.limpiar_formulario()
                 self.btn_enviar.disabled = False  # Rehabilitar el botón
                 self.btn_enviar.update()
             
             except Exception as ex:
                 log.error(f"Error al insertar el inscrito: {ex}")
-                self.mostrar_mensaje("Error al procesar la inscripción. Inténtalo de nuevo o contacta con la organización.", ft.Colors.RED_200, ft.Colors.WHITE)
+                self.mostrar_mensaje("Error al procesar la inscripción. Inténtalo de nuevo o contacta con la organización.", ft.Colors.RED_200)
                 self.btn_enviar.disabled = False  # Rehabilitar el botón
                 self.btn_enviar.update()
             
