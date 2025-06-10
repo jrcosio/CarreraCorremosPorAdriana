@@ -60,6 +60,7 @@ class NavBar(ft.Container):
                 ft.Container(expand=True),
                 NavButton("PRINCIPAL", "btn_home", self.on_button_clicked),
                 NavButton("INSCRIPCIÓN", "btn_inscripcion", self.on_button_clicked, True),
+                
                 NavButton("TRAIL", "btn_trail", self.on_button_clicked),
                 NavButton("ANDARINES", "btn_andarines", self.on_button_clicked),
                 NavButton("GALERÍA", "btn_galeria", self.on_button_clicked),
