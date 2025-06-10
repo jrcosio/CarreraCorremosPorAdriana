@@ -46,10 +46,10 @@ Para configurar este proyecto en tu entorno local:
    az acr build --registry acrjoseprod --image trail:latest .
    ```
 - Comprobación y Debuger en Docker
-```
-docker pull acrjoseprod.azurecr.io/trail:latest
-docker run -d --name trail_container -p 80:80 acrjoseprod.azurecr.io/trail:latest
-```
+   ```
+   docker pull acrjoseprod.azurecr.io/trail:latest
+   docker run -d --name trail_container -p 80:80 acrjoseprod.azurecr.io/trail:latest
+   ```
 - REINICIAR EL AppService en Azure
 
 ## 📋 Funcionalidades
