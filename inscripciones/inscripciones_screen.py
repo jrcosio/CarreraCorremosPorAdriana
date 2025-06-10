@@ -689,7 +689,7 @@ class InscripcionScreen(ft.Container):
                 self.btn_enviar.disabled = False  # Rehabilitar el botón
                 self.btn_enviar.update()
                 return
-            print(f"\n\n\n{db.obtener_ultimo_dorsal(datetime.now().year, tipo_carrera="trail")}\n\n\n")
+            
             
             if datos["carrera"] == "trail":
                 dorsal = str((int(db.obtener_ultimo_dorsal(datetime.now().year, tipo_carrera="trail") or "000") + 1)).zfill(3)
