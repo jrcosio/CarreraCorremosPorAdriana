@@ -41,10 +41,15 @@ Para configurar este proyecto en tu entorno local:
    ```
    az acr login --name acrjoseprod
    ```
-- Construir tu imagen
+- Construir tu imagen en Azure
    ```
    az acr build --registry acrjoseprod --image trail:latest .
    ```
+- Comprobación y Debuger en Docker
+```
+docker pull acrjoseprod.azurecr.io/trail:latest
+docker run -d --name trail_container -p 80:80 acrjoseprod.azurecr.io/trail:latest
+```
 
 ## 📋 Funcionalidades
 
