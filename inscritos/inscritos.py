@@ -9,8 +9,6 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 
 class Inscritos(ft.Container):
     def __init__(self):
-               
-        
         
         
         super().__init__(
@@ -19,7 +17,7 @@ class Inscritos(ft.Container):
             content=ft.Column(
                 [
                     ft.Text(
-                        "Inscriptos",
+                        "Inscritos",
                         size=40,
                         color=ft.Colors.GREEN_900,
                         font_family="Britanic Bold",
