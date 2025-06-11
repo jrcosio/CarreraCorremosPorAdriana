@@ -48,6 +48,29 @@ class MainApp:
         # Barra de navegación
         self.nav_bar = NavBar(self.on_button_clicked)
         
+        # Barra de footer
+        self.footer = ft.Container(
+            content=ft.ResponsiveRow(
+                [
+                    ft.Container(ft.Text("© 2024 Trail Peñasagra - Corremos por Adriana", size=14, color=ft.Colors.WHITE),
+                                col = {"xs": 12,"md": 3},
+                                alignment=ft.alignment.center),
+                    
+                    ft.Container(ft.Text("Escuela de Programación Hackers Cosío (Pablo, Jose, Diego, Marina, Koldo)",size=14, color=ft.Colors.RED_400),
+                                col = {"xs": 12,"md": 5},
+                                alignment=ft.alignment.center),
+    
+                    ft.Container(ft.TextButton("Aviso Legal y de Proyección de Datos",
+                                                on_click=lambda e: self.page.open(self.ventana_avisolegal() if self.page else None),),
+                                col = {"xs": 12,"md": 3}),
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
+            ),
+            bgcolor=ft.Colors.BLUE_GREY_900,
+            alignment= ft.alignment.center,
+        )
+        
         # Estructura principal de la página
         self.page.add(
             ft.Column(
@@ -57,7 +80,8 @@ class MainApp:
                         [self.body_container],
                         scroll=ft.ScrollMode.AUTO,
                         expand=True
-                    )
+                    ),
+                    self.footer
                 ],
                 spacing=0,
                 expand=True
@@ -67,6 +91,40 @@ class MainApp:
         # Configuración inicial del responsive
         self.page.on_resize = self.on_page_resize
         self.on_page_resize(None)
+        
+    def ventana_avisolegal(self):
+        
+        from avisolegal import avisolegal
+        
+        if self.page is None:
+            print("Error: page is not defined")
+            return None
+            
+        dialogo = ft.AlertDialog( 
+            title=ft.Text("Aviso Legal y Política de Protección de Datos"),
+            modal=False,
+            bgcolor=ft.Colors.BLUE_GREY_100,
+            content=ft.Column(
+                controls=[
+                    ft.Text(
+                        avisolegal,
+                        size=14,
+                        color=ft.Colors.BLACK,
+                    )
+                ],
+                scroll=ft.ScrollMode.AUTO, # Permite el scroll si el contenido es largo
+                tight=True, # Ajusta el tamaño del contenido al texto
+
+            ),
+            actions=[
+                ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo),
+                                style=ft.ButtonStyle(
+                                    text_style=ft.TextStyle(size=20),
+                                    color=ft.Colors.BLACK)),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+        )    
+        return dialogo
 
     def on_button_clicked(self, e):
         """Se ejecuta al hacer clic en una opción de navegación."""
