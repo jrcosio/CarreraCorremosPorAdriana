@@ -88,7 +88,8 @@ class ContactoScreen(ft.Container):
                     self.txtasunto,
                     self.txtcomentario,
                     self.txtnemail,
-                    self.btn_enviar
+                    self.btn_enviar,
+                    ft.Container(height=200),  # Espacio flexible para centrar el contenido
  
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
