@@ -51,6 +51,23 @@ class HomeScreen(ft.Container):
                     padding=ft.padding.all(20)
                 ),
             )
+        btn_dorsal_solidario = ft.TextButton(
+                "Dorsal Solidario desde 5€", 
+                data="btn_dorsal_solidario",
+                on_click= self.on_click,
+                style=ft.ButtonStyle(
+                    text_style=ft.TextStyle(
+                        size=30,
+                        font_family="Britanic Bold",
+                        weight=ft.FontWeight.BOLD,
+                        color=ft.Colors.WHITE,
+                    ),
+                    color=ft.Colors.WHITE,
+                    bgcolor=ft.Colors.GREEN_300,
+                    shape=ft.RoundedRectangleBorder(radius=10),
+                    padding=ft.padding.all(20)
+                ),
+            )
 
         # --- SECCIÓN 2: CONTADOR ---
         target = datetime(datetime.now().year, 7, 12, 10, 0, 0)
@@ -211,6 +228,8 @@ class HomeScreen(ft.Container):
                 
                 ft.Container(height=20),  # Espacio entre secciones
                 ft.Container(btn_inscripcion, col=12, alignment=ft.alignment.center),
+                ft.Container(height=20),
+                #ft.Container(btn_dorsal_solidario, col=12, alignment=ft.alignment.center),
                 
                 # --- Contador ---
                 ft.Container(countdown_container, col=12, expand= True, alignment=ft.alignment.center),
