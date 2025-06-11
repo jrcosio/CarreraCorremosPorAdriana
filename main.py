@@ -61,6 +61,8 @@ class MainApp:
                                 alignment=ft.alignment.center),
     
                     ft.Container(ft.TextButton("Aviso Legal y de Proyección de Datos",
+                                               style=ft.ButtonStyle(
+                                                   color=ft.Colors.WHITE),
                                                 on_click=lambda e: self.page.open(self.ventana_avisolegal() if self.page else None),),
                                 col = {"xs": 12,"md": 3}),
                 ],
@@ -126,6 +128,7 @@ class MainApp:
         )    
         return dialogo
 
+    
     def on_button_clicked(self, e):
         """Se ejecuta al hacer clic en una opción de navegación."""
         button_id = e.control.data
