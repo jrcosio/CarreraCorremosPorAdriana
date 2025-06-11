@@ -60,7 +60,7 @@ class MainApp:
                                 col = {"xs": 12,"md": 5},
                                 alignment=ft.alignment.center),
     
-                    ft.Container(ft.TextButton("Aviso Legal y de Proyección de Datos",
+                    ft.Container(ft.TextButton("Aviso Legal y de Protección de Datos",
                                                style=ft.ButtonStyle(
                                                    color=ft.Colors.WHITE),
                                                 on_click=lambda e: self.page.open(self.ventana_avisolegal() if self.page else None),),
