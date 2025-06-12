@@ -58,7 +58,7 @@ trail ={
     "fecha": "12-07-2025",
     "hora": "10:00",
     "lugar": "Cosío",
-    "track": "tracks/trailpenasagra.gpx",
+    "track": "https://drive.google.com/file/d/1XrH6lMxgGuO2luh9Jg8nCCSZ2W3T8Vae",
     "video": "videos/trail.mp4", 
 }
 
@@ -71,6 +71,6 @@ andarines ={
     "fecha": "12-07-2025",
     "hora": "10:00",
     "lugar": "Cosío",
-    "track": "tracks/andarinespenasagra.gpx",
+    "track": "https://drive.google.com/file/d/1q9iyF3uD6SsyFJVSFI00SiV9DvbfOl5I",
     "video": "videos/andarines.mp4",  
 }
