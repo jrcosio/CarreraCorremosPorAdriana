@@ -27,30 +27,66 @@ class Inscritos(ft.Container):
                     # Cabecera de la tabla
                     ft.Row(
                         [
-                            ft.Container(ft.Text("Dorsal", weight=ft.FontWeight.BOLD), padding=5),
-                            ft.Container(ft.Text("Nombre", weight=ft.FontWeight.BOLD), padding=5),
-                            ft.Container(ft.Text("Apellidos", weight=ft.FontWeight.BOLD), padding=5),
-                            ft.Container(ft.Text("Sexo", weight=ft.FontWeight.BOLD), padding=5),
-                            ft.Container(ft.Text("CCAA", weight=ft.FontWeight.BOLD), padding=5),
-                            ft.Container(ft.Text("Localidad", weight=ft.FontWeight.BOLD), padding=5),
+                            ft.Container(ft.Text("Dorsal", weight=ft.FontWeight.BOLD,),padding=5,width=80, 
+                                        border=ft.border.all(1, ft.Colors.GREY_400)),
+                            ft.Container(ft.Text("Nombre", weight=ft.FontWeight.BOLD), padding=5,width=200,
+                                        border=ft.border.all(1, ft.Colors.GREY_400)),
+                            ft.Container(ft.Text("Apellidos", weight=ft.FontWeight.BOLD), padding=5,width=500,
+                                        border=ft.border.all(1, ft.Colors.GREY_400)),
+                            ft.Container(ft.Text("Sexo", weight=ft.FontWeight.BOLD), padding=5, 
+                                         border=ft.border.all(1, ft.Colors.GREY_400)),
+                            ft.Container(ft.Text("CCAA", weight=ft.FontWeight.BOLD), padding=5, width=150,
+                                         border=ft.border.all(1, ft.Colors.GREY_400)),
+                            ft.Container(ft.Text("Localidad", weight=ft.FontWeight.BOLD), padding=5,width=200,
+                                         border=ft.border.all(1, ft.Colors.GREY_400)),
                         ],
                         alignment=ft.MainAxisAlignment.START,
-                        spacing=30,
+                        spacing=10,
                     ),
                     # Lista de inscritos (ejemplo)
                     *[
                         ft.Container(
                             content=ft.Row(
                                 [
-                                    ft.Container(ft.Text(str(inscrito["dorsal"])), padding=5),
-                                    ft.Container(ft.Text(inscrito["nombre"]), padding=5),
-                                    ft.Container(ft.Text(inscrito["apellidos"]), padding=5),
-                                    ft.Container(ft.Text(inscrito["sexo"]), padding=5),
-                                    ft.Container(ft.Text(inscrito["ccaa"]), padding=5),
-                                    ft.Container(ft.Text(inscrito["localidad"]), padding=5),
+                                    ft.Container(
+                                        ft.Text(str(inscrito["dorsal"])),
+                                            padding=5,
+                                            width=80,
+                                            alignment=ft.alignment.center_left,
+                                            ),
+                                    ft.Container(
+                                        ft.Text(inscrito["nombre"]),
+                                            padding=5,
+                                            width=200,
+                                            alignment=ft.alignment.center_left,
+                                            ),
+                                    ft.Container(
+                                        ft.Text(inscrito["apellidos"]),
+                                            padding=5,
+                                            width=500,
+                                            alignment=ft.alignment.center_left,
+                                            ),
+                                    ft.Container(
+                                        ft.Text(inscrito["sexo"]),
+                                            padding=5,
+                                            width=80,
+                                            alignment=ft.alignment.center_left,
+                                            ),
+                                    ft.Container(
+                                        ft.Text(inscrito["ccaa"]),
+                                            padding=5,
+                                            width=150,
+                                            alignment=ft.alignment.center_left,
+                                            ),
+                                    ft.Container(
+                                        ft.Text(inscrito["localidad"]),
+                                            padding=5,
+                                            width=200,
+                                            alignment=ft.alignment.center_left,
+                                            ),
                                 ],
                                 alignment=ft.MainAxisAlignment.START,
-                                spacing=30,
+                                spacing=10,
                             ),
                             border=ft.border.all(1, ft.Colors.GREY_400),
                             border_radius=8,
@@ -84,8 +120,8 @@ class Inscritos(ft.Container):
 
 def main(page: ft.Page):
     page.title = "Listado de Inscritos"
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.horizontal_alignment = ft.CrossAxisAlignment.START
+    page.vertical_alignment = ft.MainAxisAlignment.START
     page.add(Inscritos())
 
 if __name__ == "__main__":
