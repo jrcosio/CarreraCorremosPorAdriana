@@ -10,27 +10,31 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 # ...existing code...
 
 inscritos = [
-  {"dorsal":"001", "nombre":"Jose", "apellidos":"Gomez Perez", "Sexo":"H", "ccaa":"Cantabria", "Localidad":"Santander"},
-  {"dorsal":"002", "nombre":"Lucía", "apellidos":"Martínez Ruiz", "Sexo":"M", "ccaa":"Andalucía", "Localidad":"Sevilla"},
-  {"dorsal":"003", "nombre":"Carlos", "apellidos":"López Díaz", "Sexo":"H", "ccaa":"Madrid", "Localidad":"Madrid"},
-  {"dorsal":"004", "nombre":"Marta", "apellidos":"García López", "Sexo":"M", "ccaa":"Catalunya", "Localidad":"Barcelona"},
-  {"dorsal":"005", "nombre":"Álvaro", "apellidos":"Fernández Torres", "Sexo":"H", "ccaa":"Galicia", "Localidad":"A Coruña"},
-  {"dorsal":"006", "nombre":"Elena", "apellidos":"Sánchez Vega", "Sexo":"M", "ccaa":"Castilla_y_León", "Localidad":"Valladolid"},
-  {"dorsal":"007", "nombre":"David", "apellidos":"Ramírez Gómez", "Sexo":"H", "ccaa":"Comunidad Valenciana", "Localidad":"Valencia"},
-  {"dorsal":"008", "nombre":"Patricia", "apellidos":"Moreno Sáez", "Sexo":"M", "ccaa":"Extremadura", "Localidad":"Badajoz"},
-  {"dorsal":"009", "nombre":"Javier", "apellidos":"Hernández Cano", "Sexo":"H", "ccaa":"Aragón", "Localidad":"Zaragoza"},
-  {"dorsal":"010", "nombre":"Sara", "apellidos":"Iglesias León", "Sexo":"M", "ccaa":"Asturias", "Localidad":"Oviedo"},
-  {"dorsal":"011", "nombre":"Andrés", "apellidos":"Jiménez Molina", "Sexo":"H", "ccaa":"Murcia", "Localidad":"Murcia"},
-  {"dorsal":"012", "nombre":"Cristina", "apellidos":"Ortiz Delgado", "Sexo":"M", "ccaa":"Navarra", "Localidad":"Pamplona"},
-  {"dorsal":"013", "nombre":"Mario", "apellidos":"Ruiz Martín", "Sexo":"H", "ccaa":"Castilla_La_Mancha", "Localidad":"Toledo"},
-  {"dorsal":"014", "nombre":"Laura", "apellidos":"Núñez Herrera", "Sexo":"M", "ccaa":"La Rioja", "Localidad":"Logroño"},
-  {"dorsal":"015", "nombre":"Sergio", "apellidos":"Vargas Jimeno", "Sexo":"H", "ccaa":"País Vasco", "Localidad":"Bilbao"},
-  {"dorsal":"016", "nombre":"Carmen", "apellidos":"Domínguez Rivas", "Sexo":"M", "ccaa":"Baleares", "Localidad":"Palma"},
-  {"dorsal":"017", "nombre":"Hugo", "apellidos":"Cortés Blanco", "Sexo":"H", "ccaa":"Canarias", "Localidad":"Las Palmas"},
-  {"dorsal":"018", "nombre":"Beatriz", "apellidos":"Gutiérrez Lara", "Sexo":"M", "ccaa":"Aragón", "Localidad":"Huesca"},
-  {"dorsal":"019", "nombre":"Pablo", "apellidos":"Rey Moreno", "Sexo":"H", "ccaa":"Madrid", "Localidad":"Alcalá de Henares"},
-  {"dorsal":"020", "nombre":"Natalia", "apellidos":"Cano Paredes", "Sexo":"M", "ccaa":"Galicia", "Localidad":"Lugo"}
+  
+  {"dorsal":"001", "nombre":"Jose", "apellidos":"Gomez Perez", "sexo":"H", "ccaa":"Cantabria", "localidad":"Santander","Año":"2005"},
+  {"dorsal":"002", "nombre":"Lucia", "apellidos":"Martinez Ruiz", "sexo":"M", "ccaa":"Andalucía", "localidad":"Sevilla","Año":"2000"},
+  {"dorsal":"003", "nombre":"Carlos", "apellidos":"Lopez Garcia", "sexo":"H", "ccaa":"Madrid", "localidad":"Madrid","Año":"1972"},
+  {"dorsal":"004", "nombre":"Ana", "apellidos":"Sanchez Torres", "sexo":"M", "ccaa":"Catalunya", "localidad":"Barcelona","Año":"1985"},
+  {"dorsal":"005", "nombre":"Miguel", "apellidos":"Fernandez Cano", "sexo":"H", "ccaa":"Comunidad Valenciana", "localidad":"Valencia","Año":"2010"},
+  {"dorsal":"006", "nombre":"Elena", "apellidos":"Moreno Diaz", "sexo":"M", "ccaa":"Galicia", "localidad":"A Coruña","Año":"2001"},
+  {"dorsal":"007", "nombre":"Pablo", "apellidos":"Ramirez Ortega", "sexo":"H", "ccaa":"Castilla_y_León", "localidad":"Valladolid","Año":"1996"},
+  {"dorsal":"008", "nombre":"Sara", "apellidos":"Hernandez Vega", "sexo":"M", "ccaa":"País Vasco", "localidad":"Bilbao","Año":"1987"},
+  {"dorsal":"009", "nombre":"David", "apellidos":"Iglesias Martin", "sexo":"H", "ccaa":"Aragón", "localidad":"Zaragoza","Año":"2012"},
+  {"dorsal":"010", "nombre":"Laura", "apellidos":"Navarro Blanco", "sexo":"M", "ccaa":"Castilla_La_Mancha", "localidad":"Toledo","Año":"1974"},
+  {"dorsal":"011", "nombre":"Javier", "apellidos":"Ortega Perez", "sexo":"H", "ccaa":"Extremadura", "localidad":"Cáceres","Año":"1991"},
+  {"dorsal":"012", "nombre":"Claudia", "apellidos":"Ruiz Molina", "sexo":"M", "ccaa":"Asturias", "localidad":"Oviedo","Año":"2000"},
+  {"dorsal":"013", "nombre":"Alvaro", "apellidos":"Gonzalez Suarez", "sexo":"H", "ccaa":"Navarra", "localidad":"Pamplona","Año":"1970"},
+  {"dorsal":"014", "nombre":"Natalia", "apellidos":"Cruz Delgado", "sexo":"M", "ccaa":"La Rioja", "localidad":"Logroño","Año":"1986"},
+  {"dorsal":"015", "nombre":"Diego", "apellidos":"Vega Romero", "sexo":"H", "ccaa":"Canarias", "localidad":"Las Palmas","Año":"2001"},
+  {"dorsal":"016", "nombre":"Irene", "apellidos":"Campos Pardo", "sexo":"M", "ccaa":"Murcia", "localidad":"Murcia","Año":"2007"},
+  {"dorsal":"017", "nombre":"Sergio", "apellidos":"Rey Morales", "sexo":"H", "ccaa":"Baleares", "localidad":"Palma","Año":"1973"},
+  {"dorsal":"018", "nombre":"Marta", "apellidos":"Dominguez Leon", "sexo":"M", "ccaa":"Cantabria", "localidad":"Torrelavega","Año":"1986"},
+  {"dorsal":"019", "nombre":"Adrian", "apellidos":"Castro Herrera", "sexo":"H", "ccaa":"Madrid", "localidad":"Alcalá de Henares","Año":"2005"},
+  {"dorsal":"020", "nombre":"Patricia", "apellidos":"Nieto Bravo", "sexo":"M", "ccaa":"Comunidad Valenciana", "localidad":"Alicante","Año":"2011"}
 ]
+
+
+
 
 banderas_ccaa = {
     "Andalucía": "banderas/Andalucía.png",
@@ -60,7 +64,7 @@ class Inscritos(ft.Container):
             content=ft.Column(
                 [
                     ft.Text(
-                        "Inscritos",
+                        "Inscritos Trail Peñasagra 2025",
                         size=40,
                         color=ft.Colors.GREEN_900,
                         font_family="Britanic Bold",
@@ -69,24 +73,26 @@ class Inscritos(ft.Container):
                     ),
                     ft.Row(
                         [
-                            ft.Container(ft.Text("Dorsal", weight=ft.FontWeight.BOLD), padding=5, width=80, border=ft.border.all(1, ft.Colors.GREY_400), alignment=ft.alignment.center_left),
+                            ft.Container(ft.Text("Dorsal", weight=ft.FontWeight.BOLD), padding=5, width=80, border=ft.border.all(1, ft.Colors.GREY_400), alignment=ft.alignment.center),
                             ft.Container(ft.Text("Nombre", weight=ft.FontWeight.BOLD), padding=5, width=200, border=ft.border.all(1, ft.Colors.GREY_400), alignment=ft.alignment.center_left),
                             ft.Container(ft.Text("Apellidos", weight=ft.FontWeight.BOLD), padding=5, width=350, border=ft.border.all(1, ft.Colors.GREY_400), alignment=ft.alignment.center_left),
-                            ft.Container(ft.Text("Sexo", weight=ft.FontWeight.BOLD), padding=5, width=80, border=ft.border.all(1, ft.Colors.GREY_400), alignment=ft.alignment.center_left),
+                            ft.Container(ft.Text("Sexo", weight=ft.FontWeight.BOLD), padding=5, width=80, border=ft.border.all(1, ft.Colors.GREY_400), alignment=ft.alignment.center),
                             ft.Container(ft.Text("CCAA", weight=ft.FontWeight.BOLD), padding=5, width=200, border=ft.border.all(1, ft.Colors.GREY_400), alignment=ft.alignment.center_left),
                             ft.Container(ft.Text("Localidad", weight=ft.FontWeight.BOLD), padding=5, width=200, border=ft.border.all(1, ft.Colors.GREY_400), alignment=ft.alignment.center_left),
+                            ft.Container(ft.Text("Año", weight=ft.FontWeight.BOLD), padding=5, width=100, border=ft.border.all(1, ft.Colors.GREY_400), alignment=ft.alignment.center),
+                                         
                         ],
-                        alignment=ft.MainAxisAlignment.START,
+                        alignment=ft.MainAxisAlignment.CENTER,
                         spacing=10,
                     ),
                     *[
                         ft.Container(
                             content=ft.Row(
                                 [
-                                    ft.Container(ft.Text(str(inscrito["dorsal"])), padding=2, width=80, alignment=ft.alignment.center_left),
+                                    ft.Container(ft.Text(str(inscrito["dorsal"])), padding=2, width=80, alignment=ft.alignment.center),
                                     ft.Container(ft.Text(inscrito["nombre"]), padding=2, width=200, alignment=ft.alignment.center_left),
-                                    ft.Container(ft.Text(inscrito["apellidos"]), padding=2, width=350, alignment=ft.alignment.center_left),
-                                    ft.Container(ft.Text(inscrito["sexo"]), padding=2, width=80, alignment=ft.alignment.center_left),
+                                    ft.Container(ft.Text(inscrito["apellidos"].upper()), padding=2, width=350, alignment=ft.alignment.center_left),
+                                    ft.Container(ft.Text(inscrito["sexo"]), padding=2, width=80, alignment=ft.alignment.center),
                                     # Asigna la variable antes de usarla
                                     ft.Container(
                                         content=ft.Row(
@@ -105,8 +111,9 @@ class Inscritos(ft.Container):
                                         alignment=ft.alignment.center_left,
                                     ),
                                     ft.Container(ft.Text(inscrito["localidad"]), padding=2, width=200, alignment=ft.alignment.center_left),
+                                    ft.Container(ft.Text(inscrito["Año"]), padding=2, width=100, alignment=ft.alignment.center),
                                 ],
-                                alignment=ft.MainAxisAlignment.START,
+                                alignment=ft.MainAxisAlignment.CENTER,
                                 spacing=10,
                             ),
                             border_radius=4,
@@ -118,9 +125,10 @@ class Inscritos(ft.Container):
                                 "dorsal": i["dorsal"],
                                 "nombre": i["nombre"],
                                 "apellidos": i["apellidos"],
-                                "sexo": i["Sexo"],
+                                "sexo": i["sexo"],
                                 "ccaa": i["ccaa"],
-                                "localidad": i["Localidad"]
+                                "localidad": i["localidad"],
+                                "Año": i["Año"],
                             }
                             for i in inscritos
                         ]
@@ -134,6 +142,7 @@ class Inscritos(ft.Container):
 
 def main(page: ft.Page):
     page.title = "Listado de Inscritos"
+    
     page.horizontal_alignment = ft.CrossAxisAlignment.START
     page.vertical_alignment = ft.MainAxisAlignment.START
     page.add(Inscritos())
