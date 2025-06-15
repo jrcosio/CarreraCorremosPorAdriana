@@ -34,10 +34,10 @@ class RecorridoScreen(ft.Container):
                     self._create_header(),
                     self._create_main_content(),
                     self._create_boton_tracking(),
-                    ft.Text("En la ventana que se abre puedes descargar el track del recorrido", size=12, color=ft.Colors.BLACK54),
-                    ft.Text("se te abrirá una ventana emergente con el track", size=12, color=ft.Colors.BLACK54),
-                    ft.Text("y con el botón derecho del raton o la opción de descargar del móvil", size=12, color=ft.Colors.BLACK54),
-                    ft.Text("podrás descargar el track en formato GPX", size=12, color=ft.Colors.BLACK54),
+                    ft.Text("En la ventana que se abre puedes descargar el track del recorrido", size=12, color="#ffcb2e"),
+                    ft.Text("se te abrirá una ventana emergente con el track", size=12, color="#ffcb2e"),
+                    ft.Text("y con el botón derecho del raton o la opción de descargar del móvil", size=12, color="#ffcb2e"),
+                    ft.Text("podrás descargar el track en formato GPX", size=12, color="#ffcb2e"),
                     self._create_map3D_container(),
                     ft.Container(height=50),  # Espacio al final
                 ]
@@ -53,13 +53,13 @@ class RecorridoScreen(ft.Container):
                     self.recorrido_data["titulo"],
                     weight=ft.FontWeight.BOLD,
                     size=48,
-                    color=ft.Colors.BLACK,
+                    color="#ffcb2e",
                     font_family="Roboto",
                 ),
                 ft.Text(
                     self.recorrido_data["descripcion"],
                     size=24,
-                    color=ft.Colors.BLACK,
+                    color=ft.Colors.WHITE,
                     font_family="Roboto",
                 ),
             ]

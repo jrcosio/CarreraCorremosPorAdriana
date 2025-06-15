@@ -13,28 +13,29 @@ class ContactoScreen(ft.Container):
         self.txtnombre = ft.TextField(
             label="Nombre y Apellidos",
             value="",
-            color=ft.Colors.BLACK,
+            color="#ffcb2e",
+            border_color="#ffcb2e",
             width=500,
         )
 
         self.txtemail = ft.TextField(
             label="Email",  
             value="",
-            color=ft.Colors.BLACK,
+            color="#ffcb2e",
             width=500,
         )
 
         self.txtasunto = ft.TextField(
             label="Asunto",
             value="",
-            color=ft.Colors.BLACK,
+            color="#ffcb2e",
             width=500,
         )
 
         self.txtcomentario = ft.TextField(
             label="Comentario",
             value="",
-            color=ft.Colors.BLACK,
+            color="#ffcb2e",
             width=500,
             min_lines=10,
             max_length=500,

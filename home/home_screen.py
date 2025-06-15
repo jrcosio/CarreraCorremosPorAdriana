@@ -77,12 +77,12 @@ class HomeScreen(ft.Container):
                 alignment=ft.MainAxisAlignment.CENTER,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 controls=[
-                    ft.Text("Tan solo nos faltan", size=30, color=ft.Colors.BLACK),
+                    ft.Text("Tan solo nos faltan", size=30, color=ft.Colors.WHITE),
                     CountdownTimer(target_date=target, on_finish=lambda: None),                ]
             ),
             
             alignment=ft.alignment.center,
-            bgcolor=ft.Colors.WHITE,
+            bgcolor=ft.Colors.TRANSPARENT,
         )
         
         
@@ -220,6 +220,7 @@ class HomeScreen(ft.Container):
             spacing=20,
             run_spacing=0,
             controls=[
+                ft.Container(height=10),
                 # --- Cabecera de 3 imágenes ---
                 # En escritorio (md): 3-6-3 columnas. En móvil (xs, sm): 12 columnas (apilado)
                 ft.Container(portada1, col={"md": 3, "xs": 12, "sm": 12}),
@@ -229,7 +230,7 @@ class HomeScreen(ft.Container):
                 ft.Container(height=20),  # Espacio entre secciones
                 ft.Container(btn_inscripcion, col=12, alignment=ft.alignment.center),
                 ft.Container(height=20),
-                #ft.Container(btn_dorsal_solidario, col=12, alignment=ft.alignment.center),
+                ft.Container(btn_dorsal_solidario, col=12, alignment=ft.alignment.center),
                 
                 # --- Contador ---
                 ft.Container(countdown_container, col=12, expand= True, alignment=ft.alignment.center),
@@ -240,8 +241,11 @@ class HomeScreen(ft.Container):
                 trail_block,
                 # --- Logos ---
                 # Cada sección de logos ya es responsive por sí misma y ocupa todo el ancho
+                ft.Container(height=20),
                 ft.Container(patrocinadores, col=12),
+                ft.Container(height=20),
                 ft.Container(colaboradores, col=12),
+                ft.Container(height=20),
                 ft.Container(organizadores, col=12),
             ],
             alignment=ft.MainAxisAlignment.START,

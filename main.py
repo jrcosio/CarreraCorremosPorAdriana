@@ -1,4 +1,5 @@
 import flet as ft
+from dorsal_solidario.dorsalsolidario_screen import DorsalSolidarioScreen
 from home.home_screen import HomeScreen
 from inscripciones.inscripciones_screen import InscripcionScreen
 from galeria.galeria_screen import GaleriaScreen
@@ -36,13 +37,14 @@ class MainApp:
             "btn_andarines": RecorridoScreen(recorrido_data=andarines),
             "btn_contacto": ContactoScreen(),
             "btn_clasificacion": HomeScreen(),
+            "btn_dorsal_solidario": DorsalSolidarioScreen(),
         }
         
         # Contenedor para mostrar la pantalla activa
         self.body_container = ft.Container(
             content=self.screens["btn_home"],
             expand=True,
-            bgcolor=ft.Colors.WHITE,
+            bgcolor="#173b4f",
         )
         
         # Barra de navegación
@@ -56,7 +58,7 @@ class MainApp:
                                 col = {"xs": 12,"md": 3},
                                 alignment=ft.alignment.center),
                     
-                    ft.Container(ft.Text("Escuela de Programación Hackers Cosío (Pablo, Jose, Diego, Marina, Koldo)",size=14, color=ft.Colors.RED_400),
+                    ft.Container(ft.Text("Escuela Hackers Cosío (Pablo, Jose, Diego, Marina, Koldo)",size=14, color=ft.Colors.RED_400),
                                 col = {"xs": 12,"md": 5},
                                 alignment=ft.alignment.center),
     

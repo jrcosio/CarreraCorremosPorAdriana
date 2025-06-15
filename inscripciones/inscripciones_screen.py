@@ -724,12 +724,12 @@ class InscripcionScreen(ft.Container):
                 # Crear instancia de Gmail y enviar contacto
                 gmail = Gmail(gmail_user, gmail_pass)
                 
-                gmail.enviar_email_inscrito(inscrito)
-                
                 db.insertar(inscrito)
                 log.info(f"Inscrito {inscrito.nombre} {inscrito.apellidos} insertado con dorsal {inscrito.dorsal}")
                 
-                self.mostrar_mensaje(f"¡Inscripción realizada con éxito!\nTu dorsal es: {dorsal}\nRevisa tu email para la confirmación.", ft.Colors.GREEN_200)
+                gmail.enviar_email_inscrito(inscrito)
+                
+                self.mostrar_mensaje(f"¡Inscripción realizada con éxito!\nTu dorsal es: {dorsal}\nRevisa tu email para la confirmación. (Puede estar en SPAM)", ft.Colors.GREEN_200)
                 self.limpiar_formulario()
                 self.btn_enviar.disabled = False  # Rehabilitar el botón
                 self.btn_enviar.update()
