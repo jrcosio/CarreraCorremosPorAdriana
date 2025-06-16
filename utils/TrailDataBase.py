@@ -285,6 +285,18 @@ class TrailDataBase:
             log.error(f"Error obteniendo inscritos por edición", exc_info=e)
             return []
     
+    def obtener_inscritos_por_tipo_carrera(self, tipo, edicion):
+        """Obtiene todos los inscritos de una edición"""
+        try:
+            return self._session.query(Inscrito).filter(
+                Inscrito.tipo_carrera == tipo,
+                Inscrito.edicion == edicion
+            ).all()
+        except SQLAlchemyError as e:
+            log.error(f"Error obteniendo inscritos por edición", exc_info=e)
+            return []    
+    
+    
     # =================== MÉTODOS ESPECÍFICOS CLASIFICACIONES ===================
     
     def obtener_clasificacion_por_inscrito(self, id_inscrito, edicion):

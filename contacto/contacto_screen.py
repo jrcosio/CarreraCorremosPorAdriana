@@ -10,32 +10,40 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 
 class ContactoScreen(ft.Container):
     def __init__(self):
+        
+        estilo = {
+            "color" : "#ffcb2e",
+            "border_color" : "#ffcb2e",
+            "bgcolor" : "#3c90be",
+            "label_style" : ft.TextStyle(color="#ffcb2e"),
+            "error_style" : ft.TextStyle(color=ft.Colors.RED_300),
+        }
+        
         self.txtnombre = ft.TextField(
             label="Nombre y Apellidos",
             value="",
-            color="#ffcb2e",
-            border_color="#ffcb2e",
+            **estilo,
             width=500,
         )
 
         self.txtemail = ft.TextField(
             label="Email",  
             value="",
-            color="#ffcb2e",
+            **estilo,
             width=500,
         )
 
         self.txtasunto = ft.TextField(
             label="Asunto",
             value="",
-            color="#ffcb2e",
+            **estilo,
             width=500,
         )
 
         self.txtcomentario = ft.TextField(
             label="Comentario",
             value="",
-            color="#ffcb2e",
+            **estilo,
             width=500,
             min_lines=10,
             max_length=500,
@@ -79,7 +87,7 @@ class ContactoScreen(ft.Container):
                     ft.Text(
                         "Contacto",
                         size=40,
-                        color=ft.Colors.GREEN_900,
+                        color="#ffcb2e",
                         font_family="Britanic Bold",
                         weight=ft.FontWeight.BOLD,
                         text_align=ft.TextAlign.CENTER,
