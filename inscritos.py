@@ -54,7 +54,7 @@ class Inscritos(ft.Container):
         """Inicializa el componente con datos por defecto (trail)."""
         self.bd = TrailDataBase()
         self.inscritos = []
-        self.filtro_activo = "Trail"
+        self.filtro_activo = "Todos"
         self.edicion = 2025
         
         super().__init__(expand=True)
