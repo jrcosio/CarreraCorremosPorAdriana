@@ -18,7 +18,7 @@ BANDERAS_CCAA = {
     "Cantabria": "banderas/Cantabria.png",
     "Castilla_y_León": "banderas/Castilla_y_León.png",
     "Castilla_La_Mancha": "banderas/Castilla_La_Mancha.png",
-    "Catalunya": "banderas/Catalunya.png",
+    "Cataluña": "banderas/Catalunya.png",
     "Comunidad Valenciana": "banderas/Comunidad Valenciana.png",
     "Extremadura": "banderas/Extremadura.png",
     "Galicia": "banderas/Galicia.png",
@@ -110,8 +110,6 @@ class Inscritos(ft.Container):
                 ),
             ]
         )
-    
-    
     
     def _crear_botones_filtro(self):
         """Crea la fila de botones de filtro."""
