@@ -1,36 +1,35 @@
 import datetime
 
-
-fecha = datetime.datetime(1964, 2, 1)
-
-
-def parsear_categoria(anyio):
-    if anyio <= 1975:
-        return "VET C"
-    elif anyio >= 1976 and anyio <= 1979:
-        return "VET B"
-    elif anyio >= 1980 and anyio <= 1985:
-        return "VET A"
-    elif anyio >= 1986 and anyio <= 2007:
-        return "SENIOR"
-    elif anyio >= 2008:
-        return "JUNIOR"
-  
-    
-print(parsear_categoria(fecha.year))
-
-
 #------------------------------------------------------------
 #-------------------------------------------------------------
 
 
 from utils.TrailDataBase import TrailDataBase
 
-db = TrailDataBase()
+# db = TrailDataBase()
 
-#inscritos2025 = db.obtener_inscritos_por_edicion(datetime.datetime.now().year)
-inscritos2025 = db.obtener_inscritos_por_tipo_carrera("andarines", datetime.datetime.now().year)
+# #inscritos2025 = db.obtener_inscritos_por_edicion(datetime.datetime.now().year)
+# inscritos2025 = db.obtener_inscritos_por_tipo_sexo("M","trail",2025)
 
-for inscrito in inscritos2025:
-    print(f"{inscrito.dorsal} {inscrito.nombre} {inscrito.apellidos} {inscrito.ccaa} {inscrito.municipio} {parsear_categoria(inscrito.fecha_nacimiento.year)}")
+# for incrito in inscritos2025:
+#     print(incrito.nombre)
 
+
+class main():
+    
+    def __init__(self):
+        self.db = TrailDataBase()
+        self.inscritosM = self.db.obtener_inscritos_por_tipo_sexo("M","trail",2025)
+        #....flet
+        
+    
+    
+    def pintar_incritos(self):
+        
+        for inscrito in self.inscritosM:
+            print(inscrito.nombre) 
+        
+if __name__ == "__main__":
+    a = main()
+    
+    a.pintar_incritos()
