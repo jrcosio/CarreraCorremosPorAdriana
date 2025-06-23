@@ -280,7 +280,7 @@ class TrailDataBase:
         try:
             return self._session.query(Inscrito).filter(
                 Inscrito.edicion == edicion
-            ).all()
+            ).order_by(Inscrito.dorsal).all()
         except SQLAlchemyError as e:
             log.error(f"Error obteniendo inscritos por edición", exc_info=e)
             return []
@@ -291,7 +291,7 @@ class TrailDataBase:
             return self._session.query(Inscrito).filter(
                 Inscrito.tipo_carrera == tipo,
                 Inscrito.edicion == edicion
-            ).all()
+            ).order_by(Inscrito.dorsal).all()
         except SQLAlchemyError as e:
             log.error(f"Error obteniendo inscritos por edición", exc_info=e)
             return []    

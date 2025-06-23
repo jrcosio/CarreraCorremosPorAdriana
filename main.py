@@ -6,6 +6,7 @@ from galeria.galeria_screen import GaleriaScreen
 from recorrido.recorrido_screen import RecorridoScreen
 from barra_navegacion.barra_navegacion import NavBar
 from contacto.contacto_screen import ContactoScreen
+from inscritos.inscritos_screen import InscritosScreen
 from configurar_web import trail, andarines
 
 class MainApp:
@@ -31,7 +32,7 @@ class MainApp:
         self.screens = {
             "btn_home": HomeScreen(on_click=self.on_button_clicked),
             "btn_inscripcion": InscripcionScreen(),
-            "btn_inscritos": HomeScreen(),
+            "btn_inscritos": InscritosScreen(),
             "btn_galeria": GaleriaScreen(),
             "btn_trail": RecorridoScreen(recorrido_data=trail),
             "btn_andarines": RecorridoScreen(recorrido_data=andarines),

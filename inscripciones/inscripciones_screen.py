@@ -139,6 +139,7 @@ class InscripcionScreen(ft.Container):
                 ft.DropdownOption("Castilla-La Mancha"),
                 ft.DropdownOption("Castilla y León"),
                 ft.DropdownOption("Cataluña"),
+                ft.DropdownOption("Comunidad Valenciana"),
                 ft.DropdownOption("Extremadura"),
                 ft.DropdownOption("Galicia"),
                 ft.DropdownOption("Madrid"),
