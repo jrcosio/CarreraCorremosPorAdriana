@@ -3,18 +3,31 @@ import flet as ft
 class DorsalSolidarioScreen(ft.Container):
     def __init__(self, on_click=None):
         super().__init__()
+        
         self.on_click = on_click
+        
         self.cantidad_field = ft.TextField(
             label="Cantidad (€)",
             value="5",
-            width=200,
+            width=100,
             keyboard_type=ft.KeyboardType.NUMBER,
             border_color=ft.Colors.WHITE,
             label_style=ft.TextStyle(color=ft.Colors.WHITE),
             color=ft.Colors.WHITE,
             cursor_color=ft.Colors.WHITE,
+            text_style=ft.TextStyle(color=ft.Colors.WHITE,size=30),
         )
-        
+        self.Comentario_field = ft.TextField(
+            label="Comentario (opcional)",
+            value="Dorsal Solidario",
+            width=600,
+            keyboard_type=ft.KeyboardType.NUMBER,
+            border_color=ft.Colors.WHITE,
+            label_style=ft.TextStyle(color=ft.Colors.WHITE),
+            color=ft.Colors.WHITE,
+            cursor_color=ft.Colors.WHITE,
+            text_style=ft.TextStyle(color=ft.Colors.WHITE,size=30),
+        )
         self.content = ft.Column(
             [
             ft.Container(
@@ -80,6 +93,7 @@ class DorsalSolidarioScreen(ft.Container):
             ),
             
             self.cantidad_field,
+            self.Comentario_field,
             
             ft.Container(
                 content=ft.ElevatedButton(
@@ -120,6 +134,7 @@ class DorsalSolidarioScreen(ft.Container):
 
     def on_solicitar_dorsal(self, e):
         print("Dorsal Solidario solicitado con cantidad:", self.cantidad_field.value)
+        print("Comentario:", self.Comentario_field.value)
     
 if __name__ == "__main__":
  
