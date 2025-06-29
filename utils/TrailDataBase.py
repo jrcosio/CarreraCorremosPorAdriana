@@ -67,7 +67,13 @@ class Clasificacion(Base):
     __table_args__ = (
         Index("idx_clasificacion_edicion", "edicion"),
     )
+    
+# class CronoCarrera(Base):
+#     __tablename__ = "crono_carrera"
 
+#     id = Column(Integer, primary_key=True)
+#     tiempo = Column(TIMESTAMP, nullable=False)
+    
 
 class TrailDataBase:
     """
@@ -131,17 +137,13 @@ class TrailDataBase:
         """Getter para la sesión"""
         return self._session
     # ============== METODO ESPECIAL CARRERA INICIADA ==============
-    def Iniciar_Carrera(self, start_time: datetime | None = None) -> int:
+    def Iniciar_Carrera(self) -> int:
         """
         Añade a la tabla `clasificacion` todos los inscritos cuya `edicion`
-        coincida con el año actual (date.today().year) y fija `tiempo_p1`
-        al mismo instante (por defecto, ahora mismo).  
+        coincida con el año actual (date.today().year).  
         Devuelve el número total de corredores que quedan en la clasificación
         tras la operación (tanto los insertados como los actualizados).
         """
-        if start_time is None:
-            start_time = datetime.now()
-
         curr_year = date.today().year
         total_afectados = 0
 
@@ -154,15 +156,14 @@ class TrailDataBase:
                 clasif = self.obtener_clasificacion_por_inscrito(ins.id, curr_year)
 
                 if clasif:
-                    # Ya estaba en la tabla → solo actualizamos tiempo_p1
-                    clasif.tiempo_p1 = start_time
-                    self.actualizar(clasif)
+                    # Ya estaba en la tabla → no necesitamos actualizar nada específico
+                    # El registro ya existe, simplemente contamos
+                    pass
                 else:
                     # No existe → creamos nuevo objeto Clasificacion
                     nueva_clasif = Clasificacion(
                         id_inscrito = ins.id,
                         edicion     = curr_year,
-                        tiempo_p1   = start_time,
                         finalizado  = False
                     )
                     self.insertar(nueva_clasif)
@@ -310,38 +311,61 @@ class TrailDataBase:
     
     # =================== MÉTODOS ESPECÍFICOS CLASIFICACIONES ===================
     
-    def obtener_clasificacion_por_inscrito(self, id_inscrito, edicion):
-        """Obtiene la clasificación de un inscrito en una edición"""
-        try:
-            return self._session.query(Clasificacion).filter(
-                Clasificacion.id_inscrito == id_inscrito,
-                Clasificacion.edicion == edicion
-            ).first()
-        except SQLAlchemyError as e:
-            log.error(f"Error obteniendo clasificación por inscrito", exc_info=e)
-            return None
-    
+       
     def obtener_clasificaciones_por_edicion(self, edicion):
-        """Obtiene todas las clasificaciones de una edición"""
+        """Obtiene todas las clasificaciones de una edición, ordenadas por tiempo final"""
         try:
+            from sqlalchemy import desc, nullslast
             return self._session.query(Clasificacion).filter(
                 Clasificacion.edicion == edicion
+            ).order_by(
+                desc(Clasificacion.finalizado),  # Finalizados primero
+                nullslast(Clasificacion.tiempo_final)  # Luego por tiempo, NULL al final
             ).all()
         except SQLAlchemyError as e:
             log.error(f"Error obteniendo clasificaciones por edición", exc_info=e)
             return []
-    
-    def obtener_finalizados_por_edicion(self, edicion):
-        """Obtiene solo los corredores que han finalizado en una edición"""
+        
+    def anadir_tiempo_p1_por_dorsal(self, dorsal, tiempo_p1, edicion):
+        """Añade el tiempo parcial 1 a la clasificación de un inscrito por dorsal y edición"""
         try:
-            return self._session.query(Clasificacion).filter(
-                Clasificacion.edicion == edicion,
-                Clasificacion.finalizado == True
-            ).all()
+            clasif = self._session.query(Clasificacion).join(Inscrito).filter(
+                Inscrito.dorsal == dorsal,
+                Clasificacion.edicion == edicion
+            ).first()
+            
+            if clasif:
+                clasif.tiempo_p1 = tiempo_p1
+                self._session.commit()
+                return True
+            else:
+                log.warning(f"No se encontró clasificación para dorsal {dorsal} en edición {edicion}")
+                return False
         except SQLAlchemyError as e:
-            log.error(f"Error obteniendo finalizados por edición", exc_info=e)
-            return []
+            self._session.rollback()
+            log.error(f"Error añadiendo tiempo parcial 1", exc_info=e)
+            return False
     
+    def finalizar_clasificacion_por_dorsal(self, dorsal, tiempo_final, edicion):
+        """Marca una clasificación como finalizada y añade el tiempo final"""
+        try:
+            clasif = self._session.query(Clasificacion).join(Inscrito).filter(
+                Inscrito.dorsal == dorsal,
+                Clasificacion.edicion == edicion
+            ).first()
+            
+            if clasif:
+                clasif.finalizado = True
+                clasif.tiempo_final = tiempo_final
+                self._session.commit()
+                return True
+            else:
+                log.warning(f"No se encontró clasificación para dorsal {dorsal} en edición {edicion}")
+                return False
+        except SQLAlchemyError as e:
+            self._session.rollback()
+            log.error(f"Error finalizando clasificación", exc_info=e)
+            return False
     # =================== UTILIDADES ===================
     
     def cerrar_conexion(self):
