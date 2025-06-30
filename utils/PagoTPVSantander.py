@@ -70,9 +70,9 @@ class PagoTPVSantander:
             "DS_MERCHANT_AMOUNT": importe_centimos,
             "DS_MERCHANT_CURRENCY": "978",  # EUR
             "DS_MERCHANT_TRANSACTIONTYPE": "0",  # Pago
-            "DS_MERCHANT_MERCHANTURL": f"http://localhost:{self.puerto_servidor}/notificacion",
-            "DS_MERCHANT_URLOK": f"http://localhost:{self.puerto_servidor}/exito",
-            "DS_MERCHANT_URLKO": f"http://localhost:{self.puerto_servidor}/error",
+            "DS_MERCHANT_MERCHANTURL": f"https://trailpenasagra-aec5h5bydzctbxb4.spaincentral-01.azurewebsites.net/:{self.puerto_servidor}/notificacion",
+            "DS_MERCHANT_URLOK": f"https://trailpenasagra-aec5h5bydzctbxb4.spaincentral-01.azurewebsites.net/:{self.puerto_servidor}/exito",
+            "DS_MERCHANT_URLKO": f"https://trailpenasagra-aec5h5bydzctbxb4.spaincentral-01.azurewebsites.net/:{self.puerto_servidor}/error",
             "DS_MERCHANT_PRODUCTDESCRIPTION": self.concepto
         }
         
