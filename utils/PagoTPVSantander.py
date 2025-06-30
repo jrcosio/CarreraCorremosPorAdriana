@@ -33,6 +33,7 @@ class PagoTPVSantander:
         merchant_code_ = os.getenv('MERCHANT_CODE')  # Código de comercio
         terminal_ = os.getenv('TERMINAL_TPV')  # Terminal del TPV
         clave_secreta_ = os.getenv('FIRMA_SECRETA') # Clave secreta del TPV
+        
 
         
         self.concepto = concepto
@@ -57,12 +58,19 @@ class PagoTPVSantander:
         # Generar número de pedido único (4-12 caracteres alfanuméricos)
         timestamp = str(int(time.time()))
         self.numero_pedido = timestamp[-8:]  # Últimos 8 dígitos
+    
+    def get_base_url(self):
+        # Detectar si estamos en Azure
+        if os.getenv('WEBSITE_SITE_NAME'):  # Variable de Azure
+            return f"https://{os.getenv('WEBSITE_SITE_NAME')}.azurewebsites.net"
+        else:
+            return f"http://localhost:{self.puerto_servidor}"
         
     def _generar_parametros(self) -> dict:
         """Genera los parámetros necesarios para el pago"""
         # Convertir euros a céntimos
         importe_centimos = str(int(self.importe * 100))
-        
+        base_url = self.get_base_url()
         parametros = {
             "DS_MERCHANT_ORDER": self.numero_pedido,
             "DS_MERCHANT_MERCHANTCODE": self.merchant_code,
@@ -70,9 +78,9 @@ class PagoTPVSantander:
             "DS_MERCHANT_AMOUNT": importe_centimos,
             "DS_MERCHANT_CURRENCY": "978",  # EUR
             "DS_MERCHANT_TRANSACTIONTYPE": "0",  # Pago
-            "DS_MERCHANT_MERCHANTURL": f"https://trailpenasagra-aec5h5bydzctbxb4.spaincentral-01.azurewebsites.net/:{self.puerto_servidor}/notificacion",
-            "DS_MERCHANT_URLOK": f"https://trailpenasagra-aec5h5bydzctbxb4.spaincentral-01.azurewebsites.net/:{self.puerto_servidor}/exito",
-            "DS_MERCHANT_URLKO": f"https://trailpenasagra-aec5h5bydzctbxb4.spaincentral-01.azurewebsites.net/:{self.puerto_servidor}/error",
+            "DS_MERCHANT_MERCHANTURL": f"{base_url}/notificacion",
+            "DS_MERCHANT_URLOK": f"{base_url}/exito",
+            "DS_MERCHANT_URLKO": f"{base_url}/error",
             "DS_MERCHANT_PRODUCTDESCRIPTION": self.concepto
         }
         
