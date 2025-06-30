@@ -7,6 +7,7 @@ from recorrido.recorrido_screen import RecorridoScreen
 from barra_navegacion.barra_navegacion import NavBar
 from contacto.contacto_screen import ContactoScreen
 from inscritos.inscritos_screen import InscritosScreen
+from clasificacion.clasificacion_screen import ClasificacionScreen
 from configurar_web import trail, andarines
 
 class MainApp:
@@ -36,8 +37,8 @@ class MainApp:
             "btn_galeria": GaleriaScreen(),
             "btn_trail": RecorridoScreen(recorrido_data=trail),
             "btn_andarines": RecorridoScreen(recorrido_data=andarines),
+            "btn_clasificacion": ClasificacionScreen(),
             "btn_contacto": ContactoScreen(),
-            "btn_clasificacion": HomeScreen(),
             "btn_dorsal_solidario": DorsalSolidarioScreen(),
         }
         
