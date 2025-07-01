@@ -109,7 +109,7 @@ class DorsalSolidarioScreen(ft.Container):
             
             ft.Container(
                 content=ft.Text(
-                "Si no desea usar la pasarela de pago puede hacer transferecia:\nNúmero de cuenta: ES38 0049 5335 5521 1601 8049\nConcepto: Dorsal Solidario\nAsociacion Sierra de Peñasagra",
+                "Si no desea usar la pasarela de pago puede hacer transferencia:\nNúmero de cuenta: ES38 0049 5335 5521 1601 8049\nConcepto: Dorsal Solidario\nAsociacion Sierra de Peñasagra",
                 text_align=ft.TextAlign.CENTER,
                 size=18,
                 color=ft.Colors.WHITE,
