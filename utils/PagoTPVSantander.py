@@ -12,7 +12,9 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 from utils.PagoHandler import PagoHandler
 from dotenv import load_dotenv
+import logging
 
+log = logging.getLogger(__name__)
 
 class PagoTPVSantander:
     def __init__(
@@ -22,19 +24,20 @@ class PagoTPVSantander:
         entorno_test: bool = False,
         callback_exito: Optional[Callable] = None,
         callback_error: Optional[Callable] = None,
-        puerto_servidor: int = 8765
+        puerto_servidor: int = 8765,
+        base_url: Optional[str] = None,  
+        page: Optional[ft.Page] = None   # PATRÓN STRIPE: página de Flet
     ):
         """
-        Clase para realizar pagos con TPV de Redsys de forma sencilla
+        Clase para realizar pagos con TPV de Redsys 
+        Ahora usando patrón Stripe para compatibilidad con Docker
         """
         # Cargar variables de entorno
         load_dotenv()
 
-        merchant_code_ = os.getenv('MERCHANT_CODE')  # Código de comercio
-        terminal_ = os.getenv('TERMINAL_TPV')  # Terminal del TPV
-        clave_secreta_ = os.getenv('FIRMA_SECRETA') # Clave secreta del TPV
-        
-
+        merchant_code_ = os.getenv('MERCHANT_CODE')
+        terminal_ = os.getenv('TERMINAL_TPV')
+        clave_secreta_ = os.getenv('FIRMA_SECRETA')
         
         self.concepto = concepto
         self.importe = importe
@@ -45,32 +48,43 @@ class PagoTPVSantander:
         self.callback_exito = callback_exito
         self.callback_error = callback_error
         self.puerto_servidor = puerto_servidor
+        self.page = page  # PATRÓN STRIPE: guardar referencia a page
         self.servidor = None
         self.servidor_thread = None
         self.pago_completado = False
         
-        # URLs según entorno
+        # SIMPLIFICADO: URLs según entorno
+        self.base_url = base_url or self._obtener_base_url()
+        
+        print(f"🔗 Base URL configurada: {self.base_url}")
+        
+        # URLs del TPV según entorno
         if entorno_test:
             self.url_tpv = "https://sis-t.redsys.es:25443/sis/realizarPago"
+            print("🧪 Modo TEST de Redsys")
         else:
             self.url_tpv = "https://sis.redsys.es/sis/realizarPago"
+            print("🏭 Modo PRODUCCIÓN de Redsys")
             
-        # Generar número de pedido único (4-12 caracteres alfanuméricos)
+        # Generar número de pedido único
         timestamp = str(int(time.time()))
-        self.numero_pedido = timestamp[-8:]  # Últimos 8 dígitos
-    
-    def get_base_url(self):
-        # Detectar si estamos en Azure
-        if os.getenv('trailpenasagra-aec5h5bydzctbxb4.spaincentral-01'):  # Variable de Azure
-            return f"https://{os.getenv('WEBSITE_SITE_NAME')}.azurewebsites.net"
-        else:
-            return f"http://localhost:{self.puerto_servidor}"
+        self.numero_pedido = timestamp[-8:]
+
+    def _obtener_base_url(self) -> str:
+        """Obtener URL base de forma simple"""
+        # 1. Si hay variable EXTERNAL_URL, usarla
+        external_url = os.getenv('EXTERNAL_URL')
+        if external_url:
+            return external_url.rstrip('/')
         
+        # 2. Si no, usar localhost con el puerto configurado
+        return f"http://localhost:{self.puerto_servidor}"
+
     def _generar_parametros(self) -> dict:
         """Genera los parámetros necesarios para el pago"""
-        # Convertir euros a céntimos
         importe_centimos = str(int(self.importe * 100))
-        base_url = self.get_base_url()
+
+        # PATRÓN STRIPE: URLs simples y directas
         parametros = {
             "DS_MERCHANT_ORDER": self.numero_pedido,
             "DS_MERCHANT_MERCHANTCODE": self.merchant_code,
@@ -78,11 +92,16 @@ class PagoTPVSantander:
             "DS_MERCHANT_AMOUNT": importe_centimos,
             "DS_MERCHANT_CURRENCY": "978",  # EUR
             "DS_MERCHANT_TRANSACTIONTYPE": "0",  # Pago
-            "DS_MERCHANT_MERCHANTURL": f"https://trailpenasagra-aec5h5bydzctbxb4.spaincentral-01.azurewebsites.net/notificacion",
-            "DS_MERCHANT_URLOK": f"https://trailpenasagra-aec5h5bydzctbxb4.spaincentral-01.azurewebsites.net/exito",
-            "DS_MERCHANT_URLKO": f"https://trailpenasagra-aec5h5bydzctbxb4.spaincentral-01.azurewebsites.net/error",
+            "DS_MERCHANT_MERCHANTURL": f"{self.base_url}/tpv/notificacion",
+            "DS_MERCHANT_URLOK": f"{self.base_url}/tpv/exito",
+            "DS_MERCHANT_URLKO": f"{self.base_url}/tpv/error",
             "DS_MERCHANT_PRODUCTDESCRIPTION": self.concepto
         }
+        
+        print(f"📋 URLs de callback configuradas:")
+        print(f"  ✅ Éxito: {parametros['DS_MERCHANT_URLOK']}")
+        print(f"  ❌ Error: {parametros['DS_MERCHANT_URLKO']}")
+        print(f"  📨 Notificación: {parametros['DS_MERCHANT_MERCHANTURL']}")
         
         return parametros
     
@@ -93,13 +112,9 @@ class PagoTPVSantander:
     
     def _generar_firma(self, parametros_codificados: str) -> str:
         """Genera la firma HMAC SHA-256"""
-        # Decodificar clave
         clave_decodificada = base64.b64decode(self.clave_secreta)
-        
-        # Generar clave específica con 3DES
         clave_operacion = self._cifrar_3des(clave_decodificada, self.numero_pedido)
         
-        # Calcular HMAC SHA-256
         firma = hmac.new(
             clave_operacion,
             parametros_codificados.encode('utf-8'),
@@ -111,42 +126,39 @@ class PagoTPVSantander:
     def _cifrar_3des(self, clave: bytes, datos: str) -> bytes:
         """Cifrado 3DES real según especificaciones de Redsys"""
         try:
-            # Asegurar que la clave tenga 24 bytes (3DES)
             if len(clave) < 24:
                 clave = clave + b'\x00' * (24 - len(clave))
             elif len(clave) > 24:
                 clave = clave[:24]
             
-            # Preparar datos (rellenar a múltiplo de 8 bytes)
             datos_bytes = datos.encode('utf-8')
             padding_needed = 8 - (len(datos_bytes) % 8)
             if padding_needed != 8:
                 datos_bytes += b'\x00' * padding_needed
             
-            # Cifrar con 3DES en modo CBC sin vector de inicialización
             cipher = Cipher(
                 algorithms.TripleDES(clave),
-                modes.CBC(b'\x00' * 8),  # IV con ceros
+                modes.CBC(b'\x00' * 8),
                 backend=default_backend()
             )
             encryptor = cipher.encryptor()
             encrypted = encryptor.update(datos_bytes) + encryptor.finalize()
             
-            return encrypted[:24]  # Tomar solo los primeros 24 bytes como clave derivada
+            return encrypted[:24]
             
         except Exception as e:
             print(f"Error en cifrado 3DES: {e}")
             return hashlib.sha256(clave + datos.encode()).digest()[:24]
     
-    def _iniciar_servidor(self):
-        """Inicia el servidor HTTP para recibir respuestas"""
+    def _iniciar_servidor_local(self):
+        """Inicia servidor HTTP local (solo para modo desktop sin page)"""
         try:
             self.servidor = HTTPServer(('localhost', self.puerto_servidor), PagoHandler)
-            self.servidor.pago_instance = self  # Pasar referencia de esta instancia
-            print(f"🌐 Servidor iniciado en http://localhost:{self.puerto_servidor}")
+            self.servidor.pago_instance = self
+            print(f"🌐 Servidor local iniciado en http://localhost:{self.puerto_servidor}")
             self.servidor.serve_forever()
         except Exception as e:
-            print(f"❌ Error iniciando servidor: {e}")
+            print(f"❌ Error iniciando servidor local: {e}")
     
     def _on_success(self, mensaje: str):
         """Callback interno de éxito"""
@@ -172,16 +184,20 @@ class PagoTPVSantander:
         <head>
             <title>Redirigiendo al TPV...</title>
             <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
         <body>
-            <div style="text-align: center; margin-top: 50px;">
-                <h2>Redirigiendo al sistema de pago...</h2>
-                <p>Importe: {self.importe}€</p>
-                <p>Concepto: {self.concepto}</p>
-                <p>Por favor, espere...</p>
+            <div style="text-align: center; margin-top: 50px; font-family: Arial, sans-serif;">
+                <h2>🔒 Redirigiendo al sistema de pago seguro...</h2>
+                <p><strong>Importe:</strong> {self.importe}€</p>
+                <p><strong>Concepto:</strong> {self.concepto}</p>
+                <p>Por favor, espere mientras lo redirigimos...</p>
                 <div style="margin: 20px;">
                     <div style="border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 0 auto;"></div>
                 </div>
+                <p style="font-size: 12px; color: #666;">
+                    Pedido: {self.numero_pedido}
+                </p>
             </div>
             
             <form id="tpvForm" action="{self.url_tpv}" method="POST">
@@ -208,83 +224,62 @@ class PagoTPVSantander:
         return html
     
     def start(self, debug: bool = False, mantener_vivo: bool = True):
-        """Inicia el proceso de pago - Adaptado para Flet"""
+        """Versión ultra-simple para debug"""
         try:
             print(f"🚀 Iniciando pago de {self.importe}€ - {self.concepto}")
             print(f"📋 Número de pedido: {self.numero_pedido}")
             
-            # Iniciar servidor en hilo separado si no está ya corriendo
-            if self.servidor_thread is None or not self.servidor_thread.is_alive():
-                self.servidor_thread = threading.Thread(target=self._iniciar_servidor, daemon=True)
-                self.servidor_thread.start()
-                
-                # Esperar un poco para que el servidor se inicie
-                time.sleep(1)
+            # Registrar el pago
+            self._registrar_pago()
             
             # Generar parámetros
             parametros = self._generar_parametros()
             parametros_codificados = self._codificar_parametros(parametros)
             firma = self._generar_firma(parametros_codificados)
             
-            if debug:
-                print("\n🔍 DEBUG INFO:")
-                print(f"Merchant Code: {self.merchant_code}")
-                print(f"Terminal: {self.terminal}")
-                print(f"Número de pedido: {self.numero_pedido}")
-                print(f"Importe (céntimos): {int(self.importe * 100)}")
-                print(f"URL servidor local: http://localhost:{self.puerto_servidor}")
-                print(f"Parámetros JSON: {json.dumps(parametros, indent=2)}")
-                print(f"Firma generada: {firma}")
-                print("=" * 50)
-            
-            # Generar HTML y guardarlo temporalmente
+            # Crear formulario
             html_content = self._generar_formulario_html(parametros_codificados, firma)
             
-            # Crear archivo temporal
-            import tempfile
-            import os
+            # ULTRA-SIMPLE: Solo imprimir URL para debug
+            import urllib.parse
+            data_url = f"data:text/html,{urllib.parse.quote(html_content)}"
             
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, encoding='utf-8') as f:
-                f.write(html_content)
-                temp_file = f.name
+            print("=" * 80)
+            print("📄 FORMULARIO GENERADO - COPIAR ESTA URL Y PEGARLA EN EL NAVEGADOR:")
+            print(data_url[:200] + "...")
+            print("=" * 80)
             
-            # Abrir en el navegador
-            webbrowser.open(f'file://{temp_file}')
+            # Intentar abrir de todas las formas posibles
+            print("🔄 Intentando abrir...")
             
-            print("✅ Formulario de pago generado y abierto en el navegador")
-            print("💳 El usuario será redirigido al TPV para completar el pago")
-            print("⏳ Esperando respuesta del pago...")
+            try:
+                if self.page:
+                    print("1️⃣ Intentando page.launch_url...")
+                    self.page.launch_url(data_url)
+                    print("✅ page.launch_url ejecutado")
+            except Exception as e:
+                print(f"❌ Error con page.launch_url: {e}")
             
-            # En Flet no mantenemos el bucle infinito, dejamos que los callbacks manejen la respuesta
-            if not mantener_vivo:
-                # Limpiar archivo temporal después de un tiempo
-                def limpiar_temp():
-                    time.sleep(10)
-                    try:
-                        os.unlink(temp_file)
-                    except:
-                        pass
-                
-                threading.Thread(target=limpiar_temp, daemon=True).start()
-            else:
-                # Comportamiento original para uso desde terminal
-                try:
-                    while not self.pago_completado:
-                        time.sleep(1)
-                except KeyboardInterrupt:
-                    print("\n🛑 Pago cancelado por el usuario")
-                    self.detener()
-                
-                # Limpiar archivo temporal
-                try:
-                    os.unlink(temp_file)
-                except:
-                    pass
-                
+            try:
+                print("2️⃣ Intentando webbrowser.open...")
+                webbrowser.open(data_url)
+                print("✅ webbrowser.open ejecutado")
+            except Exception as e:
+                print(f"❌ Error con webbrowser.open: {e}")
+            
+            print("💳 Proceso completado")
+            
         except Exception as e:
-            print(f"❌ Error al iniciar el pago: {e}")
-            if self.callback_error:
-                self.callback_error(str(e))
+            print(f"❌ Error en start(): {e}")
+
+    def _registrar_pago(self):
+        """Registra este pago para callbacks"""
+        try:
+            from utils.pago_registry import registrar_pago_activo
+            registrar_pago_activo(self.numero_pedido, self)
+            print(f"📝 Pago registrado: {self.numero_pedido}")
+        except Exception as e:
+            print(f"⚠️ Error registrando pago: {e}")
     
     def detener(self):
         """Detiene el servidor y limpia recursos"""
@@ -302,7 +297,6 @@ class PagoTPVSantander:
             print(f"Parámetros recibidos: {parametros_respuesta}")
             print(f"Firma recibida: {firma_recibida}")
             
-            # Decodificar parámetros primero para ver qué contienen
             parametros_json = base64.b64decode(parametros_respuesta).decode('utf-8')
             parametros = json.loads(parametros_json)
             
@@ -310,7 +304,6 @@ class PagoTPVSantander:
             for key, value in parametros.items():
                 print(f"  {key}: {value}")
             
-            # Verificar código de respuesta primero (más importante que la firma)
             codigo_respuesta = parametros.get('Ds_Response', '')
             numero_pedido_respuesta = parametros.get('Ds_Order', '')
             
@@ -319,7 +312,6 @@ class PagoTPVSantander:
             print(f"Número de pedido esperado: {self.numero_pedido}")
             print(f"Número de pedido recibido: {numero_pedido_respuesta}")
             
-            # Verificar que el número de pedido coincida
             if numero_pedido_respuesta != self.numero_pedido:
                 print(f"❌ El número de pedido no coincide")
                 return False
@@ -336,7 +328,7 @@ class PagoTPVSantander:
             else:
                 print(f"❌ Código de respuesta inválido: {codigo_respuesta}")
             
-            # Intentar verificar la firma (pero no fallar si no coincide en respuestas exitosas)
+            # Verificar firma
             try:
                 firma_calculada = self._generar_firma(parametros_respuesta)
                 print(f"Firma calculada: {firma_calculada}")
@@ -346,9 +338,7 @@ class PagoTPVSantander:
                     print("✅ Firma válida")
                     return pago_exitoso
                 else:
-                    print("⚠️ Firma no coincide, pero verificando por código de respuesta...")
-                    # En algunos casos, Redsys puede tener pequeñas diferencias en la firma
-                    # Si el código de respuesta es exitoso y el pedido coincide, aceptamos el pago
+                    print("⚠️ Firma no coincide, verificando por código de respuesta...")
                     if pago_exitoso:
                         print("✅ Aceptando pago por código de respuesta exitoso")
                         return True
@@ -357,9 +347,8 @@ class PagoTPVSantander:
                         return False
             except Exception as e:
                 print(f"❌ Error calculando firma: {e}")
-                # Si hay error en la firma pero el código de respuesta es exitoso, aceptamos
                 if pago_exitoso:
-                    print("✅ Aceptando pago por código de respuesta exitoso (error en verificación de firma)")
+                    print("✅ Aceptando pago por código de respuesta exitoso")
                     return True
                 return False
                 

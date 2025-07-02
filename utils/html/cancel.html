@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Cancelado</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .cancel-icon {
+            font-size: 80px;
+            color: #ff6b35;
+            margin-bottom: 20px;
+            animation: shake 0.6s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .message {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .close-button {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .close-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+        
+        .retry-button {
+            background: transparent;
+            color: #ff6b35;
+            border: 2px solid #ff6b35;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+        
+        .retry-button:hover {
+            background: #ff6b35;
+            color: white;
+        }
+        
+        .info {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-left: 4px solid #ff6b35;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        
+        .buttons {
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cancel-icon">❌</div>
+        
+        <h1>Pago Cancelado</h1>
+        
+        <div class="message">
+            No se ha realizado ningún cargo.<br>
+            Puedes intentarlo de nuevo cuando quieras.
+        </div>
+        
+        <div class="info">
+            <strong>💡 Información:</strong><br>
+            Tu pago fue cancelado de forma segura. No se ha procesado ningún cargo en tu tarjeta.
+            <br><br>
+            Ya puedes cerrar esta pestaña y volver a la aplicación.
+        </div>
+        
+        <div class="buttons">
+            <button class="retry-button" onclick="volverAtras()">
+                🔄 Intentar de Nuevo
+            </button>
+            
+            <button class="close-button" onclick="cerrarPestana()">
+                🗂️ Cerrar Pestaña
+            </button>
+        </div>
+        
+        <div class="footer">
+            <strong>Trail Peñasagra</strong><br>
+            ¡Esperamos verte pronto! 🏃‍♂️
+        </div>
+    </div>
+
+    <script>
+        // Intentar volver atrás
+        function volverAtras() {
+            try {
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    cerrarPestana();
+                }
+            } catch (e) {
+                cerrarPestana();
+            }
+        }
+        
+        // Intentar cerrar pestaña
+        function cerrarPestana() {
+            try {
+                window.close();
+            } catch (e) {
+                alert('Por favor, cierra esta pestaña manualmente');
+            }
+        }
+        
+        // Auto-cerrar después de 15 segundos (opcional)
+        function autoCerrar() {
+            let contador = 15;
+            const button = document.querySelector('.close-button');
+            
+            const interval = setInterval(() => {
+                button.innerHTML = `🗂️ Cerrando en ${contador}s`;
+                contador--;
+                
+                if (contador < 0) {
+                    clearInterval(interval);
+                    cerrarPestana();
+                }
+            }, 1000);
+        }
+        
+        // Inicializar
+        window.onload = function() {
+            // Descomentar para auto-cerrar:
+            // autoCerrar();
+        };
+    </script>
+</body>
+</body>
+</html>
