@@ -9,6 +9,9 @@ from contacto.contacto_screen import ContactoScreen
 from inscritos.inscritos_screen import InscritosScreen
 from configurar_web import trail, andarines
 
+# NUEVO: Importar el manejador de rutas TPV
+from utils.tpv_routes import manejar_rutas_tpv
+
 class MainApp:
     def __init__(self, page: ft.Page):
         self.page = page
@@ -30,7 +33,7 @@ class MainApp:
         
         # Mapeo de botones a pantallas
         self.screens = {
-            "btn_home": HomeScreen(on_click=self.on_button_clicked),
+            "btn_home": HomeScreen(on_click=None),
             "btn_inscripcion": InscripcionScreen(),
             "btn_inscritos": InscritosScreen(),
             "btn_galeria": GaleriaScreen(),
@@ -93,9 +96,87 @@ class MainApp:
             )
         )
 
+        # NUEVO: Configurar el manejador de rutas (incluyendo TPV)
+        self.page.on_route_change = self.route_change
+        
         # Configuración inicial del responsive
         self.page.on_resize = self.on_page_resize
         self.on_page_resize(None)
+    
+    # NUEVO: Manejador de rutas que incluye las rutas del TPV
+    def route_change(self, route):
+        """Maneja los cambios de ruta, incluyendo las rutas del TPV"""
+        print(f"🔄 Ruta solicitada: {route.route}")
+        
+        # PASO 1: Verificar si es una ruta del TPV
+        if manejar_rutas_tpv(self.page, route.route):
+            print("✅ Ruta del TPV procesada")
+            return
+        
+        # NUEVO: Verificar si es una ruta de formulario de pago
+        if route.route.startswith('/formulario_pago/'):
+            numero_pedido = route.route.split('/')[-1]
+            self._mostrar_formulario_pago(numero_pedido)
+            return
+        
+        print(f"ℹ️ Ruta normal: {route.route}")
+    
+    def _mostrar_formulario_pago(self, numero_pedido: str):
+        """Muestra el formulario de pago TPV como página web"""
+        from utils.PagoTPVSantander import PagoTPVSantander
+        
+        if hasattr(PagoTPVSantander, '_formularios_temp'):
+            html_content = PagoTPVSantander._formularios_temp.get(numero_pedido)
+            if html_content:
+                print(f"📄 Sirviendo formulario para pedido: {numero_pedido}")
+                
+                # Limpiar la página y mostrar mensaje
+                self.page.clean()
+                self.page.add(
+                    ft.Container(
+                        content=ft.Column([
+                            ft.Text("🔒 Formulario de Pago Generado", size=24, weight=ft.FontWeight.BOLD),
+                            ft.Text("El formulario se ha generado correctamente.", size=16),
+                            ft.Text(f"Número de pedido: {numero_pedido}", size=14),
+                            ft.Container(height=20),
+                            ft.ElevatedButton(
+                                "📋 Ver formulario en nueva pestaña",
+                                on_click=lambda e: self._mostrar_html_raw(html_content),
+                                bgcolor=ft.colors.BLUE,
+                                color=ft.colors.WHITE
+                            ),
+                            ft.ElevatedButton(
+                                "🏠 Volver al inicio",
+                                on_click=lambda e: self.on_button_clicked(type('obj', (object,), {'control': type('ctrl', (object,), {'data': 'btn_home'})()})()),
+                                bgcolor=ft.colors.GREEN,
+                                color=ft.colors.WHITE
+                            )
+                        ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+                        alignment=ft.alignment.center,
+                        expand=True
+                    )
+                )
+                self.page.update()
+                
+                # También intentar abrir automáticamente
+                try:
+                    self._mostrar_html_raw(html_content)
+                except:
+                    pass
+                
+                return
+        
+        print("❌ Formulario no encontrado")
+
+def _mostrar_html_raw(self, html_content):
+    """Muestra el HTML raw usando data URL"""
+    import urllib.parse
+    data_url = f"data:text/html;charset=utf-8,{urllib.parse.quote(html_content)}"
+    try:
+        self.page.launch_url(data_url)
+        print("✅ Data URL abierta")
+    except Exception as e:
+        print(f"❌ Error con data URL: {e}")
         
     def ventana_avisolegal(self):
         
