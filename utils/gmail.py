@@ -209,6 +209,90 @@ class Gmail:
         </html>
         """
         return html
+
+    def crear_mensaje_dorsal(self, inscrito) -> str:
+        """
+        Crea el contenido HTML del email para agradecer el dorsal solidario
+        
+        Args:
+            inscrito: Objeto con los datos del corredor
+            
+        Returns:
+            str: Contenido HTML del mensaje de agradecimiento por dorsal solidario
+        """
+        html: str = textwrap.dedent(f"""
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8" />
+                <title>¡Gracias por tu Dorsal Solidario!</title>
+            </head>
+            <body style="margin:0;padding:0;background:#f0f4f8;">
+                <!-- Contenedor principal -->
+                <div style="max-width:600px;margin:0 auto;font-family:Helvetica,Arial,sans-serif;color:#333;">
+
+                <!-- Cabecera -->
+                <div style="background:linear-gradient(90deg,#dc2626 0%, #f87171 100%);padding:24px 0;text-align:center;border-radius:0 0 12px 12px;">
+                    <h1 style="margin:0;font-size:28px;color:#fff;">¡Gracias!</h1>
+                    <p style="margin:8px 0 0;font-size:18px;color:#fecaca;">Tu solidaridad hace la diferencia</p>
+                </div>
+
+                <!-- Tarjeta principal -->
+                <div style="background:#ffffff;padding:32px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,0.08);margin-top:-12px;">
+                    
+                    <!-- Mensaje de agradecimiento -->
+                    <div style="text-align:center;margin-bottom:32px;">
+                        <div style="font-size:48px;margin-bottom:16px;">❤️</div>
+                        <h2 style="font-size:24px;margin:0 0 16px;color:#dc2626;">¡Tu dorsal solidario cuenta!</h2>
+                    </div>
+
+                    <p style="font-size:18px;line-height:1.6;text-align:center;margin-bottom:24px;">
+                        Queremos darte las <strong>gracias de corazón</strong> por elegir un dorsal solidario para el <strong>Trail Peñasagra</strong>.
+                    </p>
+
+                    <p style="font-size:16px;line-height:1.6;text-align:center;margin-bottom:24px;font-style:italic;color:#666;">
+                        Cada granito de arena cuenta, y tu contribución nos ayuda a seguir adelante con esta bonita iniciativa.
+                    </p>
+
+                    <!-- Mensaje principal "Corremos por Adriana" -->
+                    <div style="background:linear-gradient(90deg,#fef3c7 0%, #fde68a 100%);padding:24px;border-radius:12px;text-align:center;margin:32px 0;border-left:6px solid #f59e0b;">
+                        <h3 style="margin:0 0 12px;font-size:22px;color:#92400e;">🏃‍♀️ Corremos por Adriana 🏃‍♂️</h3>
+                        <p style="margin:0;font-size:16px;color:#78350f;line-height:1.5;">
+                            Con tu participación solidaria, no solo disfrutas del deporte que amas, sino que también contribuyes a una causa que nos une a todos. 
+                            <strong>¡Gracias de Verdad!</strong>
+                        </p>
+                    </div>
+
+
+
+                    <!-- Recordatorios importantes -->
+                    <div style="margin-top:24px;">
+                        <h3 style="font-size:18px;margin:0 0 12px;color:#16a34a;">📌 Recordatorios importantes:</h3>
+                        <ul style="font-size:15px;line-height:1.6;margin-left:20px;color:#555;">
+                            <li>Guarda este email como comprobante de tu dorsal solidario</li>
+                            <li>Recuerda revisar toda la información de la carrera en nuestra web</li>
+                            <li>Síguenos en redes sociales para estar al día de las novedades</li>
+                            <li>El día de la carrera, presenta tu DNI junto con este email</li>
+                        </ul>
+                    </div>
+
+                    <!-- Mensaje final -->
+                    <div style="background:#e7f5e7;padding:20px;border-radius:8px;margin:32px 0;text-align:center;">
+                        <p style="margin:0;font-size:16px;color:#166534;line-height:1.5;">
+                            <strong>Gracias por formar parte de esta gran familia del trail.</strong><br>
+                            Tu solidaridad y tu pasión por el deporte hacen posible que sigamos creciendo juntos.
+                        </p>
+                    </div>
+
+                    <p style="font-size:18px;font-weight:bold;text-align:center;margin-top:32px;color:#dc2626;">
+                        ¡Nos vemos en la montaña! 🏔️
+                    </p>
+                </div>
+                </div>
+            </body>
+            </html>
+        """)
+        return html
     
     def enviar_contacto(self, nombre_usuario, email_usuario, asunto_usuario, comentario):
         """
