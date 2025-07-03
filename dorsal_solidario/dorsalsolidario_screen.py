@@ -41,6 +41,17 @@ class DorsalSolidarioScreen(ft.Container):
             cursor_color=ft.Colors.WHITE,
             text_style=ft.TextStyle(color=ft.Colors.WHITE,size=30),
         )
+        self.email_field = ft.TextField(
+            label="Correo electrónico (opcional)",
+            value="",
+            width=600,
+            keyboard_type=ft.KeyboardType.NUMBER,
+            border_color=ft.Colors.WHITE,
+            label_style=ft.TextStyle(color=ft.Colors.WHITE),
+            color=ft.Colors.WHITE,
+            cursor_color=ft.Colors.WHITE,
+            text_style=ft.TextStyle(color=ft.Colors.WHITE,size=30),
+        )
         self.content = ft.Column(
             [
             ft.Container(
@@ -107,6 +118,7 @@ class DorsalSolidarioScreen(ft.Container):
             
             self.cantidad_field,
             self.Comentario_field,
+            self.email_field,
             
             ft.Container(
                 content=ft.ElevatedButton(
@@ -122,7 +134,7 @@ class DorsalSolidarioScreen(ft.Container):
             
             ft.Container(
                 content=ft.Text(
-                "Sino dessea usar la pasarela de pago puede hacer transferecia:\nNúmero de cuenta: ES38 0049 5335 5521 1601 8049\nConcepto: Dorsal Solidario\nAsociacion Sierra de Peñasagra",
+                "Si tienes problemas al usar la pasarela de pago puede hacer transferecia:\nNúmero de cuenta: ES38 0049 5335 5521 1601 8049\nConcepto: Dorsal Solidario\nAsociacion Sierra de Peñasagra",
                 text_align=ft.TextAlign.CENTER,
                 size=18,
                 color=ft.Colors.WHITE,
@@ -233,6 +245,13 @@ class DorsalSolidarioScreen(ft.Container):
             ],
             actions_alignment=ft.MainAxisAlignment.END,
         )    
+        
+        #Enviar el email
+        if self.email_field.value:
+            log.info(f"Enviando email de confirmación a: {self.email_field.value}")
+            # Aquí puedes implementar la lógica para enviar el email de confirmación
+            # Por ejemplo, usando un servicio de envío de emails
+        
         return dialogo
     
     def ventana_error_pago(self, mensaje: str = None):
