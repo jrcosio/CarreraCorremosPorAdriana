@@ -37,12 +37,12 @@ COLORES = {
 }
 
 MEDIDAS = {
-    "dorsal": 80,
-    "nombre": 200,
-    "apellidos": 350,
-    "sexo": 80,
-    "ccaa": 200,
-    "localidad": 250,
+    "dorsal": 60,
+    "nombre": 100,
+    "apellidos": 200,
+    "sexo": 45,
+    "ccaa": 150,
+    "localidad": 150,
     "categoria": 100,
 }
 
