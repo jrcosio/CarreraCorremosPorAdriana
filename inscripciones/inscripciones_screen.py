@@ -1,10 +1,12 @@
 from datetime import datetime
-import os
+import os, time, threading
 from dotenv import load_dotenv
 import flet as ft
 from utils.TrailDataBase import TrailDataBase, Inscrito
 import logging
 from utils.gmail import Gmail
+from utils.pagostripe import PagoStripe
+from dotenv import load_dotenv
 
 
 load_dotenv()
@@ -53,6 +55,9 @@ class InscripcionScreen(ft.Container):
         self.condiciones = None
         self.precio_carrera = ""
         self.error_condiciones = None
+        
+        self.is_preinscripcion= False 
+        self.pago_instance = None  # Inicializamos la instancia de PagoStripe 
         
         # Botón
         self.btn_enviar = None
@@ -266,7 +271,7 @@ class InscripcionScreen(ft.Container):
     def crear_botones(self):
         """Crea los botones del formulario"""
         self.btn_enviar = ft.ElevatedButton(
-            text="Enviar inscripción", # MODIFICADO: Texto más corto
+            text="Pagar inscripción", # MODIFICADO: Texto más corto
             icon=ft.Icons.SEND,
             bgcolor=ft.Colors.GREEN_400,
             color=ft.Colors.WHITE,
@@ -444,17 +449,86 @@ class InscripcionScreen(ft.Container):
             border_radius=ft.BorderRadius( top_left=0, top_right=0, bottom_left=15, bottom_right=15),
         )
         
+    def crear_contenedor_preinscritos(self):
+        """Crea el contenedor para pagar preincripción"""
+        
+        self.preins_dorsal = ft.TextField(
+            label="Dorsal de la preinscripción",
+            value="",
+            bgcolor="#FFFFFF",
+            input_filter=ft.NumbersOnlyInputFilter(),
+            width=200,
+            scroll_padding=ft.Padding(left=10, right=10, top=10, bottom=10)
+        )
+        
+        self.preins_dni = ft.TextField(
+            label="DNI/NIE de preinscripción",
+            value="",
+            bgcolor="#FFFFFF",
+            expand=True,
+            scroll_padding=ft.Padding(left=10, right=10, top=10, bottom=10)
+        )
+        self.preins_btn_vericar = ft.ElevatedButton(
+            text="Verificar preinscripción",
+            icon=ft.Icons.CHECK,
+            bgcolor=ft.Colors.GREEN_400,
+            color=ft.Colors.WHITE,
+            width=200, # MODIFICADO: Ancho fijo para que no se expanda demasiado
+            height=50, # MODIFICADO: Altura ligeramente menor
+            on_click=self.verificar_preinscripcion
+        )
+        
+        return ft.Container(
+            content=ft.Column(
+                controls=[
+                     ft.Text(
+                        "ATENCION ATLETA",
+                        size=28,
+                        weight=ft.FontWeight.BOLD,
+                        color=ft.Colors.RED_400
+                    ),
+                    ft.Text(
+                        "Si ya hiciste la preinscripción, solo te falta realizar el pago para completar la inscripción.\n"
+                        "Si no hiciste la preinscripción, puedes hacerlo directamente desde el siguiente formulario de inscripción y pagar después con normalidad.\n"
+                        "Ya no es necesario hacer la preinscripción si es la primera vez que te apuntas a nuestro Trail este año."
+                        "\n\nDisculpar estas molestias, estamos en proceso de mejora de la web.",
+                        size=18,
+                        weight=ft.FontWeight.BOLD,
+                        color=ft.Colors.BLACK
+                    ),
+                    ft.Container(height=10),  # Espacio entre el texto y el botón
+                    ft.Row(
+                        controls=[
+                            self.preins_dorsal,
+                            self.preins_dni,
+                            self.preins_btn_vericar
+                        ]                                
+                    )
+
+                ]
+            ),
+            bgcolor="#D6DEF3",
+            padding=ft.Padding(15, 10, 15, 10), # MODIFICADO: Padding
+            width=800, # MODIFICADO: Ancho fijo para que no se expanda demasiado
+            # height=200, # MODIFICADO: Altura fija para que no se expanda demasiado
+            expand=True,
+            border_radius=ft.BorderRadius(15, 15, 15, 15), # MODIFICADO: Bordes redondeados
+            border=ft.border.all(2, ft.Colors.GREY_400)
+        )
 
     def crear_contenedor_principal(self):
         """Crea el contenedor principal de toda la pantalla"""
         return ft.Column(
             controls=[
+                ft.Container(width=800, height=10),  # Espacio superior
+                self.crear_contenedor_preinscritos(),
+                ft.Container(width=800, height=10),  # Espacio superior
                 self.crear_encabezado(),
                 self.crear_contenedor_formulario(),
             ],
             spacing=0,
             # width=800,
-            # alignment=ft.MainAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.CENTER,
             expand=True,
         )
 
@@ -624,7 +698,6 @@ class InscripcionScreen(ft.Container):
 
     def limpiar_formulario(self):
         """Limpia todos los campos del formulario"""
-        """Limpia todos los campos del formulario"""
         self.txtf_nombre.value = ""
         self.txtf_apellido.value = ""
         self.txtf_tlfno.value = ""
@@ -642,7 +715,40 @@ class InscripcionScreen(ft.Container):
         self.txtf_dni_codigo.value = ""
         self.txtf_nombre_emergencia.value = ""
         self.txtf_numero_emergencia.value = ""
+        self.condiciones.value = False 
+        self.drop_año.value = ""
+        self.drop_mes.value = ""
+        self.drop_dia.value = ""
+        self.drop_camiseta.value = None
+        self.btn_enviar.text = "Pagar inscripción"
+        
+        self.preins_dni.value = ""
+        self.preins_dorsal.value = ""
+        
+        self.is_preinscripcion= False 
+        
+        # Habilitar todos los campos del formulario
+        self.txtf_nombre.disabled = False
+        self.txtf_apellido.disabled = False
+        self.txtf_tlfno.disabled = False
+        self.txtf_email.disabled = False
+        self.txtf_rep_email.disabled = False
+        self.txtf_direccion.disabled = False
+        self.drop_ccaa.disabled = False
+        self.txtf_poblacion.disabled = False
+        self.radio_sexo.disabled = False
+        self.radio_carrera.disabled = False
+        self.drop_dia.disabled = False
+        self.drop_mes.disabled = False
+        self.drop_año.disabled = False
+        self.drop_doc.disabled = False
+        self.txtf_dni_codigo.disabled = False
+        self.txtf_nombre_emergencia.disabled = False
+        self.txtf_numero_emergencia.disabled = False
         self.condiciones.value = False
+        self.condiciones.disabled = False
+        self.drop_camiseta.disabled = False
+        
         
         self.update()
 
@@ -675,12 +781,13 @@ class InscripcionScreen(ft.Container):
     def al_enviar_formulario(self, e):
         """Maneja el evento de envío del formulario"""
         es_valido, mensaje = self.validar_formulario()
+        key_stripe_test = os.getenv("KEY_STRIPE_TEST")
+        key_stripe_prod = os.getenv("KEY_STRIPE_LIVE")
         
         if es_valido:
             self.btn_enviar.disabled = True  # Deshabilitar el botón para evitar múltiples envíos
             self.btn_enviar.update()  # Actualizar el botón para reflejar el cambio
             datos = self.obtener_datos_formulario()
-            log.info(f"Formulario que se procede a enviar: {datos}")
             
             try:
                 db = TrailDataBase()
@@ -691,61 +798,254 @@ class InscripcionScreen(ft.Container):
                 self.btn_enviar.update()
                 return
             
-            if datos["carrera"] == "trail":
-                dorsal = str((int(db.obtener_ultimo_dorsal(datetime.now().year, tipo_carrera="trail") or "000") + 1)).zfill(3)
+            if self.is_preinscripcion:
+                dorsal = self.preins_dorsal.value.strip()
+                dni = self.preins_dni.value.strip()
+                inscrito = db.obtener_inscrito_por_dorsal_y_dni(dorsal, dni, datetime.now().year)
+                
+                if inscrito:
+                    inscrito.pagado = True
             else:
-                dorsal = str((int(db.obtener_ultimo_dorsal(datetime.now().year, tipo_carrera="andarines") or "299") + 1)).zfill(3)
-            
-            inscrito = Inscrito(
-                dorsal=dorsal,  # El dorsal se asignará automáticamente
-                nombre=datos["nombre"],
-                apellidos=datos["apellido"],
-                sexo=datos["sexo"],
-                fecha_nacimiento=datetime(int(datos["año"]), int(datos["mes"]), int(datos["dia"])),
-                telefono=datos["telefono"],
-                email=datos["email"],
-                tipo_documento=datos["tipo_documento"],
-                numero_documento=datos["codigo_documento"],
-                direccion=datos["direccion"],
-                ccaa=datos["ccaa"],
-                municipio=datos["poblacion"],
-                tipo_carrera=datos["carrera"],
-                talla=datos["talla"],
-                contacto_emergencia=datos["nombre_emergencia"],
-                telefono_emergencia=datos["numero_emergencia"],
-                edicion=datetime.now().year,
-            )
-            
-            try:
+                if datos["carrera"] == "trail":
+                    dorsal = str((int(db.obtener_ultimo_dorsal(datetime.now().year, tipo_carrera="trail") or "000") + 1)).zfill(3)
+                else:
+                    dorsal = str((int(db.obtener_ultimo_dorsal(datetime.now().year, tipo_carrera="andarines") or "299") + 1)).zfill(3)
                 
-                # Obtener credenciales de Gmail desde .env
-                gmail_user = os.getenv('GMAIL_USER')
-                gmail_pass = os.getenv('GMAIL_PASSWORD')
+                inscrito = Inscrito(
+                    dorsal=dorsal,  # El dorsal se asignará automáticamente
+                    nombre=datos["nombre"],
+                    apellidos=datos["apellido"],
+                    sexo=datos["sexo"],
+                    fecha_nacimiento=datetime(int(datos["año"]), int(datos["mes"]), int(datos["dia"])),
+                    telefono=datos["telefono"],
+                    email=datos["email"],
+                    tipo_documento=datos["tipo_documento"],
+                    numero_documento=datos["codigo_documento"],
+                    direccion=datos["direccion"],
+                    ccaa=datos["ccaa"],
+                    municipio=datos["poblacion"],
+                    tipo_carrera=datos["carrera"],
+                    talla=datos["talla"],
+                    contacto_emergencia=datos["nombre_emergencia"],
+                    telefono_emergencia=datos["numero_emergencia"],
+                    edicion=datetime.now().year,
+                    pagado=True
+                )
+            
+            if self.pago_instance is None:
+                concepto = f"Inscripcion de {inscrito.dorsal}-{inscrito.numero_documento}-{inscrito.edicion}"
+                self.pago_instance = PagoStripe(
+                    concepto=concepto,
+                    importe=float(datos["precio_carrera"]),
+                    entorno_test=True,
+                    callback_exito=lambda datos: self.ventana_pago_exitoso(inscrito, mensaje=datos["mensaje"], numero_pedido=datos["numero_pedido"]) if self.page else None,
+                    callback_error=lambda mensaje: self.page.open(self.ventana_error_pago(mensaje) if self.page else None),
+                    api_key_test=key_stripe_test,  # Tu clave de test
+                    api_key_prod=key_stripe_prod,  # Tu clave de producción
+                    page=self.page
+                )
+            else:
+                log.info("Reutilizando instancia de PagoStripe")  # 👈 CAMBIO EN LOG
+                self.pago_instance.pago_completado = False  # Reiniciamos el estado de pago
+                self.pago_instance.page = self.page  
+                timestamp = str(int(time.time()))
+                self.pago_instance.numero_pedido = timestamp[-8:]  # Generamos un nuevo número de pedido basado en el timestamp
+                log.info(f"Número de pedido generado: {self.pago_instance.numero_pedido}")
+            
+            def iniciar_pago_thread():
+                self.pago_instance.start(debug=True, mantener_vivo=False)
+                
+            threading.Thread(target=iniciar_pago_thread, daemon=True).start()
+                                                
+    def ventana_pago_exitoso(self, inscrito,  mensaje: str = None, numero_pedido: str = None):      
+        """Muestra una ventana de pago exitoso"""  
+        
+        if self.page is None:
+            log.error("Error: self.page no está definido en ventana_pago_exitoso")
+            return None
+            
+        try:
+            db = TrailDataBase()
+        except Exception as ex:
+            log.error(f"Error al conectar a la base de datos: {ex}")
+            self.mostrar_mensaje("Error al conectar a la base de datos.\n"
+                                 "Has pagado correctamente, pero no se ha podido registrar tu inscripción.\n"
+                                 "Por favor, contacta con la organización para resolverlo.\n"
+                                 "Teléfono o Whatsapp: 677891779 (Jose Ramón)\n"
+                                 f"Mensaje: {mensaje}\n",
+                                 f"Numero de pedido : {numero_pedido}\n\n",  
+                                 "Disculpa las molestias."
+                                 , ft.Colors.RED_200)
 
-                # Crear instancia de Gmail y enviar contacto
-                gmail = Gmail(gmail_user, gmail_pass)
-                
-                db.insertar(inscrito)
-                log.info(f"Inscrito {inscrito.nombre} {inscrito.apellidos} insertado con dorsal {inscrito.dorsal}")
-                
-                gmail.enviar_email_inscrito(inscrito)
-                
-                self.mostrar_mensaje(f"¡Inscripción realizada con éxito!\nTu dorsal es: {dorsal}\nRevisa tu email para la confirmación. (Puede estar en SPAM)", ft.Colors.GREEN_200)
-                self.limpiar_formulario()
-                self.btn_enviar.disabled = False  # Rehabilitar el botón
-                self.btn_enviar.update()
+            return
+        try:
             
-            except Exception as ex:
-                log.error(f"Error al insertar el inscrito: {ex}")
-                self.mostrar_mensaje("Error al procesar la inscripción. Inténtalo de nuevo o contacta con la organización.", ft.Colors.RED_200)
-                self.btn_enviar.disabled = False  # Rehabilitar el botón
-                self.btn_enviar.update()
+            # Obtener credenciales de Gmail desde .env
+            gmail_user = os.getenv('GMAIL_USER')
+            gmail_pass = os.getenv('GMAIL_PASSWORD')
+
+            # Crear instancia de Gmail y enviar contacto
+            gmail = Gmail(gmail_user, gmail_pass)
+           
+            if self.is_preinscripcion: 
+                db.actualizar(inscrito)
+                log.info(f"Inscrito {inscrito.nombre} {inscrito.apellidos} actualizado con dorsal {inscrito.dorsal}")
+            else:
+                # db.insertar(inscrito)
+                log.info(f"Inscrito {inscrito.nombre} {inscrito.apellidos} insertado con dorsal {inscrito.dorsal}")
+            
+            gmail.enviar_email_inscrito(inscrito)
+            
+            self.mostrar_mensaje("¡Inscripción realizada con éxito!\n"
+                                 "Revisa tu email para la confirmación.\n"
+                                 "ATENCION!!! Si no lo encuentras, revisa la carpeta de spam o correo no deseado.\n"
+                                 f"Tienes el número de dorsal: {inscrito.dorsal}\n"
+                                 "Nos vemos en la Carrera", ft.Colors.GREEN_200)
+            self.limpiar_formulario()
+            self.btn_enviar.disabled = False  # Rehabilitar el botón
+            self.btn_enviar.update()
+        
+        except Exception as ex:
+            log.error(f"Error al insertar el inscrito: {ex}")
+            self.mostrar_mensaje("Error al procesar la inscripción. Inténtalo de nuevo o contacta con la organización.", ft.Colors.RED_200)
+            self.mostrar_mensaje("Error al procesar la inscripción.\n"
+                                 "Has pagado correctamente, pero algo ha pasado.\n"
+                                 "Por favor, contacta con la organización para resolverlo.\n"
+                                 "Teléfono o Whatsapp: 677891779 (Jose Ramón)\n"
+                                 f"Mensaje: {mensaje}\n",
+                                 f"Numero de pedido : {numero_pedido}\n\n",  
+                                 "Disculpa las molestias."
+                                 , ft.Colors.RED_200)
+            self.btn_enviar.disabled = False  # Rehabilitar el botón
+            self.btn_enviar.update()
+    
+    def ventana_error_pago(self, mensaje: str = None):
+        """ Ventana de error al realizar el pago """
+        
+        if self.page is None:
+            print("Error: page is not defined")
+            return None
+        
+        def cerrar_y_limpiar(e):
+             # Limpiar los campos
+            self.pago_instance = None # Limpiar la instancia de PagoStripe 👈 CAMBIO EN COMENTARIO
+            self.page.update()  # Actualizar la página para reflejar los cambios
+            self.page.close(dialogo) # Cerrar el diálogo
+            
+            
+        dialogo = ft.AlertDialog( 
+            title=ft.Text("Error al realizar el pago"),
+            modal=False,
+            bgcolor=ft.Colors.RED_100,
+            content=ft.Column(
+                controls=[
+                    ft.Text(
+                        "Ha ocurrido un error al procesar el pago. Por favor, inténtelo de nuevo más tarde.",
+                        size=14,
+                        color=ft.Colors.BLACK,
+                    ),
+                    ft.Text(
+                        f"Error al realizar el pago: {mensaje}",
+                        size=14,
+                        color=ft.Colors.BLACK,
+                    )
+                ],
+                scroll=ft.ScrollMode.AUTO, # Permite el scroll si el contenido es largo
+                tight=True, # Ajusta el tamaño del contenido al texto
+            ),
+            actions=[
+                ft.TextButton("Cerrar", on_click=cerrar_y_limpiar,
+                                style=ft.ButtonStyle(
+                                    text_style=ft.TextStyle(size=20),
+                                    color=ft.Colors.BLACK)),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+        )  
+        
+        return dialogo
             
   
 
     def mostrar_mensaje(self, texto, color=ft.Colors.GREEN_200):
         """Muestra un mensaje al usuario"""
         self.page.open(self.dlg_modal(texto, color) if self.page else None)
+        
+    def verificar_preinscripcion(self, e):
+        """Verifica si la preinscripción es válida"""
+        dorsal = self.preins_dorsal.value.strip()
+        dni = self.preins_dni.value.strip()
+        
+        if not dorsal or not dni:
+            self.page.open(self.dlg_modal("Por favor, completa ambos campos.", ft.Colors.RED_200))
+            return
+        
+        try:
+            db = TrailDataBase()
+            inscrito = db.obtener_inscrito_por_dorsal_y_dni(dorsal, dni, 2025)
+            
+            if inscrito:
+                self.page.open(self.dlg_modal(f"Preinscrición encontrada\nDorsal: {inscrito.dorsal}\nNombre: {inscrito.nombre} {inscrito.apellidos}\n"
+                                              "Ahora puedes proceder a pagar para formalizar la inscripción.", ft.Colors.GREEN_200))
+                
+                self.txtf_nombre.value = inscrito.nombre
+                self.txtf_nombre.disabled = True  # Deshabilitar el campo para evitar cambios
+                self.txtf_apellido.value = inscrito.apellidos
+                self.txtf_apellido.disabled = True
+                self.txtf_tlfno.value = inscrito.telefono
+                self.txtf_tlfno.disabled = True
+                self.txtf_email.value = inscrito.email
+                self.txtf_email.disabled = True
+                self.txtf_rep_email.value = inscrito.email
+                self.txtf_rep_email.disabled = True
+                self.txtf_direccion.value = inscrito.direccion
+                self.txtf_direccion.disabled = True
+                self.drop_ccaa.value = inscrito.ccaa
+                self.drop_ccaa.disabled = True
+                self.txtf_poblacion.value = inscrito.municipio
+                self.txtf_poblacion.disabled = True
+                self.radio_sexo.value = inscrito.sexo
+                self.radio_sexo.disabled = True
+                self.radio_carrera.value = inscrito.tipo_carrera
+                self.radio_carrera.disabled = True
+                self.drop_dia.value = inscrito.fecha_nacimiento.day
+                self.drop_dia.disabled = True
+                self.drop_mes.value = inscrito.fecha_nacimiento.month
+                self.drop_mes.disabled = True
+                self.drop_año.value = inscrito.fecha_nacimiento.year
+                self.drop_año.disabled = True
+                self.drop_doc.value = inscrito.tipo_documento
+                self.drop_doc.disabled = True
+                self.txtf_dni_codigo.value = inscrito.numero_documento
+                self.txtf_dni_codigo.disabled = True
+                self.txtf_nombre_emergencia.value = inscrito.contacto_emergencia
+                self.txtf_nombre_emergencia.disabled = True
+                self.txtf_numero_emergencia.value = inscrito.telefono_emergencia
+                self.txtf_numero_emergencia.disabled = True
+                self.condiciones.value = True
+                self.condiciones.disabled = True
+                self.precio_carrera = "20" if inscrito.tipo_carrera == "trail" else "15"
+                self.drop_camiseta.value = inscrito.talla
+                self.drop_camiseta.disabled = True
+                self.btn_enviar.text = "Pagar Preinscripción"  # Cambiar el
+                
+                self.is_preinscripcion = True
+
+                self.update()
+            
+            
+            else:
+                self.page.open(self.dlg_modal(
+                        "No se encontró una preinscripción con esos datos.\n"
+                        "Verique en el email que recibió tras la preinscripción, los datos correctos.\n"
+                        "Si no realizó la preinscripción, en el siguiente formulario puede inscribirse directamente.\n"
+                        "Gracias por su comprensión.",
+                        ft.Colors.RED_200
+                    )
+                )
+                
+        except Exception as ex:
+            log.error(f"Error al verificar la preinscripción: {ex}")
+            self.page.open(self.dlg_modal("Error al verificar la preinscripción. Inténtalo de nuevo.", ft.Colors.RED_200))
 
 if __name__ == "__main__":
     print("Esta clase no se puede ejecutar de forma independiente.")

@@ -243,6 +243,19 @@ class TrailDataBase:
             log.error(f"Error obteniendo inscrito por dorsal", exc_info=e)
             return None
         
+    def obtener_inscrito_por_dorsal_y_dni(self,dorsal, dni, edicion):
+        """Obtiene un inscrito por dorsal, dni y edición (comparación insensible a mayúsculas/minúsculas para DNI)"""
+        try:
+            from sqlalchemy import func
+            return self._session.query(Inscrito).filter(
+                Inscrito.dorsal == dorsal,
+                func.upper(Inscrito.numero_documento) == func.upper(dni),
+                Inscrito.edicion == edicion
+            ).first()
+        except SQLAlchemyError as e:
+            log.error(f"Error obteniendo inscrito por dorsal y dni", exc_info=e)
+            return None
+        
     def obtener_ultimo_dorsal(self, edicion, tipo_carrera):
         """Obtiene el último dorsal asignado en una edición"""
         try:
@@ -396,6 +409,23 @@ class TrailDataBase:
         except SQLAlchemyError as e:
             log.error(f"Error ejecutando query personalizada", exc_info=e)
             return []
+    
+    def normalizar_dnis_mayusculas(self):
+        """Convierte todos los números de documento a mayúsculas en la base de datos"""
+        try:
+            from sqlalchemy import func
+            # Actualizar todos los registros para que el numero_documento esté en mayúsculas
+            self._session.query(Inscrito).update(
+                {Inscrito.numero_documento: func.upper(Inscrito.numero_documento)},
+                synchronize_session=False
+            )
+            self._session.commit()
+            log.info("Todos los números de documento han sido convertidos a mayúsculas")
+            return True
+        except SQLAlchemyError as e:
+            self._session.rollback()
+            log.error(f"Error normalizando DNIs a mayúsculas", exc_info=e)
+            return False
 
 
 # =================== EJEMPLO DE USO ===================
@@ -446,4 +476,3 @@ if __name__ == "__main__":
     # finally:
     #     # Cerrar conexión al finalizar
     #     db.cerrar_conexion()
-    

@@ -3,7 +3,7 @@ import time
 import flet as ft
 import logging
 import threading
-from utils.pagostripe import PagoStripe  # 👈 ÚNICO CAMBIO EN IMPORT
+from utils.pagostripe import PagoStripe
 from dotenv import load_dotenv
 
 load_dotenv()  # Cargar variables de entorno desde .env
@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 class DorsalSolidarioScreen(ft.Container):
     def __init__(self, on_click=None):
         super().__init__()
-        self.pago_instance = None  # Inicializamos la instancia de PagoStripe 👈 CAMBIO EN COMENTARIO
+        self.pago_instance = None  # Inicializamos la instancia de PagoStripe 
         
         self.on_click = on_click
         

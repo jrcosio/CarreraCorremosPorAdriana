@@ -41,7 +41,7 @@ class Gmail:
             <html lang="es">
             <head>
                 <meta charset="UTF-8" />
-                <title>Preinscripción Trail Peñasagra</title>
+                <title>Inscripción Trail Peñasagra</title>
             </head>
             <body style="margin:0;padding:0;background:#f0f4f8;">
                 <!-- Contenedor principal -->
@@ -50,17 +50,15 @@ class Gmail:
                 <!-- Cabecera -->
                 <div style="background:linear-gradient(90deg,#16a34a 0%, #4ade80 100%);padding:24px 0;text-align:center;border-radius:0 0 12px 12px;">
                     <h1 style="margin:0;font-size:28px;color:#fff;">¡Enhorabuena, {inscrito.nombre}!</h1>
-                    <p style="margin:8px 0 0;font-size:18px;color:#e0fbe2;">Tu preinscripción está confirmada</p>
+                    <p style="margin:8px 0 0;font-size:18px;color:#e0fbe2;">Tu Inscripción está confirmada</p>
                 </div>
 
                 <!-- Tarjeta principal -->
                 <div style="background:#ffffff;padding:32px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,0.08);margin-top:-12px;">
                     <p style="font-size:16px;line-height:1.5;">
-                    Tu preinscripción en el <strong>Trail Peñasagra - Corremos por Adriana</strong> se ha registrado correctamente.
+                    Tu Inscripción en el <strong>Trail Peñasagra - Corremos por Adriana</strong> se ha registrado correctamente.
                     </p>
-                    <p style="font-size:16px;line-height:1.5;">
-                    Estamos trabajando para, en breve, disponer de un sistema automático de pago con tarjeta o <em>Bizum</em>. En los próximos días recibirás un correo para que finalices el proceso de inscripción realizando el pago.
-                    </p>
+                
 
                     <!-- Datos de la inscripción -->
                     <h2 style="font-size:20px;margin:24px 0 12px;border-bottom:2px solid #16a34a;display:inline-block;padding-bottom:4px;">Datos de tu inscripción</h2>
@@ -82,13 +80,13 @@ class Gmail:
                         <tr style="background:#f8fafc;"><td><strong>Contacto emergencia</strong></td><td>{inscrito.contacto_emergencia}</td></tr>
                         <tr><td><strong>Tel. emergencia</strong></td><td>{inscrito.telefono_emergencia}</td></tr>
                         <tr style="background:#f8fafc;"><td><strong>Edición</strong></td><td>{inscrito.edicion}</td></tr>
-                        <tr><td><strong>Dorsal</strong></td><td>{inscrito.dorsal or '<em>Se asignará al confirmar el pago</em>'}</td></tr>
+                        <tr><td><strong>Dorsal</strong></td><td>{inscrito.dorsal}</td></tr>
                     </tbody>
                     </table>
 
                     <!-- Recomendaciones -->
                     <div style="margin-top:24px;">
-                    <p style="font-size:16px;"><strong>Mientras tanto, te recomendamos que:</strong></p>
+                    <p style="font-size:16px;"><strong>Te recomendamos que:</strong></p>
                     <ul style="font-size:15px;line-height:1.5;margin-left:20px;">
                         <li>Revises toda la información de la carrera en nuestra web.</li>
                         <li>Comiences a preparar tu entrenamiento.</li>
@@ -353,7 +351,7 @@ class Gmail:
             mensaje = MIMEMultipart("alternative")
             mensaje["From"] = self.gmail_user
             mensaje["To"] = inscrito.email
-            mensaje["Subject"] = "Preinscrito en el Trail Peñasagra"
+            mensaje["Subject"] = "Incripción en el Trail Peñasagra"
             
             # Crear contenido HTML
             html_content = self.crear_mensaje_html(inscrito)
