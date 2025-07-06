@@ -837,7 +837,7 @@ class InscripcionScreen(ft.Container):
                 self.pago_instance = PagoStripe(
                     concepto=concepto,
                     importe=float(datos["precio_carrera"]),
-                    entorno_test=True,
+                    entorno_test=False,
                     callback_exito=lambda datos: self.ventana_pago_exitoso(inscrito, mensaje=datos["mensaje"], numero_pedido=datos["numero_pedido"]) if self.page else None,
                     callback_error=lambda mensaje: self.page.open(self.ventana_error_pago(mensaje) if self.page else None),
                     api_key_test=key_stripe_test,  # Tu clave de test
