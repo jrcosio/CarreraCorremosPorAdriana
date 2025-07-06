@@ -366,6 +366,19 @@ class TrailDataBase:
             self._session.rollback()
             log.error(f"Error finalizando clasificación", exc_info=e)
             return False
+        
+    def obtener_clasificacion_por_inscrito(self, id_inscrito, edicion):
+        """Obtiene la clasificación de un inscrito por su ID y edición"""
+        try:
+            return self._session.query(Clasificacion).filter(
+                Clasificacion.id_inscrito == id_inscrito,
+                Clasificacion.edicion == edicion
+            ).first()
+        except SQLAlchemyError as e:
+            log.error(f"Error obteniendo clasificación por inscrito", exc_info=e)
+            return None
+        
+        
     # =================== UTILIDADES ===================
     
     def cerrar_conexion(self):
@@ -391,6 +404,21 @@ if __name__ == "__main__":
     print("Iniciando conexión a la base de datos...\n\n\n\n")
     db = TrailDataBase()
     print("Conexión establecida.\n\n\n\n")
+    
+    
+    
+    db.Iniciar_Carrera()  # Inicia la carrera y añade inscritos a la clasificación
+    
+    input("Presiona Enter para continuar y mostrar clasificaciones...\n\n\n\n")
+    #mostrar clasificaciones de la edición actual
+    clasificaciones = db.obtener_clasificaciones_por_edicion(date.today().year)
+    
+    print(f"Clasificaciones de la edición {date.today().year}:")
+    for clasif in clasificaciones:  
+        print(f"Dorsal: {clasif.inscrito.dorsal} | {clasif.inscrito.nombre} {clasif.inscrito.apellidos} | "
+              f"CCAA: {clasif.inscrito.ccaa} | Edición: {clasif.edicion} | "
+              f"Tiempo Final: {clasif.tiempo_final}, "
+              f"Tiempo P1: {clasif.tiempo_p1}, Finalizado: {clasif.finalizado}")
     
     # # Ejemplo de uso
     # try:
