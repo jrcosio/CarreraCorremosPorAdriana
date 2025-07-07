@@ -330,6 +330,17 @@ class TrailDataBase:
         except SQLAlchemyError as e:
             log.error(f"Error obteniendo clasificaciones por edición", exc_info=e)
             return []
+        
+    def obtener_clasificaciones_por_tipo_carrera(self, tipo_carrera, edicion):
+        """Obtiene las clasificaciones de una edición por tipo de carrera"""
+        try:
+            return self._session.query(Clasificacion).join(Inscrito).filter(
+                Inscrito.tipo_carrera == tipo_carrera,
+                Clasificacion.edicion == edicion
+            ).all()
+        except SQLAlchemyError as e:
+            log.error(f"Error obteniendo clasificaciones por tipo de carrera", exc_info=e)
+            return []
     
     def obtener_finalizados_por_edicion(self, edicion):
         """Obtiene solo los corredores que han finalizado en una edición"""
@@ -367,6 +378,8 @@ if __name__ == "__main__":
     print("Iniciando conexión a la base de datos...\n\n\n\n")
     db = TrailDataBase()
     print("Conexión establecida.\n\n\n\n")
+    
+    # db.Iniciar_Carrera()  # Iniciar carrera con hora de salida = ahora
     
     # # Ejemplo de uso
     # try:

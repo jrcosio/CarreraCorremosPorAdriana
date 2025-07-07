@@ -41,7 +41,7 @@ MEDIDAS = {
     "nombre": 100,
     "apellidos": 200,
     "sexo": 45,
-    "ca": 45,
+    "ca": 50,
     "cat.": 80,
     "tiempo_final": 100,
     "gap": 80,
@@ -235,7 +235,7 @@ class ClasificacionScreen(ft.Container):
             ("Nombre", MEDIDAS["nombre"], ft.alignment.center_left),
             ("Apellidos", MEDIDAS["apellidos"], ft.alignment.center_left),
             ("Sexo", MEDIDAS["sexo"], ft.alignment.center),
-            ("CA", MEDIDAS["ca"], ft.alignment.center),
+            ("CCAA", MEDIDAS["ca"], ft.alignment.center),
             ("Cat.", MEDIDAS["cat."], ft.alignment.center),
             ("Tiempo", MEDIDAS["tiempo_final"], ft.alignment.center),
             ("Gap", MEDIDAS["gap"], ft.alignment.center),
@@ -338,7 +338,7 @@ class ClasificacionScreen(ft.Container):
             
             # Opción 1: Usar base de datos
             try:
-                self.clasificacion = self.bd.obtener_clasificados_por_tipo_carrera("trail", self.edicion)
+                self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("trail", self.edicion)
                 log.info(f"Filtro Trail (BD): {len(self.clasificacion)} elementos")
             except Exception as e:
                 log.warning(f"Error usando BD para Trail, usando filtro local: {e}")
@@ -363,7 +363,7 @@ class ClasificacionScreen(ft.Container):
             
             # Opción 1: Usar base de datos
             try:
-                self.clasificacion = self.bd.obtener_clasificados_por_tipo_carrera("andarines", self.edicion)
+                self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("andarines", self.edicion)
                 log.info(f"Filtro Andarines (BD): {len(self.clasificacion)} elementos")
             except Exception as e:
                 log.warning(f"Error usando BD para Andarines, usando filtro local: {e}")
