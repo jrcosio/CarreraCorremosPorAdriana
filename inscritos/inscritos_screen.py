@@ -96,7 +96,7 @@ class InscritosScreen(ft.Container):
                 ft.Container(height=10),  # Espacio para el título
                 
                 ft.Text(
-                    f"Inscritos Trail Peñasagra",
+                    f"Inscritos Trail Sierra de Peñasagra",
                     size=40,
                     color=COLORES["titulo"],
                     font_family="Britanic Bold",

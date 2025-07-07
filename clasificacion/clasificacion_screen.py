@@ -143,14 +143,14 @@ class ClasificacionScreen(ft.Container):
                     weight=ft.FontWeight.BOLD,
                     text_align=ft.TextAlign.CENTER,
                 ),
-                ft.Text(
-                    f"{len(self.clasificacion)} clasificados",
-                    size=24,
-                    color=COLORES["titulo"],
-                    font_family="Britanic Bold",
-                    weight=ft.FontWeight.BOLD,
-                    text_align=ft.TextAlign.CENTER,
-                ),
+                # ft.Text(
+                #     f"{len(self.clasificacion)} clasificados",
+                #     size=24,
+                #     color=COLORES["titulo"],
+                #     font_family="Britanic Bold",
+                #     weight=ft.FontWeight.BOLD,
+                #     text_align=ft.TextAlign.CENTER,
+                # ),
             ]
         )
 
