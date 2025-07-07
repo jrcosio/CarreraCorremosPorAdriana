@@ -9,8 +9,11 @@ imagenes_patrocinadores = [
     ("imagenes_patrocinadores/banner_jvcosio.png","https://juntavecinalcosiorozadio.blogspot.com/"),
     ("imagenes_patrocinadores/banner_aljomar.png","https://www.aljomar.es/"),
     ("imagenes_patrocinadores/banner_grupochovi.png","https://www.chovi.com/es/"),
+    ("imagenes_patrocinadores/banner_TMBV.png","https://www.tmbielva.com/"),
+    ("imagenes_patrocinadores/banner_raos.png","https://www.tmbielva.com/"),
     ("imagenes_patrocinadores/banner_LIS.png","https://www.lisdatasolutions.com/es/"),
-    ("imagenes_patrocinadores/banner_carandia.png","https://carandiadistribuciones.com/L"),
+    ("imagenes_patrocinadores/banner_carandia.png","https://carandiadistribuciones.com/"),
+    
 ]
         
 imagenes_colaboradores = [
@@ -38,6 +41,13 @@ imagenes_colaboradores = [
     ("imagenes_colaboradores/banner_avan1.png",""),
     ("imagenes_colaboradores/banner_cabezablanco.png",""),
     ("imagenes_colaboradores/banner_herreria.png",""),
+    ("imagenes_colaboradores/banner_pericote.png",""),
+    ("imagenes_colaboradores/banner_helguero.png",""),
+    ("imagenes_colaboradores/banner_sierraoso.png",""),
+    ("imagenes_colaboradores/banner_elsoplao.png",""),
+    ("imagenes_colaboradores/banner_lupa.png",""),
+    ("imagenes_colaboradores/banner_para.png",""),
+    ("imagenes_colaboradores/banner_kmv.png",""),
     
     
     

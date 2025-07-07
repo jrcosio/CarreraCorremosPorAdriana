@@ -437,18 +437,18 @@ if __name__ == "__main__":
     
     
     
-    db.Iniciar_Carrera()  # Inicia la carrera y añade inscritos a la clasificación
+    # db.Iniciar_Carrera()  # Inicia la carrera y añade inscritos a la clasificación
     
-    input("Presiona Enter para continuar y mostrar clasificaciones...\n\n\n\n")
-    #mostrar clasificaciones de la edición actual
-    clasificaciones = db.obtener_clasificaciones_por_edicion(date.today().year)
+    # input("Presiona Enter para continuar y mostrar clasificaciones...\n\n\n\n")
+    # #mostrar clasificaciones de la edición actual
+    # clasificaciones = db.obtener_clasificaciones_por_edicion(date.today().year)
     
-    print(f"Clasificaciones de la edición {date.today().year}:")
-    for clasif in clasificaciones:  
-        print(f"Dorsal: {clasif.inscrito.dorsal} | {clasif.inscrito.nombre} {clasif.inscrito.apellidos} | "
-              f"CCAA: {clasif.inscrito.ccaa} | Edición: {clasif.edicion} | "
-              f"Tiempo Final: {clasif.tiempo_final}, "
-              f"Tiempo P1: {clasif.tiempo_p1}, Finalizado: {clasif.finalizado}")
+    # print(f"Clasificaciones de la edición {date.today().year}:")
+    # for clasif in clasificaciones:  
+    #     print(f"Dorsal: {clasif.inscrito.dorsal} | {clasif.inscrito.nombre} {clasif.inscrito.apellidos} | "
+    #           f"CCAA: {clasif.inscrito.ccaa} | Edición: {clasif.edicion} | "
+    #           f"Tiempo Final: {clasif.tiempo_final}, "
+    #           f"Tiempo P1: {clasif.tiempo_p1}, Finalizado: {clasif.finalizado}")
     
     # # Ejemplo de uso
     # try:
