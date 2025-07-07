@@ -38,8 +38,8 @@ COLORES = {
 MEDIDAS = {
     "p.": 40,
     "d.": 40,
-    "nombre": 100,
-    "apellidos": 200,
+    "nombre": 120,
+    "apellidos": 220,
     "sexo": 45,
     "ca": 50,
     "cat.": 80,
