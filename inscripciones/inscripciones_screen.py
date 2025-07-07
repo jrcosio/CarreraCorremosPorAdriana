@@ -497,14 +497,10 @@ class InscripcionScreen(ft.Container):
                         color=ft.Colors.BLACK
                     ),
                     ft.Container(height=10),  # Espacio entre el texto y el botón
-                    ft.Row(
-                        controls=[
-                            self.preins_dorsal,
-                            self.preins_dni,
-                            self.preins_btn_vericar
-                        ]                                
-                    )
-
+                    self.preins_dorsal,
+                    self.preins_dni,
+                    self.preins_btn_vericar
+                      
                 ]
             ),
             bgcolor="#D6DEF3",
