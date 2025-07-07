@@ -887,7 +887,7 @@ class InscripcionScreen(ft.Container):
                 db.actualizar(inscrito)
                 log.info(f"Inscrito {inscrito.nombre} {inscrito.apellidos} actualizado con dorsal {inscrito.dorsal}")
             else:
-                # db.insertar(inscrito)
+                db.insertar(inscrito)
                 log.info(f"Inscrito {inscrito.nombre} {inscrito.apellidos} insertado con dorsal {inscrito.dorsal}")
             
             gmail.enviar_email_inscrito(inscrito)
