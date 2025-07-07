@@ -53,28 +53,46 @@ class ClasificacionScreen(ft.Container):
     def __init__(self):
         self.bd = TrailDataBase()
         self.clasificacion = []
+        self.clasificacion_completa = []  # Guardar datos completos
+        self.filtro_activo = "Todos"
         self.edicion = 2025
         self.tiempo_ganador = None
 
+        # Crear componentes de la interfaz
+        self.titulo_container = None
+        self.botones_container = None
+        self.encabezados_container = None
+        self.datos_container = None
+        
         super().__init__(expand=True)
         self._cargar_datos_iniciales()
         self._construir_interfaz()
 
     def _cargar_datos_iniciales(self):
         try:
-            self.clasificacion = self.bd.obtener_clasificaciones_por_edicion(self.edicion)
-            # if self.clasificacion:
-            #     # Obtener el tiempo del primer clasificado para calcular el gap
-            #     self.tiempo_ganador = self.clasificacion[0].tiempo
-            # log.info(f"Cargados {len(self.clasificacion)} clasificados")
+            self.clasificacion_completa = self.bd.obtener_clasificaciones_por_edicion(self.edicion)
+            self.clasificacion = self.clasificacion_completa.copy()
+            
+            log.info(f"Cargados {len(self.clasificacion)} clasificados inicialmente")
+            
+            # Debug: Imprimir algunos datos para verificar
+            if self.clasificacion:
+                log.info(f"Primer clasificado: {self.clasificacion[0].inscrito.nombre}")
+                # Verificar tipos de carrera disponibles
+                tipos_carrera = set()
+                for c in self.clasificacion:
+                    if hasattr(c.inscrito, 'tipo_carrera'):
+                        tipos_carrera.add(c.inscrito.tipo_carrera)
+                log.info(f"Tipos de carrera encontrados: {tipos_carrera}")
+                
         except Exception as e:
             log.error(f"Error cargando clasificación: {e}")
             self.clasificacion = []
+            self.clasificacion_completa = []
 
     def _tiempo_a_segundos(self, tiempo_str):
         """Convierte un tiempo en formato HH:MM:SS a segundos totales."""
         try:
-            # Asumiendo formato HH:MM:SS
             if isinstance(tiempo_str, str):
                 partes = tiempo_str.split(":")
                 if len(partes) == 3:
@@ -117,17 +135,52 @@ class ClasificacionScreen(ft.Container):
         return self._segundos_a_tiempo(diferencia)
 
     def _construir_interfaz(self):
+        """Construye la interfaz inicial."""
+        self.titulo_container = self._crear_titulo()
+        self.botones_container = self._crear_botones_filtro()
+        self.encabezados_container = self._crear_encabezados_tabla()
+        self.datos_container = ft.Column(
+            controls=self._crear_filas_datos(),
+            spacing=1,
+        )
+
         self.content = ft.Column(
             controls=[
-                self._crear_titulo(),
-                self._crear_encabezados_tabla(),
-                *self._crear_filas_datos(),
+                self.titulo_container,
+                self.botones_container,
+                self.encabezados_container,
+                self.datos_container,
                 ft.Container(height=30),
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             scroll="auto",
         )
+
+    def _actualizar_datos(self):
+        """Actualiza solo la sección de datos sin reconstruir toda la interfaz."""
+        try:
+            # Crear nuevas filas de datos
+            nuevas_filas = self._crear_filas_datos()
+            
+            # Actualizar el contenido del contenedor de datos
+            self.datos_container.controls = nuevas_filas
+            
+            # Actualizar los botones para mostrar el estado activo
+            self.botones_container.controls = [
+                self._crear_boton_filtro("Todos", self._filtrar_todos),
+                self._crear_boton_filtro("Trail", self._filtrar_trail),
+                self._crear_boton_filtro("Andarines", self._filtrar_andarines),
+            ]
+            
+            # Forzar la actualización de la interfaz
+            if hasattr(self, 'update'):
+                self.update()
+                
+            log.info(f"Interfaz actualizada con {len(self.clasificacion)} elementos")
+            
+        except Exception as e:
+            log.error(f"Error actualizando datos: {e}")
 
     def _crear_titulo(self):
         return ft.Column(
@@ -143,15 +196,36 @@ class ClasificacionScreen(ft.Container):
                     weight=ft.FontWeight.BOLD,
                     text_align=ft.TextAlign.CENTER,
                 ),
-                # ft.Text(
-                #     f"{len(self.clasificacion)} clasificados",
-                #     size=24,
-                #     color=COLORES["titulo"],
-                #     font_family="Britanic Bold",
-                #     weight=ft.FontWeight.BOLD,
-                #     text_align=ft.TextAlign.CENTER,
-                # ),
+                
             ]
+        )
+
+    def _crear_botones_filtro(self):
+        """Crea la fila de botones de filtro."""
+        return ft.Row(
+            controls=[
+                self._crear_boton_filtro("Todos", self._filtrar_todos),
+                self._crear_boton_filtro("Trail", self._filtrar_trail),
+                self._crear_boton_filtro("Andarines", self._filtrar_andarines),
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=10,
+        )
+    
+    def _crear_boton_filtro(self, texto, callback):
+        """Crea un botón de filtro individual."""
+        es_activo = self.filtro_activo == texto
+        
+        return ft.Container(
+            content=ft.ElevatedButton(
+                text=texto,
+                width=200,
+                on_click=callback,
+                bgcolor=ft.Colors.BLUE_100 if es_activo else ft.Colors.GREY_300,
+                color=ft.Colors.BLUE_900 if es_activo else ft.Colors.BLACK,
+            ),
+            padding=5,
+            alignment=ft.alignment.center_left,
         )
 
     def _crear_encabezados_tabla(self):
@@ -188,15 +262,10 @@ class ClasificacionScreen(ft.Container):
     def _crear_filas_datos(self):
         return [
             self._crear_fila_clasificado(clasificado, index)
-            for  index, clasificado in enumerate(self.clasificacion)
+            for index, clasificado in enumerate(self.clasificacion)
         ]
-    
-           
 
     def _crear_fila_clasificado(self, clasificado, index):
-        # Calcular el gap dinámicamente
-       # gap_calculado = self._calcular_gap(clasificado.tiempo)
-        
         return ft.Container(
             content=ft.Row(
                 controls=[
@@ -208,8 +277,9 @@ class ClasificacionScreen(ft.Container):
                     self._crear_celda_ccaa(clasificado.inscrito.ccaa),
                     self._crear_celda_datos(
                         self._calcular_categoria(clasificado.inscrito.fecha_nacimiento), 
-                                 MEDIDAS["cat."], 
-                        ft.alignment.center),
+                        MEDIDAS["cat."], 
+                        ft.alignment.center
+                    ),
                     self._crear_celda_datos(clasificado.tiempo_final, MEDIDAS["tiempo_final"], ft.alignment.center),
                     self._crear_celda_datos("gap", MEDIDAS["gap"], ft.alignment.center),
                     self._crear_celda_datos("rit", MEDIDAS["ritmo"], ft.alignment.center),
@@ -240,14 +310,76 @@ class ClasificacionScreen(ft.Container):
                         width=30,
                         height=20,
                     ),
-                    # ft.Text(ccaa, size=16, color="#ffcb2e"),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
             ),
             width=MEDIDAS["ca"],
             alignment=ft.alignment.center,
         )
-        
+    
+    def _filtrar_todos(self, e):
+        """Maneja el filtro para mostrar todos los inscritos."""
+        try:
+            log.info("Iniciando filtro: Todos")
+            self.filtro_activo = "Todos"
+            self.clasificacion = self.clasificacion_completa.copy()
+            
+            log.info(f"Filtro Todos aplicado: {len(self.clasificacion)} elementos")
+            self._actualizar_datos()
+            
+        except Exception as e:
+            log.error(f"Error en filtro Todos: {e}")
+    
+    def _filtrar_trail(self, e):
+        """Maneja el filtro para mostrar solo inscritos de trail."""
+        try:
+            log.info("Iniciando filtro: Trail")
+            self.filtro_activo = "Trail"
+            
+            # Opción 1: Usar base de datos
+            try:
+                self.clasificacion = self.bd.obtener_clasificados_por_tipo_carrera("trail", self.edicion)
+                log.info(f"Filtro Trail (BD): {len(self.clasificacion)} elementos")
+            except Exception as e:
+                log.warning(f"Error usando BD para Trail, usando filtro local: {e}")
+                # Opción 2: Filtro local
+                self.clasificacion = [
+                    c for c in self.clasificacion_completa 
+                    if hasattr(c.inscrito, 'tipo_carrera') and 
+                    c.inscrito.tipo_carrera.lower() == 'trail'
+                ]
+                log.info(f"Filtro Trail (local): {len(self.clasificacion)} elementos")
+            
+            self._actualizar_datos()
+            
+        except Exception as e:
+            log.error(f"Error en filtro Trail: {e}")
+    
+    def _filtrar_andarines(self, e):
+        """Maneja el filtro para mostrar solo inscritos de andarines."""
+        try:
+            log.info("Iniciando filtro: Andarines")
+            self.filtro_activo = "Andarines"
+            
+            # Opción 1: Usar base de datos
+            try:
+                self.clasificacion = self.bd.obtener_clasificados_por_tipo_carrera("andarines", self.edicion)
+                log.info(f"Filtro Andarines (BD): {len(self.clasificacion)} elementos")
+            except Exception as e:
+                log.warning(f"Error usando BD para Andarines, usando filtro local: {e}")
+                # Opción 2: Filtro local
+                self.clasificacion = [
+                    c for c in self.clasificacion_completa 
+                    if hasattr(c.inscrito, 'tipo_carrera') and 
+                    c.inscrito.tipo_carrera.lower() == 'andarines'
+                ]
+                log.info(f"Filtro Andarines (local): {len(self.clasificacion)} elementos")
+            
+            self._actualizar_datos()
+            
+        except Exception as e:
+            log.error(f"Error en filtro Andarines: {e}")
+
     def _calcular_categoria(self, fecha_nacimiento):
         """Calcula la categoría basada en la fecha de nacimiento."""
         try:
