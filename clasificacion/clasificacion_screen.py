@@ -73,17 +73,22 @@ class ClasificacionScreen(ft.Container):
             self.clasificacion_completa = self.bd.obtener_clasificaciones_por_edicion(self.edicion)
             self.clasificacion = self.clasificacion_completa.copy()
             
+            self.tiempo_ganador = self.clasificacion[0].tiempo_final if self.clasificacion else None
+            
+            print(f"---------------------Tiempo del ganador: {self.tiempo_ganador}")
+            print(type(self.tiempo_ganador))
+            
             log.info(f"Cargados {len(self.clasificacion)} clasificados inicialmente")
             
-            # Debug: Imprimir algunos datos para verificar
-            if self.clasificacion:
-                log.info(f"Primer clasificado: {self.clasificacion[0].inscrito.nombre}")
-                # Verificar tipos de carrera disponibles
-                tipos_carrera = set()
-                for c in self.clasificacion:
-                    if hasattr(c.inscrito, 'tipo_carrera'):
-                        tipos_carrera.add(c.inscrito.tipo_carrera)
-                log.info(f"Tipos de carrera encontrados: {tipos_carrera}")
+            # # Debug: Imprimir algunos datos para verificar
+            # if self.clasificacion:
+            #     log.info(f"Primer clasificado: {self.clasificacion[0].inscrito.nombre}")
+            #     # Verificar tipos de carrera disponibles
+            #     tipos_carrera = set()
+            #     for c in self.clasificacion:
+            #         if hasattr(c.inscrito, 'tipo_carrera'):
+            #             tipos_carrera.add(c.inscrito.tipo_carrera)
+            #     log.info(f"Tipos de carrera encontrados: {tipos_carrera}")
                 
         except Exception as e:
             log.error(f"Error cargando clasificación: {e}")
@@ -119,20 +124,18 @@ class ClasificacionScreen(ft.Container):
         else:
             return f"{minutos:02d}:{segs:02d}"
 
-    def _calcular_gap(self, tiempo_actual):
+    def _calcular_gap(self, tiempo_actual: datetime):
+
         """Calcula el gap respecto al tiempo del ganador."""
-        if not self.tiempo_ganador or tiempo_actual == self.tiempo_ganador:
-            return "00:00:00"
+        if not self.tiempo_ganador or not tiempo_actual:
+            return None  # O lanzar una excepción
+
+        if tiempo_actual == self.tiempo_ganador:
+            return ""
         
-        segundos_ganador = self._tiempo_a_segundos(self.tiempo_ganador)
-        segundos_actual = self._tiempo_a_segundos(tiempo_actual)
+        return tiempo_actual - self.tiempo_ganador
         
-        diferencia = segundos_actual - segundos_ganador
         
-        if diferencia <= 0:
-            return "00:00:00"
-        
-        return self._segundos_a_tiempo(diferencia)
 
     def _construir_interfaz(self):
         """Construye la interfaz inicial."""
@@ -260,20 +263,9 @@ class ClasificacionScreen(ft.Container):
         )
 
     def _crear_filas_datos(self):
-        self._actualizar_tiempo_ganador()  # Asegura que el tiempo del ganador está actualizado
-        filas = []
-        for index, clasificado in enumerate(self.clasificacion):
-            gap = self._calcular_gap(clasificado.tiempo_final)
-            clasificado.gap = gap  # Asigna el gap calculado
-                # Calcula el ritmo según el tipo de carrera
-            tipo_carrera = ""
-            if hasattr(clasificado.inscrito, "tipo_carrera"):
-                tipo_carrera = clasificado.inscrito.tipo_carrera
-                ritmo = self._calcular_ritmo(clasificado.tiempo_final, tipo_carrera)
-                clasificado.ritmo = ritmo  # Puedes guardar el ritmo si lo deseas
-                fila = self._crear_fila_clasificado(clasificado, index)
-                filas.append(fila)
-        return filas
+        return [ self._crear_fila_clasificado(clasificado, index) 
+                for index, clasificado in enumerate(self.clasificacion)
+            ]
 
     def _crear_fila_clasificado(self, clasificado, index):
         return ft.Container(
@@ -291,8 +283,8 @@ class ClasificacionScreen(ft.Container):
                         ft.alignment.center
                     ),
                     self._crear_celda_datos(clasificado.tiempo_final, MEDIDAS["tiempo_final"], ft.alignment.center),
-                    self._crear_celda_datos(clasificado.gap, MEDIDAS["gap"], ft.alignment.center),
-                    self._crear_celda_datos(clasificado.ritmo, MEDIDAS["ritmo"], ft.alignment.center),
+                    self._crear_celda_datos(self._calcular_gap(clasificado.tiempo_final), MEDIDAS["gap"], ft.alignment.center),
+                    self._crear_celda_datos("rit", MEDIDAS["ritmo"], ft.alignment.center),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=10,
@@ -343,50 +335,16 @@ class ClasificacionScreen(ft.Container):
     def _filtrar_trail(self, e):
         """Maneja el filtro para mostrar solo inscritos de trail."""
         try:
-            log.info("Iniciando filtro: Trail")
-            self.filtro_activo = "Trail"
-            
-            # Opción 1: Usar base de datos
-            # try:
             self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("trail", self.edicion)
-            log.info(f"Filtro Trail (BD): {len(self.clasificacion)} elementos")
-            # except Exception as e:
-            #     log.warning(f"Error usando BD para Trail, usando filtro local: {e}")
-            #     # Opción 2: Filtro local
-            #     self.clasificacion = [
-            #         c for c in self.clasificacion_completa 
-            #         if hasattr(c.inscrito, 'tipo_carrera') and 
-            #         c.inscrito.tipo_carrera.lower() == 'trail'
-            #     ]
-            #     log.info(f"Filtro Trail (local): {len(self.clasificacion)} elementos")
-            
-            self._actualizar_datos()
-            
+            self._actualizar_datos()         
         except Exception as e:
             log.error(f"Error en filtro Trail: {e}")
     
     def _filtrar_andarines(self, e):
         """Maneja el filtro para mostrar solo inscritos de andarines."""
-        try:
-            log.info("Iniciando filtro: Andarines")
-            self.filtro_activo = "Andarines"
-            
-            # Opción 1: Usar base de datos
-            # try:
+        try:  
             self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("andarines", self.edicion)
-            #     log.info(f"Filtro Andarines (BD): {len(self.clasificacion)} elementos")
-            # except Exception as e:
-            #     log.warning(f"Error usando BD para Andarines, usando filtro local: {e}")
-            #     # Opción 2: Filtro local
-            #     self.clasificacion = [
-            #         c for c in self.clasificacion_completa 
-            #         if hasattr(c.inscrito, 'tipo_carrera') and 
-            #         c.inscrito.tipo_carrera.lower() == 'andarines'
-            #     ]
-            #     log.info(f"Filtro Andarines (local): {len(self.clasificacion)} elementos")
-            
             self._actualizar_datos()
-            
         except Exception as e:
             log.error(f"Error en filtro Andarines: {e}")
     
@@ -403,12 +361,12 @@ class ClasificacionScreen(ft.Container):
                 self.tiempo_ganador = clasificado.tiempo_final
                 break
     
-    def _calcular_ritmo(self, tiempo_str, tipo_carrera):
+    def _calcular_ritmo(self, tiempo_str : str, tipo_carrera):
         """Calcula el ritmo (min/km) según el tipo de carrera y el tiempo."""
         if tipo_carrera == "trail":
             distancia = 20
         elif tipo_carrera == "andarines":
-            distancia = 14
+            distancia = 15
         else:
             return ""
 
