@@ -337,18 +337,18 @@ class ClasificacionScreen(ft.Container):
             self.filtro_activo = "Trail"
             
             # Opción 1: Usar base de datos
-            try:
-                self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("trail", self.edicion)
-                log.info(f"Filtro Trail (BD): {len(self.clasificacion)} elementos")
-            except Exception as e:
-                log.warning(f"Error usando BD para Trail, usando filtro local: {e}")
-                # Opción 2: Filtro local
-                self.clasificacion = [
-                    c for c in self.clasificacion_completa 
-                    if hasattr(c.inscrito, 'tipo_carrera') and 
-                    c.inscrito.tipo_carrera.lower() == 'trail'
-                ]
-                log.info(f"Filtro Trail (local): {len(self.clasificacion)} elementos")
+            # try:
+            self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("trail", self.edicion)
+            log.info(f"Filtro Trail (BD): {len(self.clasificacion)} elementos")
+            # except Exception as e:
+            #     log.warning(f"Error usando BD para Trail, usando filtro local: {e}")
+            #     # Opción 2: Filtro local
+            #     self.clasificacion = [
+            #         c for c in self.clasificacion_completa 
+            #         if hasattr(c.inscrito, 'tipo_carrera') and 
+            #         c.inscrito.tipo_carrera.lower() == 'trail'
+            #     ]
+            #     log.info(f"Filtro Trail (local): {len(self.clasificacion)} elementos")
             
             self._actualizar_datos()
             
@@ -362,18 +362,19 @@ class ClasificacionScreen(ft.Container):
             self.filtro_activo = "Andarines"
             
             # Opción 1: Usar base de datos
-            try:
-                self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("andarines", self.edicion)
-                log.info(f"Filtro Andarines (BD): {len(self.clasificacion)} elementos")
-            except Exception as e:
-                log.warning(f"Error usando BD para Andarines, usando filtro local: {e}")
-                # Opción 2: Filtro local
-                self.clasificacion = [
-                    c for c in self.clasificacion_completa 
-                    if hasattr(c.inscrito, 'tipo_carrera') and 
-                    c.inscrito.tipo_carrera.lower() == 'andarines'
-                ]
-                log.info(f"Filtro Andarines (local): {len(self.clasificacion)} elementos")
+            # try:
+            self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("andarines", self.edicion)
+            print("-------------------------------------" + self.clasificacion[0].inscrito.dorsal)
+            #     log.info(f"Filtro Andarines (BD): {len(self.clasificacion)} elementos")
+            # except Exception as e:
+            #     log.warning(f"Error usando BD para Andarines, usando filtro local: {e}")
+            #     # Opción 2: Filtro local
+            #     self.clasificacion = [
+            #         c for c in self.clasificacion_completa 
+            #         if hasattr(c.inscrito, 'tipo_carrera') and 
+            #         c.inscrito.tipo_carrera.lower() == 'andarines'
+            #     ]
+            #     log.info(f"Filtro Andarines (local): {len(self.clasificacion)} elementos")
             
             self._actualizar_datos()
             
