@@ -281,7 +281,7 @@ class ClasificacionScreen(ft.Container):
                         ft.alignment.center
                     ),
                     self._crear_celda_datos(clasificado.tiempo_final, MEDIDAS["tiempo_final"], ft.alignment.center),
-                    self._crear_celda_datos("gap", MEDIDAS["gap"], ft.alignment.center),
+                    self._crear_celda_datos(clasificado.gap, MEDIDAS["gap"], ft.alignment.center),
                     self._crear_celda_datos("rit", MEDIDAS["ritmo"], ft.alignment.center),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
@@ -380,7 +380,26 @@ class ClasificacionScreen(ft.Container):
             
         except Exception as e:
             log.error(f"Error en filtro Andarines: {e}")
-
+    
+    def _actualizar_tiempo_ganador(self):
+        """Actualiza el tiempo del ganador (posición 1 del listado)."""
+        self.tiempo_ganador = None
+        for clasificado in self.clasificacion:
+            # Si la posición es 1 (puede ser campo 'p.' o index 0)
+            if hasattr(clasificado, "p") and str(clasificado.p) == "1":
+                self.tiempo_ganador = clasificado.tiempo_final
+                break
+            # Alternativamente, si el primero del listado es el ganador:
+            if self.tiempo_ganador is None and hasattr(clasificado, "tiempo_final"):
+                self.tiempo_ganador = clasificado.tiempo_final
+                break
+            
+    def calcular_gap(tiempo_ganador, tiempo_final):
+        """Calcula el gap entre dos tiempos"""
+        if not tiempo_ganador or not tiempo_final:  # Verifica que ambos tiempos existan
+            return " "
+        return abs((tiempo_final - tiempo_ganador).total_seconds())
+            
     def _calcular_categoria(self, fecha_nacimiento):
         """Calcula la categoría basada en la fecha de nacimiento."""
         try:
