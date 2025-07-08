@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.exc import SQLAlchemyError
 import os
 import logging
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
@@ -435,6 +435,16 @@ if __name__ == "__main__":
     db = TrailDataBase()
     print("Conexión establecida.\n\n\n\n")
     
+    # #genera un tiempo de llegada del dia 12 de julio de 2025 que se inicia a las 09:30 
+    # tiempo_llegada = datetime(2025, 7, 12, 9, 30) + timedelta(hours=3, minutes=25, seconds=12)
+    # db.finalizar_clasificacion_por_dorsal('002', tiempo_llegada, date.today().year)
+    
+    # tiempo_llegada = datetime(2025, 7, 12, 9, 30) + timedelta(hours=3, minutes=27, seconds=14)
+    # db.finalizar_clasificacion_por_dorsal('003', tiempo_llegada, date.today().year)
+    
+    # tiempo_llegada = datetime(2025, 7, 12, 9, 30) + timedelta(hours=3, minutes=30, seconds=30)
+    # db.finalizar_clasificacion_por_dorsal('004', tiempo_llegada, date.today().year)
+  
     
     
     # db.Iniciar_Carrera()  # Inicia la carrera y añade inscritos a la clasificación
