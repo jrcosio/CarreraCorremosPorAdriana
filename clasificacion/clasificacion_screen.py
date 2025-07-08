@@ -364,7 +364,6 @@ class ClasificacionScreen(ft.Container):
             # Opción 1: Usar base de datos
             # try:
             self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("andarines", self.edicion)
-            print("-------------------------------------" + self.clasificacion[0].inscrito.dorsal)
             #     log.info(f"Filtro Andarines (BD): {len(self.clasificacion)} elementos")
             # except Exception as e:
             #     log.warning(f"Error usando BD para Andarines, usando filtro local: {e}")
