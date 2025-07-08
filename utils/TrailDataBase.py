@@ -153,16 +153,12 @@ class TrailDataBase:
             for ins in inscritos:
                 clasif = self.obtener_clasificacion_por_inscrito(ins.id, curr_year)
 
-                if clasif:
-                    # Ya estaba en la tabla → solo actualizamos tiempo_p1
-                    clasif.tiempo_p1 = start_time
-                    self.actualizar(clasif)
-                else:
-                    # No existe → creamos nuevo objeto Clasificacion
+                if not clasif:
+                   
                     nueva_clasif = Clasificacion(
                         id_inscrito = ins.id,
                         edicion     = curr_year,
-                        tiempo_p1   = start_time,
+                        tiempo_p1   = None,
                         finalizado  = False
                     )
                     self.insertar(nueva_clasif)
@@ -326,7 +322,7 @@ class TrailDataBase:
         try:
             return self._session.query(Clasificacion).filter(
                 Clasificacion.edicion == edicion
-            ).all()
+            ).order_by(Clasificacion.id).all()
         except SQLAlchemyError as e:
             log.error(f"Error obteniendo clasificaciones por edición", exc_info=e)
             return []
@@ -337,7 +333,7 @@ class TrailDataBase:
             return self._session.query(Clasificacion).join(Inscrito).filter(
                 Inscrito.tipo_carrera == tipo_carrera,
                 Clasificacion.edicion == edicion
-            ).all()
+            ).order_by(Clasificacion.id).all()
         except SQLAlchemyError as e:
             log.error(f"Error obteniendo clasificaciones por tipo de carrera", exc_info=e)
             return []
@@ -376,8 +372,8 @@ class TrailDataBase:
 if __name__ == "__main__":
     # Crear instancia singleton
     print("Iniciando conexión a la base de datos...\n\n\n\n")
-    db = TrailDataBase()
-    print("Conexión establecida.\n\n\n\n")
+    # db = TrailDataBase()
+    # print("Conexión establecida.\n\n\n\n")
     
     # db.Iniciar_Carrera()  # Iniciar carrera con hora de salida = ahora
     
