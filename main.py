@@ -119,7 +119,6 @@ class MainApp:
                 ],
                 scroll=ft.ScrollMode.AUTO, # Permite el scroll si el contenido es largo
                 tight=True, # Ajusta el tamaño del contenido al texto
-
             ),
             actions=[
                 ft.TextButton("Cerrar", on_click=lambda e: self.page.close(dialogo),

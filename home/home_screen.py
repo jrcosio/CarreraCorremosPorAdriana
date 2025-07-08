@@ -57,7 +57,7 @@ class HomeScreen(ft.Container):
                 on_click= self.on_click,
                 style=ft.ButtonStyle(
                     text_style=ft.TextStyle(
-                        size=30,
+                        size=24,
                         font_family="Britanic Bold",
                         weight=ft.FontWeight.BOLD,
                         color=ft.Colors.WHITE,
@@ -70,7 +70,7 @@ class HomeScreen(ft.Container):
             )
 
         # --- SECCIÓN 2: CONTADOR ---
-        target = datetime(datetime.now().year, 7, 12, 10, 0, 0)
+        target = datetime(datetime.now().year, 7, 12, 9, 30, 0)
         countdown_container = ft.Container(
             content=ft.Column(
                 spacing=0,
@@ -231,7 +231,16 @@ class HomeScreen(ft.Container):
                 ft.Container(btn_inscripcion, col=12, alignment=ft.alignment.center),
                 ft.Container(height=20),
                 ft.Container(btn_dorsal_solidario, col=12, alignment=ft.alignment.center),
-                
+                ft.Container(height=10),  # Espacio entre botones
+                ft.Container(
+                    content = ft.Text("ATENCIÓN: Por previsión de altas temperaturas, empezamos a las 9:30h", size=20, color=ft.Colors.RED_900, font_family="Britanic Bold", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
+                    col=12,
+                    alignment=ft.alignment.center,
+                    padding=ft.padding.all(10),
+                    bgcolor=ft.Colors.YELLOW_100,
+                    border_radius=ft.border_radius.all(10)
+                    
+                ),
                 # --- Contador ---
                 ft.Container(countdown_container, col=12, expand= True, alignment=ft.alignment.center),
                 
