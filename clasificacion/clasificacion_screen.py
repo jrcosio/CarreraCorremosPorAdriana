@@ -44,7 +44,7 @@ MEDIDAS = {
     "ca": 50,
     "cat.": 80,
     "tiempo_final": 100,
-    "gap": 80,
+    "gap": 90,
     "ritmo": 80,
 }
 
@@ -260,10 +260,14 @@ class ClasificacionScreen(ft.Container):
         )
 
     def _crear_filas_datos(self):
-        return [
-            self._crear_fila_clasificado(clasificado, index)
-            for index, clasificado in enumerate(self.clasificacion)
-        ]
+        self._actualizar_tiempo_ganador()  # Asegura que el tiempo del ganador está actualizado
+        filas = []
+        for index, clasificado in enumerate(self.clasificacion):
+            gap = self._calcular_gap(clasificado.tiempo_final)
+            clasificado.gap = gap  # Asigna el gap calculado
+            fila = self._crear_fila_clasificado(clasificado, index)
+            filas.append(fila)
+        return filas
 
     def _crear_fila_clasificado(self, clasificado, index):
         return ft.Container(
