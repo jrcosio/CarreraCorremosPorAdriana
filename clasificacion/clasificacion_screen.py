@@ -135,6 +135,25 @@ class ClasificacionScreen(ft.Container):
         
         return tiempo_actual - self.tiempo_ganador
         
+    def _calcular_ritmo(self, tiempo_actual: datetime, tipo_carrera: str):
+        """Calcula el ritmo (min/km) según el tipo de carrera y el tiempo."""
+        if tipo_carrera == "trail":
+            distancia = 20
+        elif tipo_carrera == "andarines":
+            distancia = 15
+
+        if not tiempo_actual:
+            return None  # O lanzar una excepción
+        
+        inicio_carrerra = datetime(2025, 7, 12, 9, 30, 0)  # Fecha de inicio de la carrera
+        
+        tiempo_transcurrido = tiempo_actual - inicio_carrerra
+        
+        return tiempo_transcurrido
+
+
+        
+
         
 
     def _construir_interfaz(self):
@@ -284,7 +303,7 @@ class ClasificacionScreen(ft.Container):
                     ),
                     self._crear_celda_datos(clasificado.tiempo_final, MEDIDAS["tiempo_final"], ft.alignment.center),
                     self._crear_celda_datos(self._calcular_gap(clasificado.tiempo_final), MEDIDAS["gap"], ft.alignment.center),
-                    self._crear_celda_datos("rit", MEDIDAS["ritmo"], ft.alignment.center),
+                    self._crear_celda_datos(self._calcular_ritmo( clasificado.tiempo_final, clasificado.inscrito.tipo_carrera), MEDIDAS["ritmo"], ft.alignment.center),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=10,
@@ -361,37 +380,7 @@ class ClasificacionScreen(ft.Container):
                 self.tiempo_ganador = clasificado.tiempo_final
                 break
     
-    def _calcular_ritmo(self, tiempo_str : str, tipo_carrera):
-        """Calcula el ritmo (min/km) según el tipo de carrera y el tiempo."""
-        if tipo_carrera == "trail":
-            distancia = 20
-        elif tipo_carrera == "andarines":
-            distancia = 15
-        else:
-            return ""
-
-        partes = tiempo_str.split(":")
-        if len(partes) == 3:
-            horas = int(partes[0])
-            minutos = int(partes[1])
-            segundos = int(partes[2])
-        elif len(partes) == 2:
-            horas = 0
-            minutos = int(partes[0])
-            segundos = int(partes[1])
-        else:
-            return ""
-
-        total_segundos = horas * 3600 + minutos * 60 + segundos
-
-        if distancia == 0 or total_segundos == 0:
-            return ""
-
-        ritmo_segundos = total_segundos // distancia
-        ritmo_minutos = ritmo_segundos // 60
-        ritmo_restantes = ritmo_segundos % 60
-
-        return f"{ritmo_minutos:02d}:{ritmo_restantes:02d}/km"        
+     
     
     def calcular_gap(tiempo_ganador, tiempo_final):
         """Calcula el gap entre dos tiempos"""
