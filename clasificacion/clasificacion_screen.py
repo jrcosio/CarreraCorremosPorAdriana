@@ -141,6 +141,8 @@ class ClasificacionScreen(ft.Container):
             distancia = 20
         elif tipo_carrera == "andarines":
             distancia = 15
+        else:
+            return None
 
         if not tiempo_actual:
             return None  # O lanzar una excepción
@@ -148,13 +150,12 @@ class ClasificacionScreen(ft.Container):
         inicio_carrerra = datetime(2025, 7, 12, 9, 30, 0)  # Fecha de inicio de la carrera
         
         tiempo_transcurrido = tiempo_actual - inicio_carrerra
-        
-        return tiempo_transcurrido
-
-
-        
-
-        
+        segundos = int(tiempo_transcurrido.total_seconds())
+        calculo_ritmo = segundos / distancia if distancia else None
+        ritmo_final = (distancia / segundos * 3600) if segundos > 0 else None  # km/h
+        if ritmo_final is not None:
+            ritmo_final = f"{ritmo_final:.3f}"
+        return ritmo_final
 
     def _construir_interfaz(self):
         """Construye la interfaz inicial."""
