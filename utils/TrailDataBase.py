@@ -137,7 +137,7 @@ class TrailDataBase:
         """Getter para la sesión"""
         return self._session
     # ============== METODO ESPECIAL CARRERA INICIADA ==============
-    def Iniciar_Carrera(self) -> int:
+    def Iniciar_Carrera(self, tiempo_inicial) -> int:
         """
         Añade a la tabla `clasificacion` todos los inscritos cuya `edicion`
         coincida con el año actual (date.today().year).  
@@ -156,14 +156,15 @@ class TrailDataBase:
                 clasif = self.obtener_clasificacion_por_inscrito(ins.id, curr_year)
 
                 if clasif:
-                    # Ya estaba en la tabla → no necesitamos actualizar nada específico
-                    # El registro ya existe, simplemente contamos
-                    pass
+                    # Ya existe → actualizamos el tiempo parcial 1
+                    clasif.tiempo_p1 = tiempo_inicial
+                    clasif.finalizado = False
                 else:
                     # No existe → creamos nuevo objeto Clasificacion
                     nueva_clasif = Clasificacion(
                         id_inscrito = ins.id,
                         edicion     = curr_year,
+                        tiempo_p1   = tiempo_inicial,
                         finalizado  = False
                     )
                     self.insertar(nueva_clasif)
