@@ -38,8 +38,8 @@ COLORES = {
 MEDIDAS = {
     "p.": 40,
     "d.": 40,
-    "nombre": 120,
-    "apellidos": 220,
+    "nombre": 115,
+    "apellidos": 245,
     "sexo": 45,
     "ca": 50,
     "cat.": 80,
@@ -269,7 +269,7 @@ class ClasificacionScreen(ft.Container):
                 self._crear_celda_encabezado(texto, ancho, alineacion)
                 for texto, ancho, alineacion in encabezados
             ],
-            alignment=ft.MainAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.START,
             spacing=10,
         )
 
