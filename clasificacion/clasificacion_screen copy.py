@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import logging
 from utils.TrailDataBase import TrailDataBase
 from datetime import datetime, timedelta
-import threading
 
 load_dotenv()
 log = logging.getLogger(__name__)
@@ -58,10 +57,6 @@ class ClasificacionScreen(ft.Container):
         self.filtro_activo = "Todos"
         self.edicion = 2025
         self.tiempo_ganador = None
-        
-        # Variables para control de actualización automática
-        self.timer = None
-        self.updating = False
 
         # Crear componentes de la interfaz
         self.titulo_container = None
@@ -72,79 +67,6 @@ class ClasificacionScreen(ft.Container):
         super().__init__(expand=True)
         self._cargar_datos_iniciales()
         self._construir_interfaz()
-        self._iniciar_actualizacion_automatica()
-
-    def _iniciar_actualizacion_automatica(self):
-        """Inicia el timer para actualización automática cada 5 segundos."""
-        self._programar_siguiente_actualizacion()
-
-    def _programar_siguiente_actualizacion(self):
-        """Programa la siguiente actualización."""
-        if self.timer:
-            self.timer.cancel()
-        self.timer = threading.Timer(5.0, self._verificar_y_actualizar)
-        self.timer.start()
-
-    def _verificar_y_actualizar(self):
-        """Verifica si hay cambios en la BD y actualiza si es necesario."""
-        if self.updating:
-            self._programar_siguiente_actualizacion()
-            return
-            
-        try:
-            self.updating = True
-            
-            # Obtener datos actuales según el filtro activo
-            if self.filtro_activo == "Todos":
-                nuevos_datos = self.bd.obtener_clasificaciones_por_edicion(self.edicion)
-            elif self.filtro_activo == "Trail":
-                nuevos_datos = self.bd.obtener_clasificaciones_por_tipo_carrera("trail", self.edicion)
-            elif self.filtro_activo == "Andarines":
-                nuevos_datos = self.bd.obtener_clasificaciones_por_tipo_carrera("andarines", self.edicion)
-            else:
-                nuevos_datos = self.bd.obtener_clasificaciones_por_edicion(self.edicion)
-            
-            # Verificar si hay cambios
-            if self._hay_cambios(nuevos_datos):
-                log.info("Detectados cambios en la clasificación, actualizando...")
-                
-                # Actualizar datos completos si estamos en vista "Todos"
-                if self.filtro_activo == "Todos":
-                    self.clasificacion_completa = nuevos_datos.copy()
-                
-                self.clasificacion = nuevos_datos
-                self.tiempo_ganador = self.clasificacion[0].tiempo_final if self.clasificacion else None
-                
-                # Actualizar la interfaz usando el page update thread-safe
-                if hasattr(self, 'page') and self.page:
-                    def actualizar_ui():
-                        self._actualizar_datos()
-                    self.page.run_thread_safe(actualizar_ui)
-                    
-        except Exception as e:
-            log.error(f"Error en actualización automática: {e}")
-        finally:
-            self.updating = False
-            self._programar_siguiente_actualizacion()
-
-    def _hay_cambios(self, nuevos_datos):
-        """Compara los nuevos datos con los actuales para detectar cambios."""
-        if len(nuevos_datos) != len(self.clasificacion):
-            return True
-            
-        for i, (nuevo, actual) in enumerate(zip(nuevos_datos, self.clasificacion)):
-            # Comparar campos clave que podrían cambiar
-            if (nuevo.inscrito.dorsal != actual.inscrito.dorsal or
-                nuevo.tiempo_final != actual.tiempo_final):
-                return True
-                
-        return False
-
-    def detener_actualizacion_automatica(self):
-        """Detiene la actualización automática."""
-        if self.timer:
-            self.timer.cancel()
-            self.timer = None
 
     def _cargar_datos_iniciales(self):
         try:
@@ -433,7 +355,6 @@ class ClasificacionScreen(ft.Container):
     def _filtrar_trail(self, e):
         """Maneja el filtro para mostrar solo inscritos de trail."""
         try:
-            self.filtro_activo = "Trail"
             self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("trail", self.edicion)
             self._actualizar_datos()         
         except Exception as e:
@@ -442,7 +363,6 @@ class ClasificacionScreen(ft.Container):
     def _filtrar_andarines(self, e):
         """Maneja el filtro para mostrar solo inscritos de andarines."""
         try:  
-            self.filtro_activo = "Andarines"
             self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("andarines", self.edicion)
             self._actualizar_datos()
         except Exception as e:
