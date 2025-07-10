@@ -269,7 +269,7 @@ class ClasificacionScreen(ft.Container):
                 self._crear_celda_encabezado(texto, ancho, alineacion)
                 for texto, ancho, alineacion in encabezados
             ],
-            alignment=ft.MainAxisAlignment.START,
+            alignment=ft.MainAxisAlignment.CENTER,
             spacing=10,
         )
 
