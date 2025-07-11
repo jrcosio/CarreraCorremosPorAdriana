@@ -5,6 +5,7 @@ import logging
 from utils.TrailDataBase import TrailDataBase
 from datetime import datetime, timedelta
 import threading
+import time
 
 load_dotenv()
 log = logging.getLogger(__name__)
@@ -115,11 +116,11 @@ class ClasificacionScreen(ft.Container):
                 self.clasificacion = nuevos_datos
                 self.tiempo_ganador = self.clasificacion[0].tiempo_final if self.clasificacion else None
                 
-                # Actualizar la interfaz usando el page update thread-safe
-                if hasattr(self, 'page') and self.page:
-                    def actualizar_ui():
-                        self._actualizar_datos()
-                    self.page.run_thread_safe(actualizar_ui)
+                # Actualizar la interfaz directamente
+                try:
+                    self._actualizar_datos()
+                except Exception as ui_error:
+                    log.error(f"Error actualizando UI: {ui_error}")
                     
         except Exception as e:
             log.error(f"Error en actualización automática: {e}")
