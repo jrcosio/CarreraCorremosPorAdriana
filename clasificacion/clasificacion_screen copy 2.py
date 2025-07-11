@@ -5,6 +5,7 @@ import logging
 from utils.TrailDataBase import TrailDataBase
 from datetime import datetime, timedelta
 import threading
+import time
 
 load_dotenv()
 log = logging.getLogger(__name__)
@@ -54,155 +55,122 @@ class ClasificacionScreen(ft.Container):
     def __init__(self):
         self.bd = TrailDataBase()
         self.clasificacion = []
-        self.clasificacion_completa = []
+        self.clasificacion_completa = []  # Guardar datos completos
         self.filtro_activo = "Todos"
         self.edicion = 2025
         self.tiempo_ganador = None
+        
+        # Variables para control de actualización automática
         self.timer = None
+        self.updating = False
 
+        # Crear componentes de la interfaz
+        self.titulo_container = None
+        self.botones_container = None
+        self.encabezados_container = None
+        self.datos_container = None
+        
         super().__init__(expand=True)
         self._cargar_datos_iniciales()
         self._construir_interfaz()
-        self._iniciar_timer()
+        self._iniciar_actualizacion_automatica()
 
-    def _iniciar_timer(self):
-        """Inicia el timer de actualización cada 5 segundos."""
-        def actualizar_periodicamente():
-            try:
-                self._recargar_datos()
-            except Exception as e:
-                pass
-            finally:
-                self.timer = threading.Timer(5.0, actualizar_periodicamente)
-                self.timer.daemon = True
-                self.timer.start()
-        
-        self.timer = threading.Timer(5.0, actualizar_periodicamente)
-        self.timer.daemon = True
+    def _iniciar_actualizacion_automatica(self):
+        """Inicia el timer para actualización automática cada 5 segundos."""
+        self._programar_siguiente_actualizacion()
+
+    def _programar_siguiente_actualizacion(self):
+        """Programa la siguiente actualización."""
+        if self.timer:
+            self.timer.cancel()
+        self.timer = threading.Timer(5.0, self._verificar_y_actualizar)
         self.timer.start()
 
-    def _recargar_datos(self):
-        """Recarga todos los datos desde la base de datos y actualiza la interfaz."""
-        try:
-            # LIMPIAR TODO - resetear todas las variables
-            self.clasificacion = []
-            self.clasificacion_completa = []
-            self.tiempo_ganador = None
+    def _verificar_y_actualizar(self):
+        """Verifica si hay cambios en la BD y actualiza si es necesario."""
+        if self.updating:
+            self._programar_siguiente_actualizacion()
+            return
             
-            # RECARGAR COMPLETAMENTE como si fuera la primera vez
+        try:
+            self.updating = True
+            
+            # Obtener datos actuales según el filtro activo
             if self.filtro_activo == "Todos":
-                self.clasificacion_completa = self.bd.obtener_clasificaciones_por_edicion(self.edicion)
-                self.clasificacion = self.clasificacion_completa.copy()
+                nuevos_datos = self.bd.obtener_clasificaciones_por_edicion(self.edicion)
             elif self.filtro_activo == "Trail":
-                self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("trail", self.edicion)
+                nuevos_datos = self.bd.obtener_clasificaciones_por_tipo_carrera("trail", self.edicion)
             elif self.filtro_activo == "Andarines":
-                self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("andarines", self.edicion)
-
-            # RECALCULAR tiempo ganador
-            self.tiempo_ganador = self.clasificacion[0].tiempo_final if self.clasificacion else None
+                nuevos_datos = self.bd.obtener_clasificaciones_por_tipo_carrera("andarines", self.edicion)
+            else:
+                nuevos_datos = self.bd.obtener_clasificaciones_por_edicion(self.edicion)
             
-            # ELIMINAR todos los contenedores antiguos
-            self.titulo_container = None
-            self.botones_container = None
-            self.encabezados_container = None
-            self.datos_container = None
-            self.content = None
-            
-            # RECREAR ABSOLUTAMENTE TODO desde cero
-            self.titulo_container = self._crear_titulo()
-            self.botones_container = self._crear_botones_filtro()
-            self.encabezados_container = self._crear_encabezados_tabla()
-            self.datos_container = ft.Column(
-                controls=self._crear_filas_datos(),
-                spacing=1,
-            )
-
-            self.content = ft.Column(
-                controls=[
-                    self.titulo_container,
-                    self.botones_container,
-                    self.encabezados_container,
-                    self.datos_container,
-                    ft.Container(height=30),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                scroll="auto",
-            )
-            
-            # Forzar actualización
-            self.update()
-            
-        except Exception as e:
-            pass
-
-    def _actualizar_interfaz(self):
-        """Actualiza completamente la interfaz."""
-        try:
-            print("Actualizando interfaz...")
-            
-            # RECONSTRUIR TODO DESDE CERO - no reutilizar nada
-            self.content = None  # Limpiar contenido actual
-            
-            # Crear todo nuevo
-            titulo_nuevo = self._crear_titulo()
-            botones_nuevos = self._crear_botones_filtro()
-            encabezados_nuevos = self._crear_encabezados_tabla()
-            datos_nuevos = ft.Column(controls=self._crear_filas_datos(), spacing=1)
-            
-            # Asignar contenido completamente nuevo
-            self.content = ft.Column(
-                controls=[
-                    titulo_nuevo,
-                    botones_nuevos,
-                    encabezados_nuevos,
-                    datos_nuevos,
-                    ft.Container(height=30),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                scroll="auto",
-            )
-            
-            # Actualizar referencias
-            self.titulo_container = titulo_nuevo
-            self.botones_container = botones_nuevos
-            self.encabezados_container = encabezados_nuevos
-            self.datos_container = datos_nuevos
-            
-            # Forzar actualización MÚLTIPLE y AGRESIVA
-            try:
-                self.update()
-            except:
-                pass
-            
-            try:
-                if hasattr(self, 'page') and self.page:
-                    self.page.update()
-            except:
-                pass
+            # Verificar si hay cambios
+            if self._hay_cambios(nuevos_datos):
+                log.info("Detectados cambios en la clasificación, actualizando...")
                 
-            # Intentar refrescar contenedores individuales también
-            try:
-                if hasattr(datos_nuevos, 'update'):
-                    datos_nuevos.update()
-            except:
-                pass
-            
-            print("Interfaz reconstruida completamente")
-            
+                # Actualizar datos completos si estamos en vista "Todos"
+                if self.filtro_activo == "Todos":
+                    self.clasificacion_completa = nuevos_datos.copy()
+                
+                self.clasificacion = nuevos_datos
+                self.tiempo_ganador = self.clasificacion[0].tiempo_final if self.clasificacion else None
+                
+                # Actualizar la interfaz directamente
+                try:
+                    self._actualizar_datos()
+                except Exception as ui_error:
+                    log.error(f"Error actualizando UI: {ui_error}")
+                    
         except Exception as e:
-            print(f"Error actualizando interfaz: {e}")
+            log.error(f"Error en actualización automática: {e}")
+        finally:
+            self.updating = False
+            self._programar_siguiente_actualizacion()
+
+    def _hay_cambios(self, nuevos_datos):
+        """Compara los nuevos datos con los actuales para detectar cambios."""
+        if len(nuevos_datos) != len(self.clasificacion):
+            return True
+            
+        for i, (nuevo, actual) in enumerate(zip(nuevos_datos, self.clasificacion)):
+            # Comparar campos clave que podrían cambiar
+            if (nuevo.inscrito.dorsal != actual.inscrito.dorsal or
+                nuevo.tiempo_final != actual.tiempo_final):
+                return True
+                
+        return False
+
+    def detener_actualizacion_automatica(self):
+        """Detiene la actualización automática."""
+        if self.timer:
+            self.timer.cancel()
+            self.timer = None
 
     def _cargar_datos_iniciales(self):
         try:
             self.clasificacion_completa = self.bd.obtener_clasificaciones_por_edicion(self.edicion)
             self.clasificacion = self.clasificacion_completa.copy()
+            
             self.tiempo_ganador = self.clasificacion[0].tiempo_final if self.clasificacion else None
+            
             print(f"---------------------Tiempo del ganador: {self.tiempo_ganador}")
             print(type(self.tiempo_ganador))
+            
+            log.info(f"Cargados {len(self.clasificacion)} clasificados inicialmente")
+            
+            # # Debug: Imprimir algunos datos para verificar
+            # if self.clasificacion:
+            #     log.info(f"Primer clasificado: {self.clasificacion[0].inscrito.nombre}")
+            #     # Verificar tipos de carrera disponibles
+            #     tipos_carrera = set()
+            #     for c in self.clasificacion:
+            #         if hasattr(c.inscrito, 'tipo_carrera'):
+            #             tipos_carrera.add(c.inscrito.tipo_carrera)
+            #     log.info(f"Tipos de carrera encontrados: {tipos_carrera}")
+                
         except Exception as e:
-            print(f"Error cargando clasificación: {e}")
+            log.error(f"Error cargando clasificación: {e}")
             self.clasificacion = []
             self.clasificacion_completa = []
 
@@ -240,7 +208,10 @@ class ClasificacionScreen(ft.Container):
         if not duracion:
             return "00:00:00"
         
+        # Obtener segundos totales
         total_segundos = int(duracion.total_seconds())
+        
+        # Calcular horas, minutos y segundos
         horas = total_segundos // 3600
         minutos = (total_segundos % 3600) // 60
         segundos = total_segundos % 60
@@ -270,15 +241,18 @@ class ClasificacionScreen(ft.Container):
         else:
             return ""
 
+        # Calcular la duración de la carrera
         duracion = tiempo_final - tiempo_inicio
         segundos_totales = duracion.total_seconds()
         
         if segundos_totales <= 0:
             return ""
         
+        # Calcular ritmo en minutos por kilómetro
         minutos_totales = segundos_totales / 60
         ritmo_min_por_km = minutos_totales / distancia
         
+        # Convertir a formato mm:ss
         minutos = int(ritmo_min_por_km)
         segundos = int((ritmo_min_por_km - minutos) * 60)
         
@@ -307,6 +281,31 @@ class ClasificacionScreen(ft.Container):
             scroll="auto",
         )
 
+    def _actualizar_datos(self):
+        """Actualiza solo la sección de datos sin reconstruir toda la interfaz."""
+        try:
+            # Crear nuevas filas de datos
+            nuevas_filas = self._crear_filas_datos()
+            
+            # Actualizar el contenido del contenedor de datos
+            self.datos_container.controls = nuevas_filas
+            
+            # Actualizar los botones para mostrar el estado activo
+            self.botones_container.controls = [
+                self._crear_boton_filtro("Todos", self._filtrar_todos),
+                self._crear_boton_filtro("Trail", self._filtrar_trail),
+                self._crear_boton_filtro("Andarines", self._filtrar_andarines),
+            ]
+            
+            # Forzar la actualización de la interfaz
+            if hasattr(self, 'update'):
+                self.update()
+                
+            log.info(f"Interfaz actualizada con {len(self.clasificacion)} elementos")
+            
+        except Exception as e:
+            log.error(f"Error actualizando datos: {e}")
+
     def _crear_titulo(self):
         return ft.Column(
             alignment=ft.alignment.center,
@@ -321,6 +320,7 @@ class ClasificacionScreen(ft.Container):
                     weight=ft.FontWeight.BOLD,
                     text_align=ft.TextAlign.CENTER,
                 ),
+                
             ]
         )
 
@@ -384,30 +384,31 @@ class ClasificacionScreen(ft.Container):
         )
 
     def _crear_filas_datos(self):
-        return [self._crear_fila_clasificado(clasificado, index) 
-                for index, clasificado in enumerate(self.clasificacion)]
+        return [ self._crear_fila_clasificado(clasificado, index) 
+                for index, clasificado in enumerate(self.clasificacion)
+            ]
 
     def _crear_fila_clasificado(self, clasificado, index):
         return ft.Container(
             content=ft.Row(
-                controls=[
-                    self._crear_celda_datos(str(index + 1), MEDIDAS["p."], ft.alignment.center),
-                    self._crear_celda_datos(str(clasificado.inscrito.dorsal), MEDIDAS["d."], ft.alignment.center),
-                    self._crear_celda_datos(clasificado.inscrito.nombre, MEDIDAS["nombre"], ft.alignment.center_left),
-                    self._crear_celda_datos(clasificado.inscrito.apellidos, MEDIDAS["apellidos"], ft.alignment.center_left),
-                    self._crear_celda_datos(clasificado.inscrito.sexo, MEDIDAS["sexo"], ft.alignment.center),
-                    self._crear_celda_ccaa(clasificado.inscrito.ccaa),
-                    self._crear_celda_datos(
-                        self._calcular_categoria(clasificado.inscrito.fecha_nacimiento), 
-                        MEDIDAS["cat."], 
-                        ft.alignment.center
-                    ),
-                    self._crear_celda_datos(self._formatear_tiempo_final(clasificado.tiempo_final, clasificado.tiempo_p1), MEDIDAS["tiempo_final"], ft.alignment.center),
-                    self._crear_celda_datos(self._calcular_gap(clasificado.tiempo_final), MEDIDAS["gap"], ft.alignment.center),
-                    self._crear_celda_datos(self._calcular_ritmo(clasificado.tiempo_final, clasificado.tiempo_p1, clasificado.inscrito.tipo_carrera), MEDIDAS["ritmo"], ft.alignment.center),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                spacing=10,
+            controls=[
+                self._crear_celda_datos(str(index + 1), MEDIDAS["p."], ft.alignment.center),
+                self._crear_celda_datos(str(clasificado.inscrito.dorsal), MEDIDAS["d."], ft.alignment.center),
+                self._crear_celda_datos(clasificado.inscrito.nombre, MEDIDAS["nombre"], ft.alignment.center_left),
+                self._crear_celda_datos(clasificado.inscrito.apellidos, MEDIDAS["apellidos"], ft.alignment.center_left),
+                self._crear_celda_datos(clasificado.inscrito.sexo, MEDIDAS["sexo"], ft.alignment.center),
+                self._crear_celda_ccaa(clasificado.inscrito.ccaa),
+                self._crear_celda_datos(
+                self._calcular_categoria(clasificado.inscrito.fecha_nacimiento), 
+                MEDIDAS["cat."], 
+                ft.alignment.center
+                ),
+                self._crear_celda_datos(self._formatear_tiempo_final(clasificado.tiempo_final, clasificado.tiempo_p1), MEDIDAS["tiempo_final"], ft.alignment.center),
+                self._crear_celda_datos(self._calcular_gap(clasificado.tiempo_final), MEDIDAS["gap"], ft.alignment.center),
+                self._crear_celda_datos(self._calcular_ritmo(clasificado.tiempo_final, clasificado.tiempo_p1, clasificado.inscrito.tipo_carrera), MEDIDAS["ritmo"], ft.alignment.center),
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=10,
             ),
             border_radius=4,
             padding=0,
@@ -441,27 +442,53 @@ class ClasificacionScreen(ft.Container):
     
     def _filtrar_todos(self, e):
         """Maneja el filtro para mostrar todos los inscritos."""
-        self.filtro_activo = "Todos"
-        self._recargar_datos()
+        try:
+            log.info("Iniciando filtro: Todos")
+            self.filtro_activo = "Todos"
+            self.clasificacion = self.clasificacion_completa.copy()
+            
+            log.info(f"Filtro Todos aplicado: {len(self.clasificacion)} elementos")
+            self._actualizar_datos()
+            
+        except Exception as e:
+            log.error(f"Error en filtro Todos: {e}")
     
     def _filtrar_trail(self, e):
         """Maneja el filtro para mostrar solo inscritos de trail."""
-        self.filtro_activo = "Trail"
-        self._recargar_datos()
+        try:
+            self.filtro_activo = "Trail"
+            self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("trail", self.edicion)
+            self._actualizar_datos()         
+        except Exception as e:
+            log.error(f"Error en filtro Trail: {e}")
     
     def _filtrar_andarines(self, e):
         """Maneja el filtro para mostrar solo inscritos de andarines."""
-        self.filtro_activo = "Andarines"
-        self._recargar_datos()
+        try:  
+            self.filtro_activo = "Andarines"
+            self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("andarines", self.edicion)
+            self._actualizar_datos()
+        except Exception as e:
+            log.error(f"Error en filtro Andarines: {e}")
     
     def _actualizar_tiempo_ganador(self):
         """Actualiza el tiempo del ganador (posición 1 del listado)."""
-        # El ganador es simplemente el primer elemento de la lista
-        self.tiempo_ganador = self.clasificacion[0].tiempo_final if self.clasificacion else None
+        self.tiempo_ganador = None
+        for clasificado in self.clasificacion:
+            # Si la posición es 1 (puede ser campo 'p.' o index 0)
+            if hasattr(clasificado, "p") and str(clasificado.p) == "1":
+                self.tiempo_ganador = clasificado.tiempo_final
+                break
+            # Alternativamente, si el primero del listado es el ganador:
+            if self.tiempo_ganador is None and hasattr(clasificado, "tiempo_final"):
+                self.tiempo_ganador = clasificado.tiempo_final
+                break
+    
+     
     
     def calcular_gap(tiempo_ganador, tiempo_final):
         """Calcula el gap entre dos tiempos"""
-        if not tiempo_ganador or not tiempo_final:
+        if not tiempo_ganador or not tiempo_final:  # Verifica que ambos tiempos existan
             return " "
         return abs((tiempo_final - tiempo_ganador).total_seconds())
             
@@ -485,6 +512,7 @@ class ClasificacionScreen(ft.Container):
             return "N/A"
             
         except Exception as e:
+            log.error(f"Error calculando categoría para fecha {fecha_nacimiento}: {e}")
             return "N/A"
     
     def _formatear_tiempo_final(self, tiempo_final, tiempo_inicio):
@@ -497,9 +525,3 @@ class ClasificacionScreen(ft.Container):
             return self._formatear_duracion(duracion)
         except (TypeError, AttributeError):
             return "N/A"
-
-    def detener_actualizacion_automatica(self):
-        """Detiene la actualización automática."""
-        if self.timer:
-            self.timer.cancel()
-            self.timer = None

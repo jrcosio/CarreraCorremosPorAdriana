@@ -322,7 +322,7 @@ class TrailDataBase:
         try:
             return self._session.query(Clasificacion).filter(
                 Clasificacion.edicion == edicion
-            ).order_by(Clasificacion.id).all()
+            ).order_by(Clasificacion.tiempo_final).all()
         except SQLAlchemyError as e:
             log.error(f"Error obteniendo clasificaciones por edición", exc_info=e)
             return []
@@ -333,7 +333,7 @@ class TrailDataBase:
             return self._session.query(Clasificacion).join(Inscrito).filter(
                 Inscrito.tipo_carrera == tipo_carrera,
                 Clasificacion.edicion == edicion
-            ).order_by(Clasificacion.id).all()
+            ).order_by(Clasificacion.tiempo_final).all()
         except SQLAlchemyError as e:
             log.error(f"Error obteniendo clasificaciones por tipo de carrera", exc_info=e)
             return []
