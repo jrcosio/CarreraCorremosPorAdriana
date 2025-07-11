@@ -63,6 +63,7 @@ class NavBar(ft.Container):
                 NavButton("INSCRITOS", "btn_inscritos", self.on_button_clicked),
                 NavButton("TRAIL", "btn_trail", self.on_button_clicked),
                 NavButton("ANDARINES", "btn_andarines", self.on_button_clicked),
+                NavButton("CLASIFICACIÓN", "btn_clasificacion", self.on_button_clicked),
                 NavButton("GALERÍA", "btn_galeria", self.on_button_clicked),
                 NavButton("CONTACTO", "btn_contacto", self.on_button_clicked),
             ],
@@ -74,7 +75,7 @@ class NavBar(ft.Container):
         """Construye y devuelve la Row para la vista móvil."""
         menu_items_map = {
             "PRINCIPAL": "btn_home", "INSCRIPCIÓN": "btn_inscripcion", "INSCRITOS": "btn_inscritos","TRAIL": "btn_trail",
-            "ANDARINES": "btn_andarines", "GALERÍA": "btn_galeria", "CONTACTO": "btn_contacto"
+            "ANDARINES": "btn_andarines","CLASIFICACIÓN": "btn_clasificacion", "GALERÍA": "btn_galeria", "CONTACTO": "btn_contacto"
         }
         return ft.Row(
             [
