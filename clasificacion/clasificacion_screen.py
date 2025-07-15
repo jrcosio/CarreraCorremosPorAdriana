@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import logging
 from utils.TrailDataBase import TrailDataBase
 from datetime import datetime, timedelta
-import threading
 
 load_dotenv()
 log = logging.getLogger(__name__)
@@ -58,141 +57,62 @@ class ClasificacionScreen(ft.Container):
         self.filtro_activo = "Todos"
         self.edicion = 2025
         self.tiempo_ganador = None
-        self.timer = None
 
         super().__init__(expand=True)
         self._cargar_datos_iniciales()
         self._construir_interfaz()
-        self._iniciar_timer()
 
-    def _iniciar_timer(self):
-        """Inicia el timer de actualización cada 5 segundos."""
-        def actualizar_periodicamente():
-            try:
-                self._recargar_datos()
-            except Exception as e:
-                pass
-            finally:
-                self.timer = threading.Timer(5.0, actualizar_periodicamente)
-                self.timer.daemon = True
-                self.timer.start()
-        
-        self.timer = threading.Timer(5.0, actualizar_periodicamente)
-        self.timer.daemon = True
-        self.timer.start()
-
-    def _recargar_datos(self):
-        """Recarga todos los datos desde la base de datos y actualiza la interfaz."""
+    def _aplicar_filtro(self):
+        """Aplica el filtro seleccionado y actualiza la interfaz."""
         try:
-            # LIMPIAR TODO - resetear todas las variables
-            self.clasificacion = []
-            self.clasificacion_completa = []
-            self.tiempo_ganador = None
-            
-            # RECARGAR COMPLETAMENTE como si fuera la primera vez
             if self.filtro_activo == "Todos":
-                self.clasificacion_completa = self.bd.obtener_clasificaciones_por_edicion(self.edicion)
                 self.clasificacion = self.clasificacion_completa.copy()
             elif self.filtro_activo == "Trail":
-                self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("trail", self.edicion)
+                self.clasificacion = [c for c in self.clasificacion_completa if c.inscrito.tipo_carrera == "trail"]
             elif self.filtro_activo == "Andarines":
-                self.clasificacion = self.bd.obtener_clasificaciones_por_tipo_carrera("andarines", self.edicion)
+                self.clasificacion = [c for c in self.clasificacion_completa if c.inscrito.tipo_carrera == "andarines"]
 
-            # RECALCULAR tiempo ganador
+            # Actualizar tiempo ganador para el filtro aplicado
             self.tiempo_ganador = self.clasificacion[0].tiempo_final if self.clasificacion else None
             
-            # ELIMINAR todos los contenedores antiguos
-            self.titulo_container = None
-            self.botones_container = None
-            self.encabezados_container = None
-            self.datos_container = None
-            self.content = None
+            # Actualizar solo los datos en la interfaz
+            self._actualizar_datos_tabla()
             
-            # RECREAR ABSOLUTAMENTE TODO desde cero
-            self.titulo_container = self._crear_titulo()
-            self.botones_container = self._crear_botones_filtro()
-            self.encabezados_container = self._crear_encabezados_tabla()
-            self.datos_container = ft.Column(
-                controls=self._crear_filas_datos(),
-                spacing=1,
-            )
+        except Exception as e:
+            print(f"Error aplicando filtro: {e}")
 
-            self.content = ft.Column(
-                controls=[
-                    self.titulo_container,
-                    self.botones_container,
-                    self.encabezados_container,
-                    self.datos_container,
-                    ft.Container(height=30),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                scroll="auto",
-            )
+    def _actualizar_datos_tabla(self):
+        """Actualiza solo la tabla de datos manteniendo el resto de la interfaz."""
+        try:
+            # Crear nuevas filas de datos
+            nuevas_filas = self._crear_filas_datos()
+            
+            # Actualizar el contenido del contenedor de datos
+            self.datos_container.controls = nuevas_filas
+            
+            # Actualizar botones para reflejar el filtro activo
+            self._actualizar_botones_filtro()
             
             # Forzar actualización
             self.update()
             
         except Exception as e:
-            pass
+            print(f"Error actualizando tabla: {e}")
 
-    def _actualizar_interfaz(self):
-        """Actualiza completamente la interfaz."""
+    def _actualizar_botones_filtro(self):
+        """Actualiza el estado visual de los botones de filtro."""
         try:
-            print("Actualizando interfaz...")
+            # Recrear los botones con el estado actual
+            nuevos_botones = [
+                self._crear_boton_filtro("Todos", self._filtrar_todos),
+                self._crear_boton_filtro("Trail", self._filtrar_trail),
+                self._crear_boton_filtro("Andarines", self._filtrar_andarines),
+            ]
             
-            # RECONSTRUIR TODO DESDE CERO - no reutilizar nada
-            self.content = None  # Limpiar contenido actual
-            
-            # Crear todo nuevo
-            titulo_nuevo = self._crear_titulo()
-            botones_nuevos = self._crear_botones_filtro()
-            encabezados_nuevos = self._crear_encabezados_tabla()
-            datos_nuevos = ft.Column(controls=self._crear_filas_datos(), spacing=1)
-            
-            # Asignar contenido completamente nuevo
-            self.content = ft.Column(
-                controls=[
-                    titulo_nuevo,
-                    botones_nuevos,
-                    encabezados_nuevos,
-                    datos_nuevos,
-                    ft.Container(height=30),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                scroll="auto",
-            )
-            
-            # Actualizar referencias
-            self.titulo_container = titulo_nuevo
-            self.botones_container = botones_nuevos
-            self.encabezados_container = encabezados_nuevos
-            self.datos_container = datos_nuevos
-            
-            # Forzar actualización MÚLTIPLE y AGRESIVA
-            try:
-                self.update()
-            except:
-                pass
-            
-            try:
-                if hasattr(self, 'page') and self.page:
-                    self.page.update()
-            except:
-                pass
-                
-            # Intentar refrescar contenedores individuales también
-            try:
-                if hasattr(datos_nuevos, 'update'):
-                    datos_nuevos.update()
-            except:
-                pass
-            
-            print("Interfaz reconstruida completamente")
+            self.botones_container.controls = nuevos_botones
             
         except Exception as e:
-            print(f"Error actualizando interfaz: {e}")
+            print(f"Error actualizando botones: {e}")
 
     def _cargar_datos_iniciales(self):
         try:
@@ -442,17 +362,17 @@ class ClasificacionScreen(ft.Container):
     def _filtrar_todos(self, e):
         """Maneja el filtro para mostrar todos los inscritos."""
         self.filtro_activo = "Todos"
-        self._recargar_datos()
+        self._aplicar_filtro()
     
     def _filtrar_trail(self, e):
         """Maneja el filtro para mostrar solo inscritos de trail."""
         self.filtro_activo = "Trail"
-        self._recargar_datos()
+        self._aplicar_filtro()
     
     def _filtrar_andarines(self, e):
         """Maneja el filtro para mostrar solo inscritos de andarines."""
         self.filtro_activo = "Andarines"
-        self._recargar_datos()
+        self._aplicar_filtro()
     
     def _actualizar_tiempo_ganador(self):
         """Actualiza el tiempo del ganador (posición 1 del listado)."""
@@ -497,9 +417,3 @@ class ClasificacionScreen(ft.Container):
             return self._formatear_duracion(duracion)
         except (TypeError, AttributeError):
             return "N/A"
-
-    def detener_actualizacion_automatica(self):
-        """Detiene la actualización automática."""
-        if self.timer:
-            self.timer.cancel()
-            self.timer = None

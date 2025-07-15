@@ -232,15 +232,15 @@ class HomeScreen(ft.Container):
                 ft.Container(height=20),
                 ft.Container(btn_dorsal_solidario, col=12, alignment=ft.alignment.center),
                 ft.Container(height=10),  # Espacio entre botones
-                ft.Container(
-                    content = ft.Text("ATENCIÓN: Por previsión de altas temperaturas, empezamos a las 9:30h", size=20, color=ft.Colors.RED_900, font_family="Britanic Bold", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
-                    col=12,
-                    alignment=ft.alignment.center,
-                    padding=ft.padding.all(10),
-                    bgcolor=ft.Colors.YELLOW_100,
-                    border_radius=ft.border_radius.all(10)
+                # ft.Container(
+                #     content = ft.Text("ATENCIÓN: Por previsión de altas temperaturas, empezamos a las 9:30h", size=20, color=ft.Colors.RED_900, font_family="Britanic Bold", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
+                #     col=12,
+                #     alignment=ft.alignment.center,
+                #     padding=ft.padding.all(10),
+                #     bgcolor=ft.Colors.YELLOW_100,
+                #     border_radius=ft.border_radius.all(10)
                     
-                ),
+                # ),
                 # --- Contador ---
                 ft.Container(countdown_container, col=12, expand= True, alignment=ft.alignment.center),
                 
